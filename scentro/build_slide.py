@@ -1,135 +1,266 @@
-"""SCENTRO carousel slide builder (editable source). Usage: python3 build_slide.py 1"""
-import sys, numpy as np
+"""SCENTRO carousel slide builder v2 (editable source).  Usage: python3 build_slide.py N   (N = 1..6)
+Layers: background glow -> arch niche (frame + inner shadow) -> travertine surface -> bottle reflections/shadows -> bottles -> type.
+Bottles are real photographs (transparent cutouts in assets/cutouts); they are only resized, edge-cleaned and positioned."""
+import sys
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from scipy import ndimage as ndi
+
 W, H = 1080, 1350
 CORM = 'fonts/CormorantGaramond-VF.ttf'
 INTER = '/usr/share/fonts/opentype/inter/Inter-Regular.otf'
 INTER_M = '/usr/share/fonts/opentype/inter/Inter-Medium.otf'
-rng = np.random.default_rng(7)
 
-def S(title, mad, orig, inspired, title_rgb, bg_a, bg_b, arch_rgb, mad_h=600, orig_h=440, sink=0, name_size=46):
+# ---- layout constants ------------------------------------------------------------------------------
+ARCH_CX, ARCH_TOP, ARCH_R = 540, 452, 372       # arch niche: 168..912 wide
+SURF_TOP, SURF_FRONT = 1128, 1214               # polished top surface (back edge .. front edge)
+BASE_Y = 1176                                   # bottles stand mid-way on the surface
+GAP = 64
+
+
+def S(title, mad, orig, inspired, title_rgb, bg_a, bg_b, niche_rgb, mad_h=640, orig_h=470, name_size=46, stone=(0, 0, 0)):
     return dict(title=title, mad=f'assets/cutouts/{mad}.png', orig=f'assets/cutouts/{orig}.png', inspired=inspired,
-                title_rgb=title_rgb, bg_a=bg_a, bg_b=bg_b, arch_rgb=arch_rgb, mad_h=mad_h, orig_h=orig_h, sink=sink,
-                name_size=name_size, out=f'output/slide{{n}}_{title.lower()}.png')
+                title_rgb=title_rgb, bg_a=bg_a, bg_b=bg_b, niche_rgb=niche_rgb, mad_h=mad_h, orig_h=orig_h,
+                name_size=name_size, stone=stone, out=f'output/slide{{n}}_{title.lower()}.png')
+
 
 SLIDES = {
- 1: S('ROUGE', 'mad_rouge', 'brx540_extrait', 'Baccarat Rouge 540 Extrait de Parfum', (122, 20, 38), (244, 236, 223), (230, 216, 196), (228, 213, 192), name_size=40),
- 2: S('TREASURE', 'mad_treasure', 'naxos', 'Naxos', (142, 98, 34), (245, 236, 218), (232, 214, 184), (230, 212, 182), mad_h=590, orig_h=470),
- 3: S('MARJORIE', 'mad_marjorie', 'guidance', 'Guidance', (148, 86, 92), (246, 239, 230), (236, 220, 212), (232, 214, 205), mad_h=590, orig_h=360),
- 4: S('EFFECT', 'mad_effect', 'side_effect', 'Side Effect', (104, 30, 38), (243, 234, 221), (228, 211, 193), (226, 207, 188), mad_h=600, orig_h=440),
- 5: S('DREAMLIGHT', 'mad_dreamlight', 'attrape_reves', 'Attrape-Rêves', (126, 88, 130), (247, 241, 239), (235, 224, 231), (232, 218, 222), mad_h=540, orig_h=440),
- 6: S('FORZA', 'mad_forza', 'alexandria_ii', 'Alexandria II', (106, 74, 42), (244, 236, 222), (229, 214, 190), (228, 211, 184), mad_h=500, orig_h=470),
+    1: S('ROUGE', 'mad_rouge', 'brx540_extrait', 'Baccarat Rouge 540 Extrait de Parfum', (122, 20, 38), (245, 237, 224), (231, 217, 197), (226, 209, 187), mad_h=610, orig_h=440, name_size=40),
+    2: S('TREASURE', 'mad_treasure', 'naxos', 'Naxos', (142, 98, 34), (246, 238, 220), (233, 215, 186), (229, 208, 176), mad_h=600, orig_h=470, stone=(4, 0, -6)),
+    3: S('MARJORIE', 'mad_marjorie', 'guidance', 'Guidance', (148, 86, 92), (247, 240, 231), (237, 221, 213), (230, 208, 198), mad_h=600, orig_h=350, stone=(2, -2, -2)),
+    4: S('EFFECT', 'mad_effect', 'side_effect', 'Side Effect', (104, 30, 38), (244, 235, 222), (229, 212, 194), (224, 202, 182), mad_h=610, orig_h=450),
+    5: S('DREAMLIGHT', 'mad_dreamlight', 'attrape_reves', 'Attrape-Rêves', (126, 88, 130), (248, 242, 240), (236, 225, 232), (230, 214, 222), mad_h=560, orig_h=450, stone=(0, -2, 3)),
+    6: S('FORZA', 'mad_forza', 'alexandria_ii', 'Alexandria II', (106, 74, 42), (245, 237, 223), (230, 215, 191), (226, 207, 178), mad_h=500, orig_h=470, stone=(2, 0, -3)),
 }
 
+rng = np.random.default_rng(11)
+
+
+# ---- helpers ---------------------------------------------------------------------------------------
 def font(path, size, var=None):
     f = ImageFont.truetype(path, size)
-    if var: f.set_variation_by_name(var)
+    if var:
+        f.set_variation_by_name(var)
     return f
 
-def tracked(draw, cx, cy, text, f, fill, track):
-    """Draw letter-spaced text centred on (cx, cy) (cy = vertical middle)."""
-    ws = [draw.textlength(c, font=f) for c in text]
-    total = sum(ws) + track * (len(text) - 1)
-    x = cx - total / 2
-    for c, w in zip(text, ws):
-        draw.text((x, cy), c, font=f, fill=fill, anchor='lm'); x += w + track
 
-def background(a, b):
+def tracked(draw, cx, cy, text, f, fill, track):
+    ws = [draw.textlength(c, font=f) for c in text]
+    x = cx - (sum(ws) + track * (len(text) - 1)) / 2
+    for c, w in zip(text, ws):
+        draw.text((x, cy), c, font=f, fill=fill, anchor='lm')
+        x += w + track
+
+
+def fit_width(draw, text, path, var, start, max_w, track_ratio=0.0, track_px=0.0, min_size=24):
+    size = start
+    while size > min_size:
+        f = font(path, size, var)
+        tw = sum(draw.textlength(c, font=f) for c in text) + (track_ratio * size + track_px) * (len(text) - 1)
+        if tw <= max_w:
+            break
+        size -= 2
+    return font(path, size, var), size
+
+
+def noise(h, w, sy, sx, amp):
+    n = ndi.gaussian_filter(rng.normal(0, 1, (h, w)).astype(np.float32), (sy, sx))
+    return n / (n.std() + 1e-6) * amp
+
+
+def arr(im):
+    return np.asarray(im, dtype=np.float32)
+
+
+# ---- scene -----------------------------------------------------------------------------------------
+def background(s):
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
-    t = np.clip((xx / W * 0.45 + yy / H * 0.75), 0, 1)[..., None]
-    a = np.array(a, np.float32); b = np.array(b, np.float32)
-    img = a * (1 - t) + b * t
+    t = np.clip(xx / W * 0.35 + yy / H * 0.8, 0, 1)[..., None]
+    img = np.array(s['bg_a'], np.float32) * (1 - t) + np.array(s['bg_b'], np.float32) * t
+    # soft window-light bloom from the upper left + gentle vignette
+    d = np.hypot((xx - 180) / 900, (yy - 120) / 700)[..., None]
+    img += 9 * np.clip(1 - d, 0, 1) ** 2
+    v = np.hypot((xx - W / 2) / (W * .75), (yy - H * .55) / (H * .8))[..., None]
+    img *= 1 - 0.07 * np.clip(v - .35, 0, 1)
+    img += rng.normal(0, 0.9, (H, W, 1))
     return Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).convert('RGBA')
 
-def arch(img, base_rgb):
-    cx, top, bot, R = 540, 500, 1115, 340
-    m = Image.new('L', (W, H), 0); d = ImageDraw.Draw(m)
-    d.ellipse((cx - R, top, cx + R, top + 2 * R), fill=255); d.rectangle((cx - R, top + R, cx + R, bot), fill=255)
-    m = m.filter(ImageFilter.GaussianBlur(0.8))
-    yy = np.linspace(0, 1, H, dtype=np.float32)[:, None]
-    xx = np.linspace(-1, 1, W, dtype=np.float32)[None, :]
-    base = np.array(base_rgb, np.float32)
-    shade = (1 - 0.10 * np.abs(xx) - 0.05 * np.clip((yy - 0.6) / 0.4, 0, 1))[..., None]
-    fill = Image.fromarray(np.clip(base * shade * np.ones((H, W, 3), np.float32), 0, 255).astype(np.uint8)).convert('RGBA')
-    img.paste(fill, (0, 0), m)
-    # soft inner rim on the arch edge
-    rim = Image.new('L', (W, H), 0); ImageDraw.Draw(rim).arc((cx - R, top, cx + R, top + 2 * R), 180, 360, fill=255, width=3)
-    ImageDraw.Draw(rim).line((cx - R, top + R, cx - R, bot), fill=255, width=3); ImageDraw.Draw(rim).line((cx + R, top + R, cx + R, bot), fill=255, width=3)
-    rim = rim.filter(ImageFilter.GaussianBlur(1.2)).point(lambda v: int(v * 0.55))
-    img.paste(Image.new('RGBA', (W, H), (205, 180, 145, 255)), (0, 0), rim)
 
-def travertine(img, y0=1112, ledge=34):
-    h = H - y0
-    base = np.zeros((h, W, 3), np.float32)
-    base[:ledge] = (238, 225, 203); base[ledge:] = (200, 186, 166)
-    from scipy.ndimage import gaussian_filter
-    streak = gaussian_filter(rng.normal(0, 1, (h, 1)), (2, 0)).repeat(W, 1) * 2.5
-    base += (streak * 6)[..., None]
-    base += rng.normal(0, 1.6, (h, W, 1))
-    im = Image.fromarray(np.clip(base, 0, 255).astype(np.uint8))
-    # pits / fills
-    d = ImageDraw.Draw(im)
-    for _ in range(300):
-        x = rng.integers(0, W); y = rng.integers(0, h); l = rng.integers(4, 22); t = rng.integers(1, 4)
-        c = tuple(int(v) for v in (rng.choice([178, 224]) * np.ones(3) * np.array([1, .95, .88])))
-        d.ellipse((x, y, x + l, y + t), fill=c)
-    im = im.filter(ImageFilter.GaussianBlur(0.6))
-    img.paste(im.convert('RGBA'), (0, y0))
-    # ledge highlight + contact darkening
+def arch_mask(inset=0, ss=3):
+    m = Image.new('L', (W * ss, H * ss), 0)
+    d = ImageDraw.Draw(m)
+    r = ARCH_R - inset
+    top = ARCH_TOP + inset
+    d.ellipse(((ARCH_CX - r) * ss, top * ss, (ARCH_CX + r) * ss, (top + 2 * r) * ss), fill=255)
+    d.rectangle(((ARCH_CX - r) * ss, (top + r) * ss, (ARCH_CX + r) * ss, SURF_TOP * ss), fill=255)
+    return m.resize((W, H), Image.LANCZOS)
+
+
+def niche(img, s):
+    outer = arch_mask(0)
+    inner = arch_mask(20)
+    # frame: slightly lighter than the wall, with a fine highlight on the upper-left edge
+    frame_col = np.clip(np.array(s['bg_b'], np.float32) + np.array([6, 5, 3]), 0, 255)
+    img.paste(Image.new('RGBA', (W, H), tuple(int(v) for v in frame_col) + (255,)), (0, 0), outer)
+    o = arr(outer) / 255
+    # soft shadow the frame casts onto the wall (down-right)
+    sh = Image.fromarray((np.roll(np.roll(o, 10, 0), 8, 1) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(14))
+    sh_a = np.clip(arr(sh) / 255 - o, 0, 1) * 0.22
+    base = arr(img)[..., :3]
+    base = base * (1 - sh_a[..., None]) + np.array([120, 95, 70], np.float32) * sh_a[..., None]
+    # niche interior: tinted stone, darker toward the edges, with a warm glow behind the bottles
+    i = arr(inner) / 255
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    glow = np.clip(1 - np.hypot((xx - ARCH_CX) / 430, (yy - 860) / 520), 0, 1)[..., None] ** 1.4
+    col = np.array(s['niche_rgb'], np.float32)[None, None, :] * (0.93 + 0.12 * glow) + 6 * glow
+    # inner shadow: light comes from upper-left, so the top/left walls of the niche are in shade
+    shifted = np.roll(np.roll(i, 26, 0), 20, 1)
+    shifted = ndi.gaussian_filter(shifted, 16)
+    ins = np.clip(i - shifted, 0, 1)[..., None] * 0.30
+    col = col * (1 - ins) + np.array([110, 85, 62], np.float32) * ins
+    col += noise(H, W, 1.2, 1.2, 0.8)[..., None]
+    base = base * (1 - i[..., None]) + col * i[..., None]
+    out = Image.fromarray(np.clip(base, 0, 255).astype(np.uint8)).convert('RGBA')
+    img.paste(out, (0, 0))
+    # hairline highlight along the frame's outer edge
+    hl = ImageDraw.Draw(img)
+    hl.arc((ARCH_CX - ARCH_R, ARCH_TOP, ARCH_CX + ARCH_R, ARCH_TOP + 2 * ARCH_R), 180, 360, fill=(255, 250, 240, 150), width=2)
+
+
+def travertine(img, s):
+    y0, y1 = SURF_TOP, H
+    h = y1 - y0
+    st = np.array(s['stone'], np.float32)
+    # stone body: broad horizontal strata + fine grain
+    tone = 0.0 + noise(h, W, 0.8, 90, 5.5) + noise(h, W, 3, 40, 3.5) + noise(h, W, 0.6, 5, 1.5)
+    tone2 = np.repeat(ndi.gaussian_filter(rng.normal(0, 1, (h, 1)), 1.6), W, axis=1) * 4
+    top_h = SURF_FRONT - y0
+    col = np.zeros((h, W, 3), np.float32)
+    # top surface: light, brightest at the front edge's far side, slight depth falloff
+    ty = np.linspace(0, 1, top_h, dtype=np.float32)[:, None, None]
+    col[:top_h] = np.array([232, 220, 200], np.float32) * (0.97 + 0.04 * ty) + st
+    # front face: shaded (faces away from the light), darker toward the bottom
+    fy = np.linspace(0, 1, h - top_h, dtype=np.float32)[:, None, None]
+    col[top_h:] = np.array([200, 185, 164], np.float32) * (1.0 - 0.10 * fy) + st
+    col += (tone + tone2)[..., None]
+    # pits: small, soft, low contrast, elongated along the strata (not white speckle)
+    pits = np.zeros((h, W), np.float32)
+    for _ in range(260):
+        x, y = rng.integers(0, W), rng.integers(0, h)
+        ln, th = rng.integers(6, 34), rng.integers(1, 3)
+        pits[y:y + th, x:x + ln] = rng.uniform(0.5, 1.0)
+    pits = ndi.gaussian_filter(pits, 0.8)
+    col -= pits[..., None] * np.array([26, 28, 32], np.float32)
+    col += ndi.shift(pits, (1, 0), order=1)[..., None] * 7  # tiny lit lower lip
+    im = Image.fromarray(np.clip(col, 0, 255).astype(np.uint8)).convert('RGBA')
+    img.paste(im, (0, y0))
     d = ImageDraw.Draw(img)
-    d.line((0, y0, W, y0), fill=(246, 238, 222, 255), width=2)
-    d.line((0, y0 + ledge, W, y0 + ledge), fill=(176, 160, 140, 255), width=2)
+    d.line((0, y0, W, y0), fill=(205, 190, 168, 255), width=1)                    # where wall meets surface
+    d.line((0, SURF_FRONT, W, SURF_FRONT), fill=(248, 241, 228, 255), width=2)   # lit front edge
+    d.line((0, SURF_FRONT + 2, W, SURF_FRONT + 2), fill=(170, 154, 132, 120), width=2)
+    # soft shadow the surface edge throws down the front face
+    edge = np.zeros((H, W), np.float32)
+    edge[SURF_FRONT + 3:SURF_FRONT + 30, :] = np.linspace(1, 0, 27)[:, None]
+    a = arr(img)[..., :3]
+    a = a * (1 - 0.16 * edge[..., None]) + 0
+    img.paste(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert('RGBA'), (0, 0))
 
-def place(img, path, cx, base_y, height, shadow_dx=26, shadow_w=1.0):
-    b = Image.open(path).convert('RGBA')
-    w = round(b.width * height / b.height)
-    b = b.resize((w, height), Image.LANCZOS)
-    x = round(cx - w / 2); y = base_y - height
-    # contact shadow + soft cast shadow
-    sh = Image.new('L', (W, H), 0); d = ImageDraw.Draw(sh)
-    d.ellipse((x - 6, base_y - 12, x + w + 6, base_y + 16), fill=190)
-    sh1 = sh.filter(ImageFilter.GaussianBlur(9))
-    cast = Image.new('L', (W, H), 0); d = ImageDraw.Draw(cast)
-    d.ellipse((x + w * 0.35 + shadow_dx, base_y - 20, x + w * (1.1 + 0.55 * shadow_w) + shadow_dx, base_y + 22), fill=110)
-    cast = cast.filter(ImageFilter.GaussianBlur(20))
-    dark = Image.new('RGBA', (W, H), (92, 70, 52, 255))
-    img.paste(dark, (0, 0), cast.point(lambda v: int(v * .55)))
-    img.paste(dark, (0, 0), sh1.point(lambda v: int(v * .75)))
+
+# ---- bottles ---------------------------------------------------------------------------------------
+def load_clean(path, height):
+    """Load cutout, remove edge halo (colour decontamination), resize with premultiplied alpha, light sharpen."""
+    im = Image.open(path).convert('RGBA')
+    a = np.array(im)
+    al = a[..., 3].astype(np.float32) / 255
+    solid = al > 0.97
+    idx = ndi.distance_transform_edt(~solid, return_distances=False, return_indices=True)
+    rgb = a[..., :3][idx[0], idx[1]]
+    edge = al < 0.97
+    a[..., :3][edge] = rgb[edge]
+    a[..., 3] = (np.clip((al - 0.12) / 0.82, 0, 1) * 255).astype(np.uint8)
+    im = Image.fromarray(a)
+    w = round(im.width * height / im.height)
+    scale = height / im.height
+    if scale > 1.05:   # upscale in two steps, then recover crispness
+        mid = im.resize((round(im.width * (1 + scale) / 2), round(im.height * (1 + scale) / 2)), Image.LANCZOS)
+        im = mid.resize((w, height), Image.LANCZOS)
+        rgb_img = im.convert('RGB').filter(ImageFilter.UnsharpMask(1.4, 55, 2))
+    else:
+        im = im.resize((w, height), Image.LANCZOS)
+        rgb_img = im.convert('RGB').filter(ImageFilter.UnsharpMask(0.8, 35, 2))
+    out = rgb_img.convert('RGBA')
+    out.putalpha(im.getchannel('A'))
+    return out
+
+
+def stage_bottle(img, b, cx, base_y):
+    w, h = b.size
+    x, y = round(cx - w / 2), base_y - h
+    al = b.getchannel('A')
+    # 1) wide, soft ambient occlusion on the surface
+    amb = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(amb).ellipse((x - 14, base_y - 15, x + w + 30, base_y + 20), fill=120)
+    amb = amb.filter(ImageFilter.GaussianBlur(14))
+    # 2) cast shadow, light from upper-left -> falls to the right
+    cast = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(cast).polygon([(x + w * .1, base_y - 4), (x + w * .9, base_y - 4),
+                                  (x + w * 1.55, base_y + 16), (x + w * .75, base_y + 16)], fill=150)
+    cast = cast.filter(ImageFilter.GaussianBlur(10))
+    # 3) tight contact shadow
+    con = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(con).ellipse((x + 3, base_y - 5, x + w - 3, base_y + 6), fill=235)
+    con = con.filter(ImageFilter.GaussianBlur(3.2))
+    dark = Image.new('RGBA', (W, H), (70, 52, 38, 255))
+    for m, k in ((amb, .42), (cast, .34), (con, .78)):
+        img.paste(dark, (0, 0), m.point(lambda v, k=k: int(v * k)))
+    # 4) glossy-surface reflection: mirrored bottle fading out within ~34px of the base
+    rh = 34
+    refl = b.transpose(Image.FLIP_TOP_BOTTOM).crop((0, 0, w, rh))
+    fade = Image.fromarray((np.linspace(0.30, 0, rh)[:, None] * np.ones((1, w)) * 255).astype(np.uint8))
+    ra = Image.fromarray((arr(refl.getchannel('A')) * arr(fade) / 255).astype(np.uint8))
+    refl = refl.filter(ImageFilter.GaussianBlur(0.9))
+    refl.putalpha(ra.filter(ImageFilter.GaussianBlur(0.9)))
+    img.alpha_composite(refl, (x, base_y))
+    # 5) the bottle itself
     img.alpha_composite(b, (x, y))
-    return x, y, w
 
+
+# ---- build -----------------------------------------------------------------------------------------
 def build(n):
-    s = SLIDES[n]; s['out'] = s['out'].format(n=n)
-    img = background(s['bg_a'], s['bg_b']); arch(img, s['arch_rgb']); travertine(img)
+    s = SLIDES[n]
+    s['out'] = s['out'].format(n=n)
+    img = background(s)
+    niche(img, s)
+    travertine(img, s)
+
     d = ImageDraw.Draw(img)
-    brown = (74, 52, 40); gold = (176, 141, 87)
-    # logo (placeholder wordmark until the real file is supplied)
-    tracked(d, 540, 90, 'SCENTRO', font(CORM, 42, 'Medium'), brown, 20)
-    tracked(d, 540, 125, 'LOGO PLACEHOLDER', font(INTER, 11), (176, 150, 125), 5.5)
-    d.line((517, 156, 563, 156), fill=gold, width=2)
-    # title block
-    size = 100
-    while True:
-        tf = font(CORM, size, 'SemiBold'); tw = sum(d.textlength(c, font=tf) for c in s['title']) + (size * .12) * (len(s['title']) - 1)
-        if tw <= 720 or size < 50: break
-        size -= 2
-    tracked(d, 540, 243, s['title'], tf, s['title_rgb'], size * .12)
-    tracked(d, 540, 317, 'MAD PARFUMEUR', font(INTER, 20), brown, 9)
-    d.line((480, 350, 600, 350), fill=gold, width=2); d.ellipse((536, 346, 544, 354), fill=gold)
-    # INSPIRED BY – darker champagne-gold, slightly heavier than draft for contrast
-    tracked(d, 540, 377, 'INSPIRED BY', font(INTER_M, 16), (143, 105, 52), 8)
-    ns = s['name_size']
-    while sum(d.textlength(c, font=font(CORM, ns, 'SemiBold')) for c in s['inspired']) + 1.5 * len(s['inspired']) > 700: ns -= 2
-    tracked(d, 540, 425, s['inspired'], font(CORM, ns, 'SemiBold'), brown, 1.5)
-    # bottles: MAD larger left, original smaller right, shared baseline on the ledge
-    base = 1128; gap = 56
-    def dims(p, h):
-        im = Image.open(p); return round(im.width * h / im.height)
-    w1, w2 = dims(s['mad'], s['mad_h']), dims(s['orig'], s['orig_h'])
-    left = 540 - (w1 + gap + w2) / 2
-    place(img, s['mad'], left + w1 / 2, base, s['mad_h'])
-    place(img, s['orig'], left + w1 + gap + w2 / 2, base + s['sink'], s['orig_h'], shadow_dx=14, shadow_w=0.6)
-    out = img.convert('RGB'); out.save(s['out'], optimize=True); print(s['out'], out.size)
+    brown, gold = (74, 52, 40), (176, 141, 87)
+    # header (logo placeholder until the real file arrives)
+    tracked(d, 540, 78, 'SCENTRO', font(CORM, 42, 'Medium'), brown, 20)
+    tracked(d, 540, 111, 'LOGO PLACEHOLDER', font(INTER, 11), (176, 150, 125), 5.5)
+    d.line((517, 138, 563, 138), fill=gold, width=2)
+    # title block (tightened so the bottles can be larger)
+    tf, size = fit_width(d, s['title'], CORM, 'SemiBold', 100, 720, track_ratio=.12)
+    tracked(d, 540, 200, s['title'], tf, s['title_rgb'], size * .12)
+    tracked(d, 540, 281, 'MAD PARFUMEUR', font(INTER, 19), brown, 9)
+    d.line((480, 311, 600, 311), fill=gold, width=2)
+    d.ellipse((536, 307, 544, 315), fill=gold)
+    tracked(d, 540, 340, 'INSPIRED BY', font(INTER_M, 16), (143, 105, 52), 8)
+    nf, _ = fit_width(d, s['inspired'], CORM, 'SemiBold', s['name_size'], 700, track_px=1.5)
+    tracked(d, 540, 388, s['inspired'], nf, brown, 1.5)
+
+    # bottles: MAD hero on the left, original on the right, shared baseline, group centred on the arch
+    b1 = load_clean(s['mad'], s['mad_h'])
+    b2 = load_clean(s['orig'], s['orig_h'])
+    left = ARCH_CX - (b1.width + GAP + b2.width) / 2
+    stage_bottle(img, b1, left + b1.width / 2, BASE_Y)
+    stage_bottle(img, b2, left + b1.width + GAP + b2.width / 2, BASE_Y)
+
+    out = img.convert('RGB')
+    out.save(s['out'], optimize=True)
+    print(s['out'], out.size)
+
 
 if __name__ == '__main__':
-    build(int(sys.argv[1]))
+    for a in sys.argv[1:]:
+        build(int(a))
