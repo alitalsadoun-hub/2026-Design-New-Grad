@@ -27,12 +27,12 @@ def S(title, mad, orig, inspired, title_rgb, bg_a, bg_b, niche_rgb, mad_h=640, o
 SLIDES = {
     1: S('ROUGE', 'mad_rouge', 'brx540_extrait', 'Baccarat Rouge 540 Extrait de Parfum', (122, 20, 38), (245, 237, 224), (231, 217, 197), (226, 209, 187), mad_h=610, orig_h=440, name_size=40),
     2: S('TREASURE', 'mad_treasure', 'naxos', 'Naxos', (142, 98, 34), (246, 238, 220), (233, 215, 186), (229, 208, 176), mad_h=600, orig_h=470, stone=(4, 0, -6)),
-    3: S('MARJORIE', 'mad_marjorie', 'guidance', 'Guidance', (148, 86, 92), (247, 240, 231), (237, 221, 213), (230, 208, 198), mad_h=600, orig_h=395, stone=(2, -2, -2),
-          photo=dict(src='assets/source/mad_marjorie_original.webp', crop=(245, 105, 595, 630), size=(450, 675))),
+    3: S('MARJORIE', 'mad_marjorie', 'guidance', 'Guidance', (148, 86, 92), (247, 240, 231), (237, 221, 213), (230, 208, 198), mad_h=610, orig_h=380, stone=(2, -2, -2),),
     4: S('EFFECT', 'mad_effect', 'side_effect', 'Side Effect', (104, 30, 38), (244, 235, 222), (229, 212, 194), (224, 202, 182), mad_h=610, orig_h=450),
     5: S('DREAMLIGHT', 'mad_dreamlight', 'attrape_reves', 'Attrape-Rêves', (126, 88, 130), (248, 242, 240), (236, 225, 232), (230, 214, 222), mad_h=560, orig_h=450, stone=(0, -2, 3)),
     6: S('FORZA', 'mad_forza', 'alexandria_ii', 'Alexandria II', (106, 74, 42), (245, 237, 223), (230, 215, 191), (226, 207, 178), mad_h=500, orig_h=470, stone=(2, 0, -3)),
 }
+SLIDES[31] = dict(SLIDES[3], photo=dict(src='assets/source/mad_marjorie_original.webp', crop=(245, 105, 595, 630), size=(450, 675)), mad_h=600, orig_h=395, out='output/slide3_marjorie_framed.png')
 
 rng = np.random.default_rng(11)
 
@@ -254,7 +254,7 @@ def photo_panel(s):
 # ---- build -----------------------------------------------------------------------------------------
 def build(n):
     s = SLIDES[n]
-    s['out'] = s['out'].format(n=n)
+    s = dict(s); s['out'] = s['out'].format(n=n)
     img = background(s)
     if not s['photo']:
         niche(img, s)

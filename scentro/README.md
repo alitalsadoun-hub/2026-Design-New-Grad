@@ -5,5 +5,6 @@
 - Fonts: Cormorant Garamond (OFL) + Inter.
 
 ## Original-bottle photo sources (commercial-reuse licence NOT verified)
-Rouge: zgoperfumery.com · Naxos: shoprescuespa.com · Guidance: parfumexquis.us · Side Effect: 4doutfitters.com ·
+MAD bottles (Rouge, Treasure, Marjorie, Dreamlight): fragrantica.com ids 118803, 119723, 119716, 118790 (bottle-only photos, edge-based cutout via cutout_edge.py). Effect + Forza: supplied photos.
+Originals - Rouge: zgoperfumery.com · Naxos: shoprescuespa.com · Guidance: parfumexquis.us · Side Effect: 4doutfitters.com ·
 Attrape-Rêves: fragrantica.com (id 51016) · Alexandria II: perfumeforever.com (matches Fragrantica id 17786 design)
