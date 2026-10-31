@@ -18,16 +18,17 @@ BASE_Y = 1176                                   # bottles stand mid-way on the s
 GAP = 64
 
 
-def S(title, mad, orig, inspired, title_rgb, bg_a, bg_b, niche_rgb, mad_h=640, orig_h=470, name_size=46, stone=(0, 0, 0)):
+def S(title, mad, orig, inspired, title_rgb, bg_a, bg_b, niche_rgb, mad_h=640, orig_h=470, name_size=46, stone=(0, 0, 0), photo=None):
     return dict(title=title, mad=f'assets/cutouts/{mad}.png', orig=f'assets/cutouts/{orig}.png', inspired=inspired,
                 title_rgb=title_rgb, bg_a=bg_a, bg_b=bg_b, niche_rgb=niche_rgb, mad_h=mad_h, orig_h=orig_h,
-                name_size=name_size, stone=stone, out=f'output/slide{{n}}_{title.lower()}.png')
+                name_size=name_size, stone=stone, photo=photo, out=f'output/slide{{n}}_{title.lower()}.png')
 
 
 SLIDES = {
     1: S('ROUGE', 'mad_rouge', 'brx540_extrait', 'Baccarat Rouge 540 Extrait de Parfum', (122, 20, 38), (245, 237, 224), (231, 217, 197), (226, 209, 187), mad_h=610, orig_h=440, name_size=40),
     2: S('TREASURE', 'mad_treasure', 'naxos', 'Naxos', (142, 98, 34), (246, 238, 220), (233, 215, 186), (229, 208, 176), mad_h=600, orig_h=470, stone=(4, 0, -6)),
-    3: S('MARJORIE', 'mad_marjorie', 'guidance', 'Guidance', (148, 86, 92), (247, 240, 231), (237, 221, 213), (230, 208, 198), mad_h=600, orig_h=350, stone=(2, -2, -2)),
+    3: S('MARJORIE', 'mad_marjorie', 'guidance', 'Guidance', (148, 86, 92), (247, 240, 231), (237, 221, 213), (230, 208, 198), mad_h=600, orig_h=395, stone=(2, -2, -2),
+          photo=dict(src='assets/source/mad_marjorie_original.webp', crop=(245, 105, 595, 630), size=(450, 675))),
     4: S('EFFECT', 'mad_effect', 'side_effect', 'Side Effect', (104, 30, 38), (244, 235, 222), (229, 212, 194), (224, 202, 182), mad_h=610, orig_h=450),
     5: S('DREAMLIGHT', 'mad_dreamlight', 'attrape_reves', 'Attrape-Rêves', (126, 88, 130), (248, 242, 240), (236, 225, 232), (230, 214, 222), mad_h=560, orig_h=450, stone=(0, -2, 3)),
     6: S('FORZA', 'mad_forza', 'alexandria_ii', 'Alexandria II', (106, 74, 42), (245, 237, 223), (230, 215, 191), (226, 207, 178), mad_h=500, orig_h=470, stone=(2, 0, -3)),
@@ -225,12 +226,38 @@ def stage_bottle(img, b, cx, base_y):
     img.alpha_composite(b, (x, y))
 
 
+def photo_panel(s):
+    """Marjorie: the original lifestyle photo (bottle intact with its roses/peaches) in a standing arch-shaped stone frame."""
+    p = s['photo']; w, h = p['size']; fr = 18
+    ph = Image.open(p['src']).convert('RGB').crop(p['crop'])
+    ph = ph.resize((w, h), Image.LANCZOS).filter(ImageFilter.UnsharpMask(1.2, 45, 2))
+    ss = 3
+    def arch_m(wm, hm):
+        m = Image.new('L', (wm * ss, hm * ss), 0); d = ImageDraw.Draw(m)
+        d.ellipse((0, 0, wm * ss - 1, wm * ss - 1), fill=255); d.rectangle((0, wm * ss // 2, wm * ss - 1, hm * ss - 1), fill=255)
+        return m.resize((wm, hm), Image.LANCZOS)
+    W2, H2 = w + 2 * fr, h + fr
+    panel = Image.new('RGBA', (W2, H2), (0, 0, 0, 0))
+    frame_col = tuple(int(v) for v in np.clip(np.array(s['bg_b'], np.float32) + np.array([12, 11, 9]), 0, 255))
+    panel.paste(Image.new('RGBA', (W2, H2), frame_col + (255,)), (0, 0), arch_m(W2, H2))
+    inner = Image.new('RGBA', (w, h)); inner.paste(ph.convert('RGBA'), (0, 0))
+    m_in = arch_m(w, h)
+    # subtle inner shade so the photo sits inside the frame
+    sh = np.roll(np.roll(arr(m_in) / 255, 10, 0), 8, 1); sh = ndi.gaussian_filter(sh, 8)
+    ins = np.clip(arr(m_in) / 255 - sh, 0, 1)[..., None] * 0.28
+    a = arr(inner)[..., :3] * (1 - ins) + np.array([100, 80, 60], np.float32) * ins
+    inner = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert('RGBA'); inner.putalpha(m_in)
+    panel.alpha_composite(inner, (fr, fr))
+    return panel
+
+
 # ---- build -----------------------------------------------------------------------------------------
 def build(n):
     s = SLIDES[n]
     s['out'] = s['out'].format(n=n)
     img = background(s)
-    niche(img, s)
+    if not s['photo']:
+        niche(img, s)
     travertine(img, s)
 
     d = ImageDraw.Draw(img)
@@ -250,7 +277,7 @@ def build(n):
     tracked(d, 540, 388, s['inspired'], nf, brown, 1.5)
 
     # bottles: MAD hero on the left, original on the right, shared baseline, group centred on the arch
-    b1 = load_clean(s['mad'], s['mad_h'])
+    b1 = photo_panel(s) if s['photo'] else load_clean(s['mad'], s['mad_h'])
     b2 = load_clean(s['orig'], s['orig_h'])
     left = ARCH_CX - (b1.width + GAP + b2.width) / 2
     stage_bottle(img, b1, left + b1.width / 2, BASE_Y)
