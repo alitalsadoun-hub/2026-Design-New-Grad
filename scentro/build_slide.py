@@ -7,11 +7,18 @@ INTER = '/usr/share/fonts/opentype/inter/Inter-Regular.otf'
 INTER_M = '/usr/share/fonts/opentype/inter/Inter-Medium.otf'
 rng = np.random.default_rng(7)
 
+def S(title, mad, orig, inspired, title_rgb, bg_a, bg_b, arch_rgb, mad_h=600, orig_h=440, sink=0, name_size=46):
+    return dict(title=title, mad=f'assets/cutouts/{mad}.png', orig=f'assets/cutouts/{orig}.png', inspired=inspired,
+                title_rgb=title_rgb, bg_a=bg_a, bg_b=bg_b, arch_rgb=arch_rgb, mad_h=mad_h, orig_h=orig_h, sink=sink,
+                name_size=name_size, out=f'output/slide{{n}}_{title.lower()}.png')
+
 SLIDES = {
- 1: dict(title='ROUGE', mad='assets/cutouts/mad_rouge.png', orig='assets/cutouts/brx540_extrait.png',
-         inspired='Baccarat Rouge 540 Extrait de Parfum', title_rgb=(122, 20, 38),
-         tint=(0, 0, 0),  # per-slide background tint (r,g,b offsets)
-         out='output/slide1_rouge.png'),
+ 1: S('ROUGE', 'mad_rouge', 'brx540_extrait', 'Baccarat Rouge 540 Extrait de Parfum', (122, 20, 38), (244, 236, 223), (230, 216, 196), (228, 213, 192), name_size=40),
+ 2: S('TREASURE', 'mad_treasure', 'naxos', 'Naxos', (142, 98, 34), (245, 236, 218), (232, 214, 184), (230, 212, 182), mad_h=590, orig_h=470),
+ 3: S('MARJORIE', 'mad_marjorie', 'guidance', 'Guidance', (148, 86, 92), (246, 239, 230), (236, 220, 212), (232, 214, 205), mad_h=590, orig_h=360),
+ 4: S('EFFECT', 'mad_effect', 'side_effect', 'Side Effect', (104, 30, 38), (243, 234, 221), (228, 211, 193), (226, 207, 188), mad_h=600, orig_h=440),
+ 5: S('DREAMLIGHT', 'mad_dreamlight', 'attrape_reves', 'Attrape-Rêves', (126, 88, 130), (247, 241, 239), (235, 224, 231), (232, 218, 222), mad_h=540, orig_h=440),
+ 6: S('FORZA', 'mad_forza', 'alexandria_ii', 'Alexandria II', (106, 74, 42), (244, 236, 222), (229, 214, 190), (228, 211, 184), mad_h=500, orig_h=470),
 }
 
 def font(path, size, var=None):
@@ -27,21 +34,21 @@ def tracked(draw, cx, cy, text, f, fill, track):
     for c, w in zip(text, ws):
         draw.text((x, cy), c, font=f, fill=fill, anchor='lm'); x += w + track
 
-def background(tint):
+def background(a, b):
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
     t = np.clip((xx / W * 0.45 + yy / H * 0.75), 0, 1)[..., None]
-    a = np.array([244, 236, 223], np.float32); b = np.array([230, 216, 196], np.float32)
-    img = a * (1 - t) + b * t + np.array(tint, np.float32)
+    a = np.array(a, np.float32); b = np.array(b, np.float32)
+    img = a * (1 - t) + b * t
     return Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).convert('RGBA')
 
-def arch(img):
+def arch(img, base_rgb):
     cx, top, bot, R = 540, 500, 1115, 340
     m = Image.new('L', (W, H), 0); d = ImageDraw.Draw(m)
     d.ellipse((cx - R, top, cx + R, top + 2 * R), fill=255); d.rectangle((cx - R, top + R, cx + R, bot), fill=255)
     m = m.filter(ImageFilter.GaussianBlur(0.8))
     yy = np.linspace(0, 1, H, dtype=np.float32)[:, None]
     xx = np.linspace(-1, 1, W, dtype=np.float32)[None, :]
-    base = np.array([228, 213, 192], np.float32)
+    base = np.array(base_rgb, np.float32)
     shade = (1 - 0.10 * np.abs(xx) - 0.05 * np.clip((yy - 0.6) / 0.4, 0, 1))[..., None]
     fill = Image.fromarray(np.clip(base * shade * np.ones((H, W, 3), np.float32), 0, 255).astype(np.uint8)).convert('RGBA')
     img.paste(fill, (0, 0), m)
@@ -92,8 +99,8 @@ def place(img, path, cx, base_y, height, shadow_dx=26, shadow_w=1.0):
     return x, y, w
 
 def build(n):
-    s = SLIDES[n]
-    img = background(s['tint']); arch(img); travertine(img)
+    s = SLIDES[n]; s['out'] = s['out'].format(n=n)
+    img = background(s['bg_a'], s['bg_b']); arch(img, s['arch_rgb']); travertine(img)
     d = ImageDraw.Draw(img)
     brown = (74, 52, 40); gold = (176, 141, 87)
     # logo (placeholder wordmark until the real file is supplied)
@@ -101,16 +108,27 @@ def build(n):
     tracked(d, 540, 125, 'LOGO PLACEHOLDER', font(INTER, 11), (176, 150, 125), 5.5)
     d.line((517, 156, 563, 156), fill=gold, width=2)
     # title block
-    tracked(d, 540, 243, s['title'], font(CORM, 100, 'SemiBold'), s['title_rgb'], 12)
+    size = 100
+    while True:
+        tf = font(CORM, size, 'SemiBold'); tw = sum(d.textlength(c, font=tf) for c in s['title']) + (size * .12) * (len(s['title']) - 1)
+        if tw <= 720 or size < 50: break
+        size -= 2
+    tracked(d, 540, 243, s['title'], tf, s['title_rgb'], size * .12)
     tracked(d, 540, 317, 'MAD PARFUMEUR', font(INTER, 20), brown, 9)
     d.line((480, 350, 600, 350), fill=gold, width=2); d.ellipse((536, 346, 544, 354), fill=gold)
     # INSPIRED BY – darker champagne-gold, slightly heavier than draft for contrast
     tracked(d, 540, 377, 'INSPIRED BY', font(INTER_M, 16), (143, 105, 52), 8)
-    tracked(d, 540, 425, s['inspired'], font(CORM, 40, 'SemiBold'), brown, 1.5)
+    ns = s['name_size']
+    while sum(d.textlength(c, font=font(CORM, ns, 'SemiBold')) for c in s['inspired']) + 1.5 * len(s['inspired']) > 700: ns -= 2
+    tracked(d, 540, 425, s['inspired'], font(CORM, ns, 'SemiBold'), brown, 1.5)
     # bottles: MAD larger left, original smaller right, shared baseline on the ledge
-    base = 1128
-    place(img, s['mad'], 372, base, 600)
-    place(img, s['orig'], 700, base, 440, shadow_dx=14, shadow_w=0.6)
+    base = 1128; gap = 56
+    def dims(p, h):
+        im = Image.open(p); return round(im.width * h / im.height)
+    w1, w2 = dims(s['mad'], s['mad_h']), dims(s['orig'], s['orig_h'])
+    left = 540 - (w1 + gap + w2) / 2
+    place(img, s['mad'], left + w1 / 2, base, s['mad_h'])
+    place(img, s['orig'], left + w1 + gap + w2 / 2, base + s['sink'], s['orig_h'], shadow_dx=14, shadow_w=0.6)
     out = img.convert('RGB'); out.save(s['out'], optimize=True); print(s['out'], out.size)
 
 if __name__ == '__main__':
