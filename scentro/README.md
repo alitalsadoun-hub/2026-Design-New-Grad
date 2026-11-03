@@ -8,3 +8,7 @@
 MAD bottles (Rouge, Treasure, Marjorie, Dreamlight): fragrantica.com ids 118803, 119723, 119716, 118790 (bottle-only photos, edge-based cutout via cutout_edge.py). Effect + Forza: supplied photos.
 Originals - Rouge: zgoperfumery.com · Naxos: shoprescuespa.com · Guidance: parfumexquis.us · Side Effect: 4doutfitters.com ·
 Attrape-Rêves: fragrantica.com (id 51016) · Alexandria II: perfumeforever.com (matches Fragrantica id 17786 design)
+
+## Collection 2 (new MAD carousel) - `output/collection2/`, cutouts in `assets/cutouts/collection2/`, sources in `assets/source/collection2/`
+Built with the same `build_slide.py` template (entries 11+ in `SLIDES`). Bottle photos: Fragrantica ids - MAD: Sateen Oud 119717, Inviting 118792, Adria 118783, Bruno Exotic 118784, Draco 118789, Gumin 118791, Bruno Detox 119695;
+originals: Oud Satin Mood 30352, Craquele 32671, Amyris Homme 15566, Delox 44357, Supreme Bouquet 18369. Commercial-reuse licence NOT verified.

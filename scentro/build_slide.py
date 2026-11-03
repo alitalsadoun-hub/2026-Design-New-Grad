@@ -18,10 +18,11 @@ BASE_Y = 1176                                   # bottles stand mid-way on the s
 GAP = 64
 
 
-def S(title, mad, orig, inspired, title_rgb, bg_a, bg_b, niche_rgb, mad_h=640, orig_h=470, name_size=46, stone=(0, 0, 0), photo=None):
-    return dict(title=title, mad=f'assets/cutouts/{mad}.png', orig=f'assets/cutouts/{orig}.png', inspired=inspired,
+def S(title, mad, orig, inspired, title_rgb, bg_a, bg_b, niche_rgb, mad_h=640, orig_h=470, name_size=46, stone=(0, 0, 0), photo=None, out=None):
+    P = lambda n: n if '/' in n else f'assets/cutouts/{n}.png'
+    return dict(title=title, mad=P(mad), orig=P(orig), inspired=inspired,
                 title_rgb=title_rgb, bg_a=bg_a, bg_b=bg_b, niche_rgb=niche_rgb, mad_h=mad_h, orig_h=orig_h,
-                name_size=name_size, stone=stone, photo=photo, out=f'output/slide{{n}}_{title.lower()}.png')
+                name_size=name_size, stone=stone, photo=photo, out=out or f'output/slide{{n}}_{title.lower()}.png')
 
 
 SLIDES = {
@@ -33,6 +34,13 @@ SLIDES = {
     6: S('FORZA', 'mad_forza', 'alexandria_ii', 'Alexandria II', (106, 74, 42), (245, 237, 223), (230, 215, 191), (226, 207, 178), mad_h=500, orig_h=470, stone=(2, 0, -3)),
 }
 SLIDES[31] = dict(SLIDES[3], photo=dict(src='assets/source/mad_marjorie_original.webp', crop=(245, 105, 595, 630), size=(450, 675)), mad_h=600, orig_h=395, out='output/slide3_marjorie_framed.png')
+
+# ---- collection 2 (new MAD carousel) ----------------------------------------------------------------
+C2 = 'assets/cutouts/collection2/'
+SLIDES[11] = S('SATEEN OUD', C2 + 'mad_sateen_oud.png', C2 + 'oud_satin_mood.png', 'Oud Satin Mood', (38, 48, 84),
+               (244, 237, 226), (229, 217, 199), (224, 211, 192), mad_h=520, orig_h=500, stone=(0, 0, 2),
+               out='output/collection2/slide1_sateen_oud.png')
+MAXW = 640   # max combined width of both bottles + gap, so they always sit inside the arch
 
 rng = np.random.default_rng(11)
 
@@ -278,11 +286,15 @@ def build(n):
     # bottles: MAD hero on the left, original on the right, shared baseline, group centred on the arch
     b1 = photo_panel(s) if s['photo'] else load_clean(s['mad'], s['mad_h'])
     b2 = load_clean(s['orig'], s['orig_h'])
+    if not s['photo'] and b1.width + GAP + b2.width > MAXW:   # keep both bottles inside the arch
+        f = (MAXW - GAP) / (b1.width + b2.width)
+        b1 = load_clean(s['mad'], round(s['mad_h'] * f)); b2 = load_clean(s['orig'], round(s['orig_h'] * f))
     left = ARCH_CX - (b1.width + GAP + b2.width) / 2
     stage_bottle(img, b1, left + b1.width / 2, BASE_Y)
     stage_bottle(img, b2, left + b1.width + GAP + b2.width / 2, BASE_Y)
 
     out = img.convert('RGB')
+    import os; os.makedirs(os.path.dirname(s['out']), exist_ok=True)
     out.save(s['out'], optimize=True)
     print(s['out'], out.size)
 
