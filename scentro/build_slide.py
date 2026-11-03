@@ -47,7 +47,7 @@ def C2S(n, title, mad, orig, inspired, title_rgb, bg_a, bg_b, niche, mad_h, orig
              stone=stone, name_size=name_size, out=f'output/collection2/slide{n}_{slug}.png')
 
 
-SLIDES[12] = C2S(2, 'BRUNO EXOTIC', 'mad_bruno_exotic', 'amyris_homme', 'Amyris Homme', (150, 48, 36), (245, 236, 222), (231, 214, 194), (227, 206, 186), 560, 470, stone=(3, 0, -3))
+SLIDES[12] = C2S(2, 'BRUNO EXOTIC', 'mad_bruno_exotic', 'amyris_homme_extrait', 'Amyris Homme Extrait de Parfum', (150, 48, 36), (245, 236, 222), (231, 214, 194), (227, 206, 186), 560, 470, stone=(3, 0, -3))
 SLIDES[13] = C2S(3, 'BRUNO DETOX', 'mad_bruno_detox', 'delox', 'Delox', (96, 50, 90), (246, 239, 233), (233, 221, 223), (229, 212, 216), 560, 470, stone=(1, -1, 2))
 SLIDES[14] = C2S(4, 'ADRIA', 'mad_adria', 'craquele', 'Craquelé', (24, 84, 88), (244, 239, 229), (227, 225, 211), (222, 220, 205), 560, 480, stone=(-2, 1, 0))
 SLIDES[15] = C2S(5, 'INVITING', 'mad_inviting', 'supreme_bouquet', 'Supreme Bouquet', (150, 112, 40), (248, 241, 226), (237, 223, 195), (233, 217, 187), 520, 480, stone=(3, 1, -5))
