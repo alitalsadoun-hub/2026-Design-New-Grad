@@ -40,6 +40,19 @@ C2 = 'assets/cutouts/collection2/'
 SLIDES[11] = S('SATEEN OUD', C2 + 'mad_sateen_oud.png', C2 + 'oud_satin_mood.png', 'Oud Satin Mood', (38, 48, 84),
                (244, 237, 226), (229, 217, 199), (224, 211, 192), mad_h=520, orig_h=500, stone=(0, 0, 2),
                out='output/collection2/slide1_sateen_oud.png')
+
+def C2S(n, title, mad, orig, inspired, title_rgb, bg_a, bg_b, niche, mad_h, orig_h, stone=(0, 0, 0), name_size=46):
+    slug = title.lower().replace(' ', '_')
+    return S(title, C2 + mad + '.png', C2 + orig + '.png', inspired, title_rgb, bg_a, bg_b, niche, mad_h=mad_h, orig_h=orig_h,
+             stone=stone, name_size=name_size, out=f'output/collection2/slide{n}_{slug}.png')
+
+
+SLIDES[12] = C2S(2, 'BRUNO EXOTIC', 'mad_bruno_exotic', 'amyris_homme', 'Amyris Homme', (150, 48, 36), (245, 236, 222), (231, 214, 194), (227, 206, 186), 560, 470, stone=(3, 0, -3))
+SLIDES[13] = C2S(3, 'BRUNO DETOX', 'mad_bruno_detox', 'delox', 'Delox', (96, 50, 90), (246, 239, 233), (233, 221, 223), (229, 212, 216), 560, 470, stone=(1, -1, 2))
+SLIDES[14] = C2S(4, 'ADRIA', 'mad_adria', 'craquele', 'Craquelé', (24, 84, 88), (244, 239, 229), (227, 225, 211), (222, 220, 205), 560, 480, stone=(-2, 1, 0))
+SLIDES[15] = C2S(5, 'INVITING', 'mad_inviting', 'supreme_bouquet', 'Supreme Bouquet', (150, 112, 40), (248, 241, 226), (237, 223, 195), (233, 217, 187), 520, 480, stone=(3, 1, -5))
+SLIDES[16] = C2S(6, 'DRACO', 'mad_draco', 'draco', 'Draco', (28, 52, 104), (244, 239, 229), (229, 223, 213), (223, 216, 205), 600, 440, stone=(0, 0, 2))
+SLIDES[17] = C2S(7, 'GUMIN', 'mad_gumin', 'gumin', 'Gumin', (20, 96, 118), (244, 240, 230), (227, 227, 215), (221, 223, 211), 540, 470, stone=(-2, 1, 1))
 MAXW = 640   # max combined width of both bottles + gap, so they always sit inside the arch
 
 rng = np.random.default_rng(11)
