@@ -70,7 +70,10 @@ def tracked(draw, cx, cy, text, f, fill, track):
     ws = [draw.textlength(c, font=f) for c in text]
     x = cx - (sum(ws) + track * (len(text) - 1)) / 2
     for c, w in zip(text, ws):
-        draw.text((x, cy), c, font=f, fill=fill, anchor='lm')
+        try:
+            draw.text((x, cy), c, font=f, fill=fill, anchor='lm', features=['lnum'])
+        except Exception:
+            draw.text((x, cy), c, font=f, fill=fill, anchor='lm')
         x += w + track
 
 

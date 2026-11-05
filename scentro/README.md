@@ -12,3 +12,7 @@ Attrape-Rêves: fragrantica.com (id 51016) · Alexandria II: perfumeforever.com 
 ## Collection 2 (new MAD carousel) - `output/collection2/`, cutouts in `assets/cutouts/collection2/`, sources in `assets/source/collection2/`
 Built with the same `build_slide.py` template (entries 11+ in `SLIDES`). Bottle photos: Fragrantica ids - MAD: Sateen Oud 119717, Inviting 118792, Adria 118783, Bruno Exotic 118784, Draco 118789, Gumin 118791, Bruno Detox 119695;
 originals: Oud Satin Mood 30352, Craquele 32671, Amyris Homme 15566, Delox 44357, Supreme Bouquet 18369. Commercial-reuse licence NOT verified.
+
+## Collection 3 - women's MAD Selective 100 ml (`build_women.py`, `collection3/`)
+Source = scentrojo.com product pages (site is a JS app; read with headless Playwright). Product ids: A113=48, A118=49, B103=51, B105=52, B107=53, D116=57, G102=59, K102=64, W213=73, Y104=76.
+Use only the clean packshot (bottle beside its box); the site's campaign photos include designer bottles - do not use. Licence/permission: Scentro's own site imagery.
