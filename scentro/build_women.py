@@ -6,7 +6,8 @@ import build_slide as B
 
 W_ITEMS = {
     'A113': dict(cut='collection3/assets/cutouts/a113.png', title_rgb=(168, 104, 70), bg_a=(247, 240, 229), bg_b=(237, 222, 203),
-                 niche_rgb=(233, 214, 194), stone=(3, 0, -3), notes='Bergamot  ·  Jasmine  ·  Vanilla  ·  Cashmere', hero_h=660),
+                 niche_rgb=(233, 214, 194), stone=(3, 0, -3), notes='Bergamot  ·  Jasmine  ·  Vanilla  ·  Cashmere', hero_h=620,
+                 orig='collection3/assets/cutouts/orig_alien_goddess.png', orig_h=480),
 }
 
 def build(code):
@@ -24,7 +25,11 @@ def build(code):
     nf, _ = B.fit_width(d, w['notes'], B.CORM, 'SemiBold', 38, 760, track_px=1.5)
     B.tracked(d, 540, 388, w['notes'], nf, brown, 1.5)
     b = B.load_clean(w['cut'], w['hero_h'])
-    B.stage_bottle(img, b, B.ARCH_CX, B.BASE_Y)
+    if w.get('orig'):
+        o = B.load_clean(w['orig'], w['orig_h']); left = B.ARCH_CX - (b.width + B.GAP + o.width) / 2
+        B.stage_bottle(img, b, left + b.width / 2, B.BASE_Y); B.stage_bottle(img, o, left + b.width + B.GAP + o.width / 2, B.BASE_Y)
+    else:
+        B.stage_bottle(img, b, B.ARCH_CX, B.BASE_Y)
     os.makedirs('collection3/output', exist_ok=True); out = f'collection3/output/{code.lower()}.png'
     img.convert('RGB').save(out, optimize=True); print(out)
 
