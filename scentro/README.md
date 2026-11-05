@@ -16,3 +16,5 @@ originals: Oud Satin Mood 30352, Craquele 32671, Amyris Homme 15566, Delox 44357
 ## Collection 3 - women's MAD Selective 100 ml (`build_women.py`, `collection3/`)
 Source = scentrojo.com product pages (site is a JS app; read with headless Playwright). Product ids: A113=48, A118=49, B103=51, B105=52, B107=53, D116=57, G102=59, K102=64, W213=73, Y104=76.
 Use only the clean packshot (bottle beside its box); the site's campaign photos include designer bottles - do not use. Licence/permission: Scentro's own site imagery.
+Originals (Fragrantica ids, each checked against the bottle in scentrojo's own product photo): A113 Alien Goddess 68354, A118 Armani My Way 62036, B103 Burberry Her 51694, B105 Burberry Her Elixir 75968, B107 Burberry Goddess 83483, D116 D&G Q EDP 78873, G102 Gucci Guilty Elixir Pour Femme 84546, K102 Kayali Vanilla Candy Rock Sugar 42 92258, W213 YSL Black Opium 25324, Y104 YSL Black Opium Over Red 88707.
+Build all: `python3 build_women.py` (or pass codes). Per-perfume palette/notes/sizes live in W_ITEMS.
