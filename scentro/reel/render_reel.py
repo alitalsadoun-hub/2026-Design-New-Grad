@@ -6,7 +6,7 @@ import cta_layers
 CODES = ['a113', 'a118', 'b103', 'b105', 'b107', 'd116', 'g102', 'k102', 'w213', 'y104']
 FPS, D, O = 30, 3.5, 0.7                 # clip length, crossfade overlap (s)  -> total 10*3.5 - 9*0.7 = 28.7 s
 WO, HO = 2160, 3840
-Z0, Z1, DY = 1.020, 1.070, -10.0         # slow push-in; tiny upward drift (source px)
+Z0, Z1, DY = 1.020, 1.105, -30.0         # slow push-in; tiny upward drift (source px)
 IVORY = np.array([228, 238, 245], np.float32)   # BGR ivory used for the fade in / out
 plates = [cv2.imread(f'plate_{c}.png') for c in CODES]
 step = D - O; main_end = len(CODES) * D - (len(CODES) - 1) * O          # 28.7 s of perfumes
@@ -19,7 +19,7 @@ for im, cx, cy, dl in cta_layers.layers():
     CTA_L.append((rgb, al, cx - im.width // 2, cy - im.height // 2, dl))
 
 def cta_frame(t):
-    f = CTA_BG.copy(); tt = t - cs - 0.35                               # text starts once the background is mostly in
+    f = CTA_BG.copy(); tt = t - cs - 0.7                               # text starts once the background is mostly in
     for rgb, al, x, y, dl in CTA_L:
         k = float(ease((tt - dl) / 0.6))
         if k <= 0: continue
@@ -31,9 +31,10 @@ ease = lambda x: 0.5 - 0.5 * np.cos(np.pi * np.clip(x, 0, 1))
 rng = np.random.default_rng(1)
 
 def view(i, t):
-    u = (t - i * step) / D                               # 0..1 over the clip
-    e = ease(u); z = Z0 + (Z1 - Z0) * e; s = 2.0 * z
-    cx, cy = 540.0, 960.0 + DY * e
+    """One continuous, very slow push-in shared by every clip, so slides sit at the same scale during each dissolve (no ghosted double text)."""
+    g = np.clip(t / main_end, 0, 1)
+    z = Z0 + (Z1 - Z0) * g; s = 2.0 * z
+    cx, cy = 540.0, 960.0 + DY * g
     M = np.array([[s, 0, -s * cx + WO / 2], [0, s, -s * cy + HO / 2]], np.float32)
     return cv2.warpAffine(plates[i], M, (WO, HO), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE).astype(np.float32)
 

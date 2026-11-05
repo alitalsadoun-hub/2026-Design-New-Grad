@@ -37,12 +37,12 @@ def layers():
     """-> list of (RGBA image, centre_x, centre_y, start_delay_s)"""
     L = []
     L.append((tracked('SCENTRO', font(CORM, 170, 'Medium'), BROWN, 46), WO // 2, 1380, 0.0))
-    L.append((line(190), WO // 2, 1565, 0.2))
-    L.append((tracked('Discover Your Signature Scent', font(CORM, 104, 'Medium'), BROWN, 4), WO // 2, 1745, 0.4))
-    L.append((tracked('SHOP ONLINE', font(INTER_M, 54), GOLD_D, 24), WO // 2, 2120, 0.7))
+    L.append((line(190), WO // 2, 1565, 0.15))
+    L.append((tracked('Discover Your Signature Scent', font(CORM, 104, 'Medium'), BROWN, 4), WO // 2, 1745, 0.3))
+    L.append((tracked('SHOP ONLINE', font(INTER_M, 54), GOLD_D, 24), WO // 2, 2120, 0.5))
     url = tracked('scentrojo.com', font(CORM, 250, 'SemiBold'), BROWN, 6)
-    L.append((url, WO // 2, 2340, 0.9))
-    L.append((line(url.width - 110, 7), WO // 2, 2505, 1.15))
+    L.append((url, WO // 2, 2340, 0.7))
+    L.append((line(url.width - 110, 7), WO // 2, 2505, 0.9))
     return L
 
 if __name__ == '__main__':
