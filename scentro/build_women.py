@@ -16,7 +16,7 @@ W_ITEMS = {
  'B103': W('b103', 'orig_burberry_her_edp', 'Raspberry  ·  Blackberry  ·  Violet  ·  Vanilla', (112, 86, 150), (244, 240, 246), (229, 222, 238), (223, 214, 234), (-1, -1, 3), 640, 440, 3),
  'B105': W('b105', 'orig_burberry_her_elixir', 'Strawberry  ·  Blackberry  ·  Jasmine  ·  Vanilla', (140, 82, 120), (247, 240, 241), (236, 223, 231), (231, 214, 225), (2, -1, 1), 640, 460, 1),
  'B107': W('b107', 'orig_burberry_goddess', 'Bergamot  ·  Lavender  ·  Chocolate  ·  Vanilla', (128, 86, 52), (247, 239, 224), (233, 217, 192), (227, 208, 178), (3, 1, -4), 640, 410, 2),
- 'D116': W('d116', 'orig_dg_q_edp', 'Bergamot  ·  Jasmine  ·  Cedarwood  ·  Sandalwood', (98, 114, 82), (245, 243, 233), (230, 230, 212), (222, 224, 204), (-1, 1, -1), 640, 540, 3),
+ 'D116': W('d116', 'orig_dg_q_edp', 'Sicilian Lemon  ·  Cherry  ·  Jasmine  ·  Cedarwood', (98, 114, 82), (245, 243, 233), (230, 230, 212), (222, 224, 204), (-1, 1, -1), 640, 540, 3),
  'G102': W('g102', 'orig_gucci_guilty_elixir_femme', 'Bitter Almond  ·  Peony  ·  Tonka Bean  ·  Vanilla', (118, 66, 108), (248, 241, 233), (236, 223, 213), (231, 213, 204), (1, -1, 0), 640, 285, 2),
  'K102': W('k102', 'orig_kayali_vanilla_candy_rock_sugar_42', 'Candied Pear · Bubble Gum · Vanilla Cream · Rock Sugar', (176, 88, 118), (251, 242, 244), (243, 225, 230), (238, 215, 222), (3, -2, 1), 640, 460, 1),
  'W213': W('w213', 'orig_ysl_black_opium', 'Pear  ·  Coffee  ·  Jasmine  ·  Vanilla', (92, 64, 44), (247, 241, 229), (233, 221, 201), (226, 211, 189), (2, 0, -3), 640, 390, 3),
