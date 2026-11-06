@@ -8,3 +8,7 @@ Commercial-use permission NOT verified (plan/voice licence must be checked in th
 Prompt: `[brightly] [warmly] عطور بتحبيها... بروائح بتعرفيها. [pause] [warmly] اكتشفي مجموعتنا النسائية من ماد، مع سِنترو. [pause] [playfully] واطلبي عطرك المفضل من سِنترو.` (163 credits; raw take 9.84 s = `layla_v2_raw_take.mp3`)
 `scentro_ar_layla_v2_timed.mp3` (15.2 s, -16.1 LUFS, peak -4.8 dBFS): the same take cut at its natural pauses and placed with `place_ar_vo.py` -
 lines start at 0.4 s, 6.3 s, 12.5 s; speech ends 14.8 s (CTA solo starts 16.4 s). Voice not stretched or altered.
+
+## Continuous preview (no regeneration)
+`scentro_ar_layla_v2_continuous.mp3` (10.2 s, -16.2 LUFS, peak -4.7 dBFS): the raw take as recorded (`layla_v2_raw_take.mp3`), only lead-in/tail trimmed so speech starts at 0.4 s (`make_continuous.py`).
+Pauses are the take's own: 0.27 s (inside line 1), 0.43 s and 0.45 s (between lines). No stretch, no pitch change, no cuts between lines. Speech ends at 9.87 s.
