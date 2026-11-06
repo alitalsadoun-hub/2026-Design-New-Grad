@@ -20,3 +20,8 @@ Prompt tags (not spoken): `[brightly] [warmly]` opening, `[pause]` between sente
 - `make_final_vo.py` - adds only: 0.4 s lead-in, 15 ms fade-in, 40 ms fade-out, 75 Hz high-pass, loudnorm -16 LUFS/-1.5 dBTP, silence pad to 19.2 s. No stretch, no cuts.
 - `../scentro_women_reel_v2_ar_final.mp4` - silent Reel V2 video stream copied bit-for-bit (md5 30add418...) + AAC 192k audio. Voice 0.4-14.8 s; CTA solo from 16.4 s.
 Commercial-use permission for the ElevenLabs voice/plan NOT verified.
+
+## v3 (refined script) - editorial cut edit
+Script: الأناقة تبدأ من التفاصيل... / وعطرك، واحد من أهمها. / اكتشفي مجموعة ماد النسائية من سِنترو. / مجموعة من الروائح المميزة، لكل ذوق ولمسة مختلفة. / سِنترو... اكتشفي المزيد.
+Prompt tags: `[confidently] [warmly]` (once), `[pause]` between sentences. Layla, eleven_v4, 216 credits. Original recording: `scentro_ar_v3_layla_raw_elevenlabs.mp3` (15.2 s, unmodified).
+`../../scentro_women_reel_v3_ar.mp4` (19.4 s): hard cuts on phrase boundaries (render_reel_v3.py), voice 0.4-~15.5 s, CTA from 15.9 s (dissolve) / solo 16.4-19.4 s. Video stream = silent master `scentro_women_reel_v3_silent.mp4` (not tracked).
