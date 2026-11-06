@@ -10,7 +10,7 @@ def font(p, s, var=None):
     if var: f.set_variation_by_name(var)
     return f
 
-def background():
+def background(arch=True):
     yy, xx = np.mgrid[0:HO, 0:WO].astype(np.float32)
     t = np.clip(xx / WO * 0.30 + yy / HO * 0.85, 0, 1)[..., None]
     img = np.array([248, 241, 230], np.float32) * (1 - t) + np.array([236, 222, 203], np.float32) * t
@@ -18,11 +18,19 @@ def background():
     img *= 1 - 0.06 * np.clip(np.hypot((xx - WO / 2) / (WO * .8), (yy - HO * .5) / (HO * .75)) - .35, 0, 1)[..., None]
     img += np.random.default_rng(3).normal(0, 0.9, (HO, WO, 1))
     im = Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).convert('RGBA'); d = ImageDraw.Draw(im, 'RGBA')
+    if not arch: return im.convert('RGB')
     # thin gold arch outline echoing the brand arch (kept faint)
     cx, top, R, bot = WO // 2, 860, 900, 2700
     d.arc((cx - R, top, cx + R, top + 2 * R), 180, 360, fill=GOLD + (120,), width=4)
     d.line((cx - R, top + R, cx - R, bot), fill=GOLD + (120,), width=4); d.line((cx + R, top + R, cx + R, bot), fill=GOLD + (120,), width=4)
     return im.convert('BGR' if False else 'RGB')
+
+def arch_alpha():
+    """Float alpha mask (HO x WO) + gold colour for the arch outline, so it can fade in on its own."""
+    m = Image.new('L', (WO, HO), 0); d = ImageDraw.Draw(m); cx, top, R, bot = WO // 2, 860, 900, 2700
+    d.arc((cx - R, top, cx + R, top + 2 * R), 180, 360, fill=120, width=4)
+    d.line((cx - R, top + R, cx - R, bot), fill=120, width=4); d.line((cx + R, top + R, cx + R, bot), fill=120, width=4)
+    return np.asarray(m, np.float32)[..., None] / 255.0, np.array(GOLD[::-1], np.float32)       # BGR gold
 
 def tracked(txt, f, fill, track, pad=40):
     ws = [f.getlength(c) for c in txt]; w = int(sum(ws) + track * (len(txt) - 1)) + 2 * pad; h = int(f.size * 1.7)

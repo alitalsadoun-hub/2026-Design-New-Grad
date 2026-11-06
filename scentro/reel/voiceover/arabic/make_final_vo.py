@@ -2,7 +2,7 @@
 Adds only: 0.4 s lead-in, 15 ms fade-in, 40 ms fade-out, high-pass 75 Hz, 2-pass loudnorm (-16 LUFS, -1.5 dBTP), silence padding to 19.2 s.
 Usage: python3 make_final_vo.py raw.mp3 out.wav"""
 import sys, subprocess, json, numpy as np, soundfile as sf
-src, out = sys.argv[1], sys.argv[2]; SR = 44100; START, TOTAL = 0.40, 19.2
+src, out = sys.argv[1], sys.argv[2]; SR = 44100; START = 0.40; TOTAL = float(sys.argv[3]) if len(sys.argv) > 3 else 19.2
 subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', src, '-ac', '1', '-ar', str(SR), '/tmp/_fin_raw.wav'], check=True)
 x, _ = sf.read('/tmp/_fin_raw.wav', dtype='float32')
 a = int(0.0 * SR); seg = x.copy(); n1, n2 = int(0.015 * SR), int(0.040 * SR)
