@@ -25,3 +25,8 @@ Commercial-use permission for the ElevenLabs voice/plan NOT verified.
 Script: الأناقة تبدأ من التفاصيل... / وعطرك، واحد من أهمها. / اكتشفي مجموعة ماد النسائية من سِنترو. / مجموعة من الروائح المميزة، لكل ذوق ولمسة مختلفة. / سِنترو... اكتشفي المزيد.
 Prompt tags: `[confidently] [warmly]` (once), `[pause]` between sentences. Layla, eleven_v4, 216 credits. Original recording: `scentro_ar_v3_layla_raw_elevenlabs.mp3` (15.2 s, unmodified).
 `../../scentro_women_reel_v3_ar.mp4` (19.4 s): hard cuts on phrase boundaries (render_reel_v3.py), voice 0.4-~15.5 s, CTA from 15.9 s (dissolve) / solo 16.4-19.4 s. Video stream = silent master `scentro_women_reel_v3_silent.mp4` (not tracked).
+
+## FINAL (v4): MAD Parfumeur = brand, Scentro = retailer
+Script (exact): الأناقة تبدأ من التفاصيل... / وعطرك، واحد من أهمها. / اكتشفي تشكيلة العطور النسائية من ماد بارفيومر، المتوفرة لدى سِنترو. / مجموعة من الروائح المميزة، لكل ذوق ولمسة مختلفة. / سِنترو... اكتشفي المزيد.
+Layla (g3YpdjT1OTh9cunaumJs), eleven_v4, tags `[confidently] [warmly]` once + `[pause]` between sentences, 246 credits. Original: `scentro_ar_v4_final_layla_raw_elevenlabs.mp3` (18.0 s, unmodified).
+`../../scentro_women_reel_final_ar.mp4` (21.6 s): render_reel_v4.py (hard cuts at 1.40/2.84/4.15/5.43/7.30/9.37/11.25/13.69/16.03 s), voice 0.42-18.3 s, dissolve to CTA 18.3-18.8 s, CTA solo 18.8-21.6 s. Commercial-use permission for the voice NOT verified.
