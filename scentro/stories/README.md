@@ -4,3 +4,7 @@ Sources (the user's three supplied photos) in `assets/source/`; cutouts in `asse
 Safe zones respected: no important content above y=250 or below y=1620.
 Notes used (verified on Fragrantica / Parfumo): New York Night - peach, vanilla (both sites), lily of the valley (Parfumo + brand flat-lay). Golden Soul - ylang-ylang, neroli / orange blossom, jasmine, cedarwood.
 No inspiration claims are made on either Story (Bond No. 9 / Armani Prive not mentioned).
+
+## Update: sharper sources
+New York Night now uses the official MAD Parfumeur Singapore store images (2000x2000): packshot `assets/source/new_york_night_packshot_official_2000.jpg` (bottle + box) and flat-lay `..._flatlay_official_2000.jpg` (ingredients, extract_ingredients.py with scale 2.415). Cutouts: `nyn_bottle_hi.png`, `nyn_box_hi.png`, `ing_hi_*.png`.
+Golden Soul: official madparfum.com page images top out at 615 px and Fragrantica (id 120894) has only a bottle-only 750x1000 photo, so the supplied 828 px box+bottle photo remains the best source for that Story.

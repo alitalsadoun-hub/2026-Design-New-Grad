@@ -73,24 +73,25 @@ def story_nyn():
     glow(img, 760, 700, 600, 500, (255, 214, 176), 0.20)            # warm peach light from the right
     B.niche(img, s); B.travertine(img, s)
 
-    box = B.load_clean(A + 'nyn_box.png', 720)
-    bt = np.array(Image.open(A + 'nyn_bottle.png').convert('RGBA')); lo = bt[-16:, :, :3].astype(int)
-    bt[-16:, :, 3][(lo.min(axis=2) > 165) & (lo.max(axis=2) - lo.min(axis=2) < 40)] = 0
+    box = B.load_clean(A + 'nyn_box_hi.png', 720)
+    bt = np.array(Image.open(A + 'nyn_bottle_hi.png').convert('RGBA')); lo = bt[-30:, :, :3].astype(int)
+    bt[-30:, :, 3][(lo.min(axis=2) > 165) & (lo.max(axis=2) - lo.min(axis=2) < 40)] = 0
+    bt[150:236, 0:188, 3] = 0                                                    # photo's soft shadow line beside the cap base (left of the cap only)
     Image.fromarray(bt).save('/tmp/_bottle.png'); bottle = B.load_clean('/tmp/_bottle.png', 520)               # the real bottle, larger than the box's real ratio (it stands in front)
     bw, bh = bottle.size; xw = box.width; ov = 80
     left = 540 - (bw + xw - ov) / 2 - 10; box_cx = left + bw - ov + xw / 2; box_r = left + bw - ov + xw
     B.stage_bottle(img, box, box_cx, B.BASE_Y)
     # ingredients = real pixels from the supplied flat-lay (peach, vanilla, leaves), grounded with alpha-shaped shadows
-    p0 = np.array(Image.open(A + 'ing_vanilla_pods.png').convert('RGBA')); p0[(p0[..., :3].max(axis=2) > 120) | (p0[..., 1].astype(int) > p0[..., 0].astype(int) - 2), 3] = 0
-    pods = Image.fromarray(p0); pods = pods.resize((int(pods.width * .62), int(pods.height * .62)), Image.LANCZOS)
+    p0 = np.array(Image.open(A + 'ing_hi_pods.png').convert('RGBA')); p0[(p0[..., :3].max(axis=2) > 120) | (p0[..., 1].astype(int) > p0[..., 0].astype(int) - 2), 3] = 0
+    pods = Image.fromarray(p0); pods = pods.resize((int(pods.width * .248), int(pods.height * .248)), Image.LANCZOS)
     pods = crop_alpha(pods.rotate(-20, expand=True, resample=Image.BICUBIC)); pods.save('/tmp/_pods.png'); pods = B.load_clean('/tmp/_pods.png', 330)
     drop_shadow(img, pods, int(box_r + 100 - pods.width), B.BASE_Y + 14 - pods.height, dx=12, dy=8, blur=7, op=0.30)
-    pe = Image.open(A + 'ing_peach.png').convert('RGBA'); a_ = np.array(pe); hh, ww = a_.shape[:2]; yy_, xx_ = np.mgrid[0:hh, 0:ww]; cxp, cyp = ww * 0.50, hh * 0.52
+    pe = Image.open(A + 'ing_hi_peach.png').convert('RGBA'); a_ = np.array(pe); hh, ww = a_.shape[:2]; yy_, xx_ = np.mgrid[0:hh, 0:ww]; cxp, cyp = ww * 0.50, hh * 0.52
     outside = ((xx_ - cxp) / (ww * 0.49)) ** 2 + ((yy_ - cyp) / (hh * 0.49)) ** 2 > 1.0
     a_[outside & (xx_ < cxp) & (yy_ < cyp), 3] = 0; Image.fromarray(a_).save('/tmp/_peach.png')      # drop the stem fragment outside the fruit outline only
     pe = B.load_clean('/tmp/_peach.png', 232)
     B.stage_bottle(img, pe, box_r + 38, B.BASE_Y + 56)
-    lf = Image.open(A + 'ing_leaves_a.png').convert('RGBA').rotate(12, expand=True, resample=Image.BICUBIC); lf.save('/tmp/_leaf.png'); lf = B.load_clean('/tmp/_leaf.png', 150)
+    lf = Image.open(A + 'ing_hi_leaf_bl.png').convert('RGBA').rotate(12, expand=True, resample=Image.BICUBIC); lf.save('/tmp/_leaf.png'); lf = B.load_clean('/tmp/_leaf.png', 150)
     drop_shadow(img, lf, int(left - 62), B.BASE_Y + 52 - lf.height, dx=10, dy=7, blur=6, op=0.30)
     B.stage_bottle(img, bottle, left + bw / 2, B.BASE_Y)
 
