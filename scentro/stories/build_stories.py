@@ -195,10 +195,56 @@ def story_gs():
     return img
 
 
-JOBS = {'nyn': (story_nyn, 'stories/output/scentro_new_york_night_story.png'),
-        'gs': (story_gs, 'stories/output/scentro_golden_soul_story.png')}
+# ---------------------------------------------------------------- v2: same layout as the 10-slide collections (MAD hero left, inspired original right)
+def prep_nyn_bottle():
+    bt = np.array(Image.open(A + 'nyn_bottle_hi.png').convert('RGBA')); lo = bt[-46:, :, :3].astype(int)
+    bt[-46:, :, 3][(lo.min(axis=2) > 165) & (lo.max(axis=2) - lo.min(axis=2) < 75)] = 0      # backdrop sliver at the base corners
+    bt[150:236, 0:188, 3] = 0                                                      # photo's soft shadow line beside the cap base
+    Image.fromarray(bt).save('/tmp/_nyn_bottle.png'); return '/tmp/_nyn_bottle.png'
+
+
+def duo_story(label, mad, mad_h, orig, orig_h, pal, title, title_max, subtitle=None, tagline='Discover the fragrance'):
+    canvas(arch_top=520, arch_r=470, surf_top=1330, surf_front=1470, base_y=1390)
+    s = dict(bg_a=pal['bg_a'], bg_b=pal['bg_b'], niche_rgb=pal['niche'], stone=pal['stone'])
+    img = B.background(s)
+    for (gx, gy, rx, ry, rgb, al) in pal['glows']: glow(img, gx, gy, rx, ry, rgb, al)
+    B.niche(img, s); B.travertine(img, s)
+    b1 = B.load_clean(mad, mad_h); b2 = B.load_clean(orig, orig_h); gap = 64
+    f = min(1.0, (860 - gap) / (b1.width + b2.width))
+    if f < 1.0: b1 = B.load_clean(mad, round(mad_h * f)); b2 = B.load_clean(orig, round(orig_h * f))
+    left = 540 - (b1.width + gap + b2.width) / 2
+    B.stage_bottle(img, b1, left + b1.width / 2, B.BASE_Y); B.stage_bottle(img, b2, left + b1.width + gap + b2.width / 2, B.BASE_Y)
+    d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87)
+    tracked_in(d, 540, 292, 'MAD PARFUMEUR', B.font(INTER_M, 24), brown, 12)
+    tf, size = B.fit_width(d, title, CORM, 'SemiBold', 104, title_max, track_ratio=.11)
+    tracked_in(d, 540, 382, title, tf, pal['title'], size * .11)
+    d.line((500, 446, 580, 446), fill=gold, width=2); d.ellipse((536, 442, 544, 450), fill=gold)
+    if subtitle: tracked_in(d, 540, 482, subtitle, B.font(INTER_M, 22), (143, 105, 52), 11)
+    tracked_in(d, 540, 1508, tagline, B.font(CORM, 50, 'Medium'), brown, 3)
+    d.line((500, 1556, 580, 1556), fill=gold, width=2)
+    pair_line(d, 540, 1606, 'AVAILABLE AT', B.font(INTER_M, 21), (143, 105, 52), 9, 'SCENTRO', B.font(CORM, 42, 'SemiBold'), brown, 12)
+    check_safe(label, {'title block': (270, 500), 'bottom block': (1480, 1620)})
+    return img
+
+
+def story_nyn_v2():
+    pal = dict(bg_a=(251, 240, 226), bg_b=(241, 217, 194), niche=(240, 218, 198), stone=(4, 0, -4), title=(66, 54, 118),
+               glows=[(380, 980, 560, 620, (176, 150, 222), 0.14), (760, 700, 600, 500, (255, 214, 176), 0.20)])
+    return duo_story('nyn_v2', prep_nyn_bottle(), 700, A + 'orig_bond9_nyn_r.png', 440, pal, 'NEW YORK NIGHT', 820)
+
+
+def story_gs_v2():
+    pal = dict(bg_a=(249, 243, 229), bg_b=(237, 223, 197), niche=(233, 216, 186), stone=(3, 1, -5), title=(124, 90, 38),
+               glows=[(420, 960, 600, 640, (255, 222, 150), 0.18), (780, 720, 560, 480, (255, 236, 200), 0.18)])
+    return duo_story('gs_v2', A + 'mad_gs_bottle_c.png', 700, A + 'orig_rouge_malachite_r.png', 600, pal, 'GOLDEN SOUL', 820, subtitle='EXTRAIT DE PARFUM')
+
+
+JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
+        'gs': (story_gs_v2, 'stories/output/scentro_golden_soul_story.png'),
+        'nyn_box': (story_nyn, 'stories/output/archive_box_version/scentro_new_york_night_story.png'),
+        'gs_box': (story_gs, 'stories/output/archive_box_version/scentro_golden_soul_story.png')}
 
 if __name__ == '__main__':
     os.makedirs('stories/output', exist_ok=True)
-    for k in (sys.argv[1:] or JOBS):
+    for k in (sys.argv[1:] or ['nyn', 'gs']):
         fn, out = JOBS[k]; im = fn().convert('RGB'); assert im.size == (W, H); im.save(out, optimize=True); print(out, im.size)
