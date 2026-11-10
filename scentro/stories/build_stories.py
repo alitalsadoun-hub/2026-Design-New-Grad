@@ -212,7 +212,7 @@ def prep_nyn_bottle():
     Image.fromarray(bt).save('/tmp/_nyn_bottle.png'); return '/tmp/_nyn_bottle.png'
 
 
-def duo_story(label, mad, mad_h, orig, orig_h, pal, title, title_max, subtitle=None, tagline='Discover the fragrance'):
+def duo_story(label, mad, mad_h, orig, orig_h, pal, title, title_max, inspired, subtitle=None, tagline='Discover the fragrance'):
     canvas(arch_top=520, arch_r=470, surf_top=1330, surf_front=1470, base_y=1390)
     s = dict(bg_a=pal['bg_a'], bg_b=pal['bg_b'], niche_rgb=pal['niche'], stone=pal['stone'])
     img = B.background(s)
@@ -224,28 +224,33 @@ def duo_story(label, mad, mad_h, orig, orig_h, pal, title, title_max, subtitle=N
     left = 540 - (b1.width + gap + b2.width) / 2
     B.stage_bottle(img, b1, left + b1.width / 2, B.BASE_Y); B.stage_bottle(img, b2, left + b1.width + gap + b2.width / 2, B.BASE_Y)
     d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87)
-    tracked_in(d, 540, 292, 'MAD PARFUMEUR', B.font(INTER_M, 24), brown, 12)
-    tf, size = B.fit_width(d, title, CORM, 'SemiBold', 104, title_max, track_ratio=.11)
-    tracked_in(d, 540, 382, title, tf, pal['title'], size * .11)
-    d.line((500, 446, 580, 446), fill=gold, width=2); d.ellipse((536, 442, 544, 450), fill=gold)
-    if subtitle: tracked_in(d, 540, 482, subtitle, B.font(INTER_M, 22), (143, 105, 52), 11)
+    tracked_in(d, 540, 268, 'MAD PARFUMEUR', B.font(INTER_M, 24), brown, 12)
+    tf, size = B.fit_width(d, title, CORM, 'SemiBold', 92, title_max, track_ratio=.11)
+    tracked_in(d, 540, 330, title, tf, pal['title'], size * .11)
+    y = 392
+    if subtitle:
+        tracked_in(d, 540, y, subtitle, B.font(INTER_M, 21), (143, 105, 52), 11); y += 28
+    d.line((500, y, 580, y), fill=gold, width=2); d.ellipse((536, y - 4, 544, y + 4), fill=gold); y += 34
+    tracked_in(d, 540, y, 'INSPIRED BY', B.font(INTER_M, 17), (143, 105, 52), 9)               # same treatment as the earlier collections
+    nf, _ = B.fit_width(d, inspired, CORM, 'SemiBold', 38, 800, track_px=1.5)
+    tracked_in(d, 540, y + 36, inspired, nf, brown, 1.5)
     tracked_in(d, 540, 1508, tagline, B.font(CORM, 50, 'Medium'), brown, 3)
     d.line((500, 1556, 580, 1556), fill=gold, width=2)
     pair_line(d, 540, 1606, 'AVAILABLE AT', B.font(INTER_M, 21), (143, 105, 52), 9, 'SCENTRO', B.font(CORM, 42, 'SemiBold'), brown, 12)
-    check_safe(label, {'title block': (270, 500), 'bottom block': (1480, 1620)})
+    check_safe(label, {'title block': (255, 520), 'bottom block': (1480, 1620)})
     return img
 
 
 def story_nyn_v2():
     pal = dict(bg_a=(251, 240, 226), bg_b=(241, 217, 194), niche=(240, 218, 198), stone=(4, 0, -4), title=(66, 54, 118),
                glows=[(380, 980, 560, 620, (176, 150, 222), 0.14), (760, 700, 600, 500, (255, 214, 176), 0.20)])
-    return duo_story('nyn_v2', prep_nyn_bottle(), 500, A + 'orig_bond9_nyn_r.png', 440, pal, 'NEW YORK NIGHT', 820)
+    return duo_story('nyn_v2', prep_nyn_bottle(), 500, A + 'orig_bond9_nyn_r.png', 440, pal, 'NEW YORK NIGHT', 820, 'New York Nights')
 
 
 def story_gs_v2():
     pal = dict(bg_a=(249, 243, 229), bg_b=(237, 223, 197), niche=(233, 216, 186), stone=(3, 1, -5), title=(124, 90, 38),
                glows=[(420, 960, 600, 640, (255, 222, 150), 0.18), (780, 720, 560, 480, (255, 236, 200), 0.18)])
-    return duo_story('gs_v2', A + 'mad_gs_bottle_c.png', 565, A + 'orig_rouge_malachite_r.png', 520, pal, 'GOLDEN SOUL', 820, subtitle='EXTRAIT DE PARFUM')
+    return duo_story('gs_v2', A + 'mad_gs_bottle_c.png', 565, A + 'orig_rouge_malachite_r.png', 520, pal, 'GOLDEN SOUL', 820, 'Rouge Malachite', subtitle='EXTRAIT DE PARFUM')
 
 
 JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
