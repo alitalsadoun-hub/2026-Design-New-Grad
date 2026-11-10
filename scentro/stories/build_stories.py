@@ -230,13 +230,13 @@ def duo_story(label, mad, mad_h, orig, orig_h, pal, title, title_max, subtitle=N
 def story_nyn_v2():
     pal = dict(bg_a=(251, 240, 226), bg_b=(241, 217, 194), niche=(240, 218, 198), stone=(4, 0, -4), title=(66, 54, 118),
                glows=[(380, 980, 560, 620, (176, 150, 222), 0.14), (760, 700, 600, 500, (255, 214, 176), 0.20)])
-    return duo_story('nyn_v2', prep_nyn_bottle(), 700, A + 'orig_bond9_nyn_r.png', 440, pal, 'NEW YORK NIGHT', 820)
+    return duo_story('nyn_v2', prep_nyn_bottle(), 500, A + 'orig_bond9_nyn_r.png', 440, pal, 'NEW YORK NIGHT', 820)
 
 
 def story_gs_v2():
     pal = dict(bg_a=(249, 243, 229), bg_b=(237, 223, 197), niche=(233, 216, 186), stone=(3, 1, -5), title=(124, 90, 38),
                glows=[(420, 960, 600, 640, (255, 222, 150), 0.18), (780, 720, 560, 480, (255, 236, 200), 0.18)])
-    return duo_story('gs_v2', A + 'mad_gs_bottle_c.png', 700, A + 'orig_rouge_malachite_r.png', 600, pal, 'GOLDEN SOUL', 820, subtitle='EXTRAIT DE PARFUM')
+    return duo_story('gs_v2', A + 'mad_gs_bottle_c.png', 650, A + 'orig_rouge_malachite_r.png', 600, pal, 'GOLDEN SOUL', 820, subtitle='EXTRAIT DE PARFUM')
 
 
 JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
