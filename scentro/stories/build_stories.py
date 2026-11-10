@@ -200,6 +200,15 @@ def prep_nyn_bottle():
     bt = np.array(Image.open(A + 'nyn_bottle_hi.png').convert('RGBA')); lo = bt[-46:, :, :3].astype(int)
     bt[-46:, :, 3][(lo.min(axis=2) > 165) & (lo.max(axis=2) - lo.min(axis=2) < 75)] = 0      # backdrop sliver at the base corners
     bt[150:236, 0:188, 3] = 0                                                      # photo's soft shadow line beside the cap base
+    # the packshot shows the cap ~28 px and the neck ~54 px right of the body's centre line: re-centre them (body, label and glass are untouched)
+    body = np.where(bt[600, :, 3] > 128)[0]; cx_body = (body.min() + body.max()) / 2
+    def shift_band(arr, r0, r1, dx):
+        band = arr[r0:r1].copy(); arr[r0:r1] = 0
+        if dx < 0: arr[r0:r1, :band.shape[1] + dx] = band[:, -dx:]
+        else: arr[r0:r1, dx:] = band[:, :band.shape[1] - dx]
+    cap_c = np.where(bt[20:190, :, 3].max(axis=0) > 128)[0]; neck_c = np.where(bt[222:240, :, 3].max(axis=0) > 128)[0]   # solid cap block / neck cylinder only
+    dxc = int(round(cx_body - (cap_c.min() + cap_c.max()) / 2)); dxn = int(round(cx_body - (neck_c.min() + neck_c.max()) / 2))
+    shift_band(bt, 0, 216, dxc); shift_band(bt, 216, 257, dxn); print('cap shift', dxc, 'neck shift', dxn, 'body centre', cx_body)
     Image.fromarray(bt).save('/tmp/_nyn_bottle.png'); return '/tmp/_nyn_bottle.png'
 
 
@@ -236,7 +245,7 @@ def story_nyn_v2():
 def story_gs_v2():
     pal = dict(bg_a=(249, 243, 229), bg_b=(237, 223, 197), niche=(233, 216, 186), stone=(3, 1, -5), title=(124, 90, 38),
                glows=[(420, 960, 600, 640, (255, 222, 150), 0.18), (780, 720, 560, 480, (255, 236, 200), 0.18)])
-    return duo_story('gs_v2', A + 'mad_gs_bottle_c.png', 650, A + 'orig_rouge_malachite_r.png', 600, pal, 'GOLDEN SOUL', 820, subtitle='EXTRAIT DE PARFUM')
+    return duo_story('gs_v2', A + 'mad_gs_bottle_c.png', 565, A + 'orig_rouge_malachite_r.png', 520, pal, 'GOLDEN SOUL', 820, subtitle='EXTRAIT DE PARFUM')
 
 
 JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
