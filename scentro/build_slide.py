@@ -49,6 +49,7 @@ def C2S(n, title, mad, orig, inspired, title_rgb, bg_a, bg_b, niche, mad_h, orig
 
 SLIDES[12] = C2S(2, 'BRUNO EXOTIC', 'mad_bruno_exotic', 'amyris_homme_extrait', 'Amyris Homme Extrait de Parfum', (150, 48, 36), (245, 236, 222), (231, 214, 194), (227, 206, 186), 560, 470, stone=(3, 0, -3))
 SLIDES[13] = C2S(3, 'BRUNO DETOX', 'mad_bruno_detox', 'delox', 'Delox', (96, 50, 90), (246, 239, 233), (233, 221, 223), (229, 212, 216), 560, 470, stone=(1, -1, 2))
+SLIDES[18] = dict(S('BRUNO DETOX', 'stories/assets/cutouts/bd_bottle.png', 'stories/assets/cutouts/mancera_rv_r.png', 'Mancera Roses Vanille', (96, 50, 90), (246, 239, 233), (233, 221, 223), (229, 212, 216), mad_h=560, orig_h=520, stone=(1, -1, 2), name_size=44, out='output/collection2/bruno_detox_mancera_roses_vanille.png'), label='FOR LOVERS OF')
 SLIDES[14] = C2S(4, 'ADRIA', 'mad_adria', 'craquele', 'Craquelé', (24, 84, 88), (244, 239, 229), (227, 225, 211), (222, 220, 205), 560, 480, stone=(-2, 1, 0))
 SLIDES[15] = C2S(5, 'INVITING', 'mad_inviting', 'supreme_bouquet', 'Supreme Bouquet', (150, 112, 40), (248, 241, 226), (237, 223, 195), (233, 217, 187), 520, 480, stone=(3, 1, -5))
 SLIDES[16] = C2S(6, 'DRACO', 'mad_draco', 'draco', 'Draco', (28, 52, 104), (244, 239, 229), (229, 223, 213), (223, 216, 205), 600, 440, stone=(0, 0, 2))
@@ -295,7 +296,7 @@ def build(n):
     tracked(d, 540, 281, 'MAD PARFUMEUR', font(INTER, 19), brown, 9)
     d.line((480, 311, 600, 311), fill=gold, width=2)
     d.ellipse((536, 307, 544, 315), fill=gold)
-    tracked(d, 540, 340, 'INSPIRED BY', font(INTER_M, 16), (143, 105, 52), 8)
+    tracked(d, 540, 340, s.get('label', 'INSPIRED BY'), font(INTER_M, 16), (143, 105, 52), 8)
     nf, _ = fit_width(d, s['inspired'], CORM, 'SemiBold', s['name_size'], 700, track_px=1.5)
     tracked(d, 540, 388, s['inspired'], nf, brown, 1.5)
 
