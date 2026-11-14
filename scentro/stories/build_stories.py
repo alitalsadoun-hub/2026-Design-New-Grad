@@ -3,6 +3,7 @@ Real product photographs (cut out, never redrawn) composited into a lit scene. R
 Safe zones: nothing important above y=250 or below y=1620.   Usage (from scentro/):  python3 stories/build_stories.py [nyn|gs ...]"""
 import os, sys
 import numpy as np
+import cv2
 from PIL import Image, ImageDraw, ImageFilter
 from scipy import ndimage as ndi
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -301,6 +302,68 @@ def story_bd():
     nf, _ = B.fit_width(d, 'ROSES VANILLE', CORM, 'SemiBold', 54, 760, track_px=7)
     tracked_in(d, 540, 1584, 'ROSES VANILLE', nf, mauve, 7)
     check_safe('bd', {'header': (255, 505), 'bottom block': (1480, 1612)})
+    return img
+
+
+# ---------------------------------------------------------------- Bruno Detox x Mancera Roses Vanille  v2 (refined: ingredient groupings, bigger bottles)
+def tint_rgba(im, dh=0, ds=1.0, dv=1.0):
+    """Hue/sat/value nudge on real pixels (coral -> blush pink), alpha untouched."""
+    a = np.array(im.convert('RGBA')); hsv = cv2.cvtColor(a[..., :3], cv2.COLOR_RGB2HSV).astype(np.float32)
+    hsv[..., 0] = (hsv[..., 0] + dh / 2) % 180; hsv[..., 1] = np.clip(hsv[..., 1] * ds, 0, 255); hsv[..., 2] = np.clip(hsv[..., 2] * dv, 0, 255)
+    a[..., :3] = cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB); return Image.fromarray(a)
+
+
+def prop(path, height, angle=0, flip=False, tint=(0, 1.0, 1.0), tag='p'):
+    im = Image.open(path).convert('RGBA')
+    if flip: im = im.transpose(Image.FLIP_LEFT_RIGHT)
+    if angle: im = im.rotate(angle, expand=True, resample=Image.BICUBIC)
+    im = tint_rgba(crop_alpha(im), *tint); fn = f'/tmp/_prop_{tag}.png'; im.save(fn); return B.load_clean(fn, height)
+
+
+def story_bd():
+    canvas(arch_top=545, arch_r=470, surf_top=1415, surf_front=1620, base_y=1490)
+    s = dict(bg_a=(249, 241, 231), bg_b=(238, 222, 214), niche_rgb=(234, 216, 212), stone=(1, -1, 2))
+    img = B.background(s)
+    glow(img, 340, 1060, 600, 660, (200, 160, 196), 0.15)            # soft mauve bloom behind Bruno Detox
+    glow(img, 770, 820, 600, 520, (255, 226, 190), 0.20)             # champagne light on the right
+    B.niche(img, s); B.travertine(img, s)
+    C = 'stories/assets/cutouts/'
+    mad = B.load_clean(C + 'bd_bottle.png', 670); mv = B.load_clean(C + 'mancera_rv_r.png', 635)
+    gap = 132; total = mad.width + gap + mv.width; left = 556 - total / 2
+    mad_cx = left + mad.width / 2; mv_cx = left + mad.width + gap + mv.width / 2; mv_r = left + total; BY = B.BASE_Y
+
+    # ---- ingredients: real photographic rose / petal / vanilla pixels, grouped at the bottle bases, always behind or beside the glass
+    rose_a = prop(C + 'ing_rose_bd.png', 178, angle=18, tint=(-11, 0.92, 1.03), tag='ra')
+    B.stage_bottle(img, rose_a, left + 62 - rose_a.width / 2, BY + 10)                                    # tucked behind Bruno Detox, left
+    rose_c = prop(C + 'ing_rose_bd.png', 124, angle=205, flip=True, tint=(-7, 0.88, 1.06), tag='rc')
+    B.stage_bottle(img, rose_c, mv_r - 40 + rose_c.width / 2, BY + 8)                                      # tucked behind Mancera, right
+    pod = Image.open(C + 'ing_vanilla_pod_single.png').convert('RGBA').rotate(216, expand=True, resample=Image.BICUBIC)
+    pod = crop_alpha(pod); k = 262 / pod.width; pod = pod.resize((262, max(1, int(pod.height * k))), Image.LANCZOS); pod.save('/tmp/_pod2.png'); pod = B.load_clean('/tmp/_pod2.png', pod.height)
+    pod_x = int(left - 52); pod_y = BY + 66 - pod.height
+    drop_shadow(img, pod, pod_x, pod_y, dx=7, dy=9, blur=6, op=0.36)                                      # lies on the stone, front-left
+    B.stage_bottle(img, mad, mad_cx, BY); B.stage_bottle(img, mv, mv_cx, BY)
+    rose_b = prop(C + 'ing_rose_bd.png', 108, angle=95, flip=True, tint=(-14, 0.95, 1.02), tag='rb')
+    B.stage_bottle(img, rose_b, left - 8 - rose_b.width / 2 + 40, BY + 112)                                # small front rose, hides the pod's cut end
+    petals = [(C + 'petal_a.png', 86, 38, False, (-10, 0.92, 1.04), left + 205, BY + 112),
+              (C + 'petal_a.png', 62, 205, True, (-12, 0.9, 1.05), left + 292, BY + 84),
+              (C + 'petal_a.png', 62, 118, False, (-9, 0.9, 1.04), mv_r + 98, BY + 50)]
+    for n, (p, h, ang, fl, tt, px_, py_) in enumerate(petals):
+        pt = prop(p, h, angle=ang, flip=fl, tint=tt, tag=f'pt{n}'); drop_shadow(img, pt, int(px_ - pt.width / 2), int(py_ - pt.height / 2), dx=5, dy=6, blur=4, op=0.38)
+
+    # single refined approximately-equal sign, centred in the gap at glass height
+    d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87); mauve = (104, 58, 98)
+    ef = B.font(CORM, 215, 'SemiBold'); d.text((left + mad.width + gap / 2, BY - 285), '≈', font=ef, fill=gold, anchor='mm')
+
+    tracked_in(d, 540, 282, 'SCENTRO', B.font(CORM, 44, 'Medium'), brown, 20)
+    d.line((517, 326, 563, 326), fill=gold, width=2)
+    tf, size = B.fit_width(d, 'BRUNO DETOX', CORM, 'SemiBold', 100, 860, track_ratio=.11)
+    tracked_in(d, 540, 412, 'BRUNO DETOX', tf, mauve, size * .11)
+    tracked_in(d, 540, 490, 'MAD PARFUMEUR', B.font(INTER_M, 22), brown, 11)
+    # caption directly under its own bottle (Mancera), on the stone
+    tracked_in(d, mv_cx, 1541, 'MANCERA', B.font(INTER_M, 19), (143, 105, 52), 12)
+    nf, _ = B.fit_width(d, 'ROSES VANILLE', CORM, 'SemiBold', 42, 330, track_px=5)
+    tracked_in(d, mv_cx, 1582, 'ROSES VANILLE', nf, mauve, 5)
+    check_safe('bd', {'header': (255, 505), 'caption': (1525, 1602)})
     return img
 
 

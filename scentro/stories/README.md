@@ -18,3 +18,6 @@ Golden Soul: official madparfum.com page images top out at 615 px and Fragrantic
 `python3 stories/build_stories.py bd` -> `stories/output/scentro_bruno_detox_vs_mancera_roses_vanille_story.png` (1080x1920).
 Sources: MAD Bruno Detox bottle = official MAD Singapore store 2000 px bottle-only photo; Mancera Roses Vanille = Fragrantica id 15210 (900x1200); rose = official Bruno Detox flat-lay (2000 px); vanilla pod = official New York Night flat-lay (2000 px). All real pixels, cut out only.
 Per the brief: no "Inspired by", no slogans, hand-drawn gold "approx equal" sign between the bottles. Pairing (Roses Vanille) supplied by the owner; the earlier 10-slide collection paired Bruno Detox with Delox - flagged.
+
+### Bruno Detox x Mancera - refined v2
+Bigger bottles (670 / 635 px), deeper surface so the "MANCERA / ROSES VANILLE" caption sits directly under its bottle, single Cormorant approx-equal glyph. Ingredients regrouped at the bottle bases: three roses + three petals cut from the official 2000 px Bruno Detox flat-lay rose (rotated / flipped / tinted blush so they are not identical), one real vanilla pod from the official New York Night flat-lay. Real vanilla-orchid flowers could not be sourced (Wikimedia rate-limited, no suitable photo in MAD's flat-lays) - not included.
