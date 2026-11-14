@@ -367,8 +367,35 @@ def story_bd():
     return img
 
 
+# ---------------------------------------------------------------- Bruno Detox "for lovers of Mancera Roses Vanille" Story (same design as the 4:5 slide, no props)
+def story_bd_lovers():
+    canvas(arch_top=690, arch_r=500, surf_top=1440, surf_front=1595, base_y=1515)
+    s = dict(bg_a=(246, 239, 233), bg_b=(233, 221, 223), niche_rgb=(229, 212, 216), stone=(1, -1, 2))
+    img = B.background(s)
+    glow(img, 340, 1120, 600, 660, (200, 160, 196), 0.13)
+    glow(img, 780, 900, 600, 520, (255, 226, 190), 0.16)
+    B.niche(img, s); B.travertine(img, s)
+    C = 'stories/assets/cutouts/'
+    mad = B.load_clean(C + 'bd_bottle.png', 700); mv = B.load_clean(C + 'mancera_rv_r.png', 665)
+    gap = 84; total = mad.width + gap + mv.width; left = 540 - total / 2
+    B.stage_bottle(img, mad, left + mad.width / 2, B.BASE_Y); B.stage_bottle(img, mv, left + mad.width + gap + mv.width / 2, B.BASE_Y)
+    d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87); mauve = (96, 50, 90)
+    tracked_in(d, 540, 282, 'SCENTRO', B.font(CORM, 44, 'Medium'), brown, 20)
+    d.line((517, 326, 563, 326), fill=gold, width=2)
+    tf, size = B.fit_width(d, 'BRUNO DETOX', CORM, 'SemiBold', 104, 860, track_ratio=.11)
+    tracked_in(d, 540, 410, 'BRUNO DETOX', tf, mauve, size * .11)
+    tracked_in(d, 540, 486, 'MAD PARFUMEUR', B.font(INTER_M, 22), brown, 11)
+    d.line((500, 528, 580, 528), fill=gold, width=2); d.ellipse((536, 524, 544, 532), fill=gold)
+    tracked_in(d, 540, 576, 'FOR LOVERS OF', B.font('/usr/share/fonts/opentype/inter/Inter-SemiBold.otf', 27), (126, 90, 38), 12)    # larger + bolder than before
+    nf, _ = B.fit_width(d, 'Mancera Roses Vanille', CORM, 'Bold', 62, 880, track_px=2)
+    tracked_in(d, 540, 636, 'Mancera Roses Vanille', nf, brown, 2)
+    check_safe('bd_lovers', {'header': (255, 668)})
+    return img
+
+
 JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
         'gs': (story_gs_v2, 'stories/output/scentro_golden_soul_story.png'),
+        'bd_lovers': (story_bd_lovers, 'stories/output/scentro_bruno_detox_mancera_lovers_story.png'),
         'bd': (story_bd, 'stories/output/scentro_bruno_detox_vs_mancera_roses_vanille_story.png'),
         'nyn_box': (story_nyn, 'stories/output/archive_box_version/scentro_new_york_night_story.png'),
         'gs_box': (story_gs, 'stories/output/archive_box_version/scentro_golden_soul_story.png')}
