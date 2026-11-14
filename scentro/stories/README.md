@@ -13,3 +13,8 @@ Golden Soul: official madparfum.com page images top out at 615 px and Fragrantic
 - New York Night: MAD (official 2000 px packshot cutout) + Bond No. 9 New York Nights (Fragrantica id 46057). Pairing NOT verified by MAD's current page - flagged for owner confirmation.
 - Golden Soul: MAD bottle (Fragrantica id 120894, bottle-only) + Armani Prive Rouge Malachite (Fragrantica id 34589). Pairing supplied by the owner ("listed by retailers"); no official source found.
 - No "inspired by"/"dupe" wording on either image. First (box + props) versions are kept in `output/archive_box_version/`.
+
+## Bruno Detox vs Mancera Roses Vanille (comparison Story)
+`python3 stories/build_stories.py bd` -> `stories/output/scentro_bruno_detox_vs_mancera_roses_vanille_story.png` (1080x1920).
+Sources: MAD Bruno Detox bottle = official MAD Singapore store 2000 px bottle-only photo; Mancera Roses Vanille = Fragrantica id 15210 (900x1200); rose = official Bruno Detox flat-lay (2000 px); vanilla pod = official New York Night flat-lay (2000 px). All real pixels, cut out only.
+Per the brief: no "Inspired by", no slogans, hand-drawn gold "approx equal" sign between the bottles. Pairing (Roses Vanille) supplied by the owner; the earlier 10-slide collection paired Bruno Detox with Delox - flagged.

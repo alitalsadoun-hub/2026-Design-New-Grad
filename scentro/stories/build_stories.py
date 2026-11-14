@@ -253,8 +253,60 @@ def story_gs_v2():
     return duo_story('gs_v2', A + 'mad_gs_bottle_c.png', 565, A + 'orig_rouge_malachite_r.png', 520, pal, 'GOLDEN SOUL', 820, 'Rouge Malachite', subtitle='EXTRAIT DE PARFUM')
 
 
+# ---------------------------------------------------------------- Bruno Detox x Mancera Roses Vanille (comparison Story)
+def wave_symbol(img, cx, cy, w=84, gap=26, amp=7, col=(176, 141, 87), th=5):
+    """Hand-drawn thin double wave (the 'approximately equal' sign), supersampled 4x for crisp gold lines."""
+    S = 4; pad = 12
+    layer = Image.new('RGBA', ((w + 2 * pad) * S, (gap + 2 * amp + 2 * pad + th) * S), (0, 0, 0, 0)); d = ImageDraw.Draw(layer)
+    for k, y0 in enumerate((pad + amp, pad + amp + gap)):
+        pts = [((pad + x) * S, (y0 + amp * np.sin(x / w * 2 * np.pi * 1.5 + 0.0)) * S) for x in np.linspace(0, w, 160)]
+        d.line(pts, fill=col + (255,), width=th * S, joint='curve')
+        for p in (pts[0], pts[-1]): d.ellipse((p[0] - th * S / 2, p[1] - th * S / 2, p[0] + th * S / 2, p[1] + th * S / 2), fill=col + (255,))
+    layer = layer.resize((layer.width // S, layer.height // S), Image.LANCZOS)
+    img.alpha_composite(layer, (int(cx - layer.width / 2), int(cy - layer.height / 2)))
+
+
+def story_bd():
+    canvas(arch_top=545, arch_r=470, surf_top=1330, surf_front=1470, base_y=1390)
+    s = dict(bg_a=(249, 241, 231), bg_b=(238, 222, 214), niche_rgb=(234, 216, 212), stone=(1, -1, 2))
+    img = B.background(s)
+    glow(img, 330, 1000, 580, 640, (200, 160, 196), 0.15)            # soft mauve bloom behind Bruno Detox
+    glow(img, 760, 760, 600, 520, (255, 226, 190), 0.20)             # champagne light on the right
+    B.niche(img, s); B.travertine(img, s)
+
+    mad = B.load_clean('stories/assets/cutouts/bd_bottle.png', 590); mv = B.load_clean('stories/assets/cutouts/mancera_rv.png', 570)
+    gap = 138; total = mad.width + gap + mv.width; left = 556 - total / 2
+    mad_cx = left + mad.width / 2; mv_cx = left + mad.width + gap + mv.width / 2
+
+    # real photographic props, tucked BEHIND the bottles so no cut edge is ever visible
+    rose = B.load_clean('stories/assets/cutouts/ing_rose_bd.png', 188)
+    rx = int(left - rose.width + 58); ry = B.BASE_Y + 14 - rose.height
+    drop_shadow(img, rose, rx, ry, dx=12, dy=10, blur=9, op=0.30)
+    pod = Image.open('stories/assets/cutouts/ing_vanilla_pod_single.png').convert('RGBA').rotate(218, expand=True, resample=Image.BICUBIC)
+    pod = crop_alpha(pod); k = 252 / pod.width; pod = pod.resize((252, max(1, int(pod.height * k))), Image.LANCZOS); pod.save('/tmp/_pod.png'); pod = B.load_clean('/tmp/_pod.png', pod.height)
+    px = int(mv_cx - 20); py = B.BASE_Y + 8 - pod.height
+    drop_shadow(img, pod, px, py, dx=8, dy=8, blur=6, op=0.34)
+
+    B.stage_bottle(img, mad, mad_cx, B.BASE_Y); B.stage_bottle(img, mv, mv_cx, B.BASE_Y)
+    wave_symbol(img, left + mad.width + gap / 2, B.BASE_Y - 250)
+
+    d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87); mauve = (104, 58, 98)
+    tracked_in(d, 540, 282, 'SCENTRO', B.font(CORM, 44, 'Medium'), brown, 20)
+    d.line((517, 326, 563, 326), fill=gold, width=2)
+    tf, size = B.fit_width(d, 'BRUNO DETOX', CORM, 'SemiBold', 100, 860, track_ratio=.11)
+    tracked_in(d, 540, 412, 'BRUNO DETOX', tf, mauve, size * .11)
+    tracked_in(d, 540, 490, 'MAD PARFUMEUR', B.font(INTER_M, 22), brown, 11)
+    d.line((500, 1496, 580, 1496), fill=gold, width=2)
+    tracked_in(d, 540, 1534, 'MANCERA', B.font(INTER_M, 21), (143, 105, 52), 13)
+    nf, _ = B.fit_width(d, 'ROSES VANILLE', CORM, 'SemiBold', 54, 760, track_px=7)
+    tracked_in(d, 540, 1584, 'ROSES VANILLE', nf, mauve, 7)
+    check_safe('bd', {'header': (255, 505), 'bottom block': (1480, 1612)})
+    return img
+
+
 JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
         'gs': (story_gs_v2, 'stories/output/scentro_golden_soul_story.png'),
+        'bd': (story_bd, 'stories/output/scentro_bruno_detox_vs_mancera_roses_vanille_story.png'),
         'nyn_box': (story_nyn, 'stories/output/archive_box_version/scentro_new_york_night_story.png'),
         'gs_box': (story_gs, 'stories/output/archive_box_version/scentro_golden_soul_story.png')}
 
