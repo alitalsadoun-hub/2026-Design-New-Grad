@@ -483,8 +483,80 @@ def story_offer2():
     return img
 
 
+# ---------------------------------------------------------------- Niche "limited-time offer" Story - pedestals, directional light
+def pedestal(img, cx, w, top_y, base_y, depth=34):
+    x0, x1 = int(cx - w / 2), int(cx + w / 2); h = base_y - top_y
+    # front face: travertine with horizontal strata, lit from the left, shaded toward the right edge and bottom
+    xs = np.linspace(0, 1, w, dtype=np.float32)[None, :, None]; ys = np.linspace(0, 1, h, dtype=np.float32)[:, None, None]
+    col = np.array([214, 197, 173], np.float32) * (1.07 - 0.14 * xs - 0.07 * ys) * np.ones((h, w, 1), np.float32)
+    col *= 1 - 0.14 * np.clip((xs - 0.86) / 0.14, 0, 1)
+    col += (B.noise(h, w, 0.7, 80, 5.0) + B.noise(h, w, 2.5, 30, 3.0) + B.noise(h, w, 0.6, 4, 1.4))[..., None]
+    front = Image.fromarray(np.clip(col, 0, 255).astype(np.uint8)).convert('RGBA')
+    # top face
+    tcol = np.array([240, 229, 210], np.float32) * (1.03 - 0.06 * xs) * np.ones((depth, w, 1), np.float32)
+    tcol += B.noise(depth, w, 0.8, 60, 3.0)[..., None]
+    top = Image.fromarray(np.clip(tcol, 0, 255).astype(np.uint8)).convert('RGBA')
+    img.alpha_composite(front, (x0, top_y)); img.alpha_composite(top, (x0, top_y - depth))
+    d = ImageDraw.Draw(img, 'RGBA')
+    d.line((x0, top_y, x1, top_y), fill=(252, 246, 234, 255), width=2)                     # lit front edge
+    d.line((x0, top_y - depth, x1, top_y - depth), fill=(214, 198, 174, 200), width=1)      # back edge of the top face
+    d.line((x0, top_y, x0, base_y), fill=(250, 242, 228, 160), width=1)                     # left edge catch-light
+    d.line((x1 - 1, top_y, x1 - 1, base_y), fill=(150, 130, 108, 120), width=2)             # right edge in shade
+
+
+def pedestal_shadows(img, cx, w, top_y, base_y, depth=34):
+    x0, x1 = int(cx - w / 2), int(cx + w / 2)
+    wall = Image.new('L', (W, H), 0); ImageDraw.Draw(wall).rectangle((x0 + 30, top_y - depth - 40, x1 + 46, base_y - 20), fill=255)
+    img.paste(Image.new('RGBA', (W, H), (96, 72, 52, 255)), (0, 0), wall.filter(ImageFilter.GaussianBlur(22)).point(lambda v: int(v * .20)))   # soft shadow on the wall, to the right
+    fl = Image.new('L', (W, H), 0); ImageDraw.Draw(fl).polygon([(x0 + 10, base_y - 4), (x1 + 6, base_y - 4), (x1 + 150, base_y + 18), (x0 + 120, base_y + 40), (x0 + 10, base_y + 22)], fill=255)
+    img.paste(Image.new('RGBA', (W, H), (86, 62, 44, 255)), (0, 0), fl.filter(ImageFilter.GaussianBlur(16)).point(lambda v: int(v * .42)))
+    ct = Image.new('L', (W, H), 0); ImageDraw.Draw(ct).rectangle((x0 - 6, base_y - 6, x1 + 6, base_y + 6), fill=255)
+    img.paste(Image.new('RGBA', (W, H), (70, 50, 36, 255)), (0, 0), ct.filter(ImageFilter.GaussianBlur(5)).point(lambda v: int(v * .55)))
+
+
+def stage_ped(img, b, cx, base_y):
+    w, h = b.size; x, y = round(cx - w / 2), base_y - h
+    amb = Image.new('L', (W, H), 0); ImageDraw.Draw(amb).ellipse((x - 14, base_y - 12, x + w + 28, base_y + 16), fill=130)
+    cast = Image.new('L', (W, H), 0); ImageDraw.Draw(cast).polygon([(x + w * .1, base_y - 3), (x + w * .9, base_y - 3), (x + w * 1.45, base_y + 11), (x + w * .8, base_y + 11)], fill=140)
+    con = Image.new('L', (W, H), 0); ImageDraw.Draw(con).ellipse((x + 3, base_y - 5, x + w - 3, base_y + 6), fill=235)
+    dark = Image.new('RGBA', (W, H), (70, 52, 38, 255))
+    for m, k, bl in ((amb, .40, 12), (cast, .32, 8), (con, .75, 3)):
+        img.paste(dark, (0, 0), m.filter(ImageFilter.GaussianBlur(bl)).point(lambda v, k=k: int(v * k)))
+    img.alpha_composite(b, (x, y))
+
+
+def story_offer3():
+    canvas(arch_top=610, arch_r=470, surf_top=1360, surf_front=1650, base_y=1470)
+    s = dict(bg_a=(247, 239, 227), bg_b=(233, 218, 198), niche_rgb=(225, 206, 182), stone=(2, 0, -3))
+    img = B.background(s)
+    # warm directional light: a soft diagonal beam from the upper left, plus a champagne pool behind the centre pedestal
+    beam = Image.new('L', (W, H), 0); ImageDraw.Draw(beam).polygon([(-260, -120), (300, -120), (1320, 1500), (760, 1500)], fill=255)
+    img.paste(Image.new('RGBA', (W, H), (255, 238, 205, 255)), (0, 0), beam.filter(ImageFilter.GaussianBlur(70)).point(lambda v: int(v * .16)))
+    glow(img, 540, 980, 520, 600, (255, 226, 186), 0.20)
+    B.niche(img, s); B.travertine(img, s)
+    C = 'stories/assets/cutouts/'
+    BASE, DEP = 1470, 34
+    P = [(540, 300, 1140, 'rouge_hi.png', 470), (215, 270, 1255, None, 440), (865, 270, 1345, 'bd_bottle.png', 425)]
+    for cx, w, top, _, _ in P: pedestal_shadows(img, cx, w, top, BASE, DEP)
+    for cx, w, top, _, _ in sorted(P, key=lambda p: p[2]): pedestal(img, cx, w, top, BASE, DEP)       # tallest first
+    nyn = B.load_clean(prep_nyn_bottle(), 440)
+    items = {540: B.load_clean(C + 'rouge_hi.png', 470), 215: nyn, 865: B.load_clean(C + 'bd_bottle.png', 425)}
+    for cx, w, top, _, _ in P: stage_ped(img, items[cx], cx, top - int(DEP * 0.45))
+    d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87); burg = (112, 28, 44)
+    tracked_in(d, 540, 282, 'SCENTRO', B.font(CORM, 46, 'Medium'), brown, 22)
+    d.line((517, 326, 563, 326), fill=gold, width=2)
+    tf, size = B.fit_width(d, 'LIMITED-TIME OFFER', CORM, 'SemiBold', 92, 860, track_ratio=.09)
+    tracked_in(d, 540, 410, 'LIMITED-TIME OFFER', tf, burg, size * .09)
+    d.line((500, 462, 580, 462), fill=gold, width=2); d.ellipse((536, 458, 544, 466), fill=gold)
+    sf, _ = B.fit_width(d, 'SPECIAL PRICES ON NICHE FRAGRANCES', INTER_M, None, 26, 920, track_px=10)
+    tracked_in(d, 540, 508, 'SPECIAL PRICES ON NICHE FRAGRANCES', sf, (143, 105, 52), 10)
+    check_safe('offer3', {'header': (255, 535), 'scene': (640, 1560)})
+    return img
+
+
 JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
         'gs': (story_gs_v2, 'stories/output/scentro_golden_soul_story.png'),
+        'offer3': (story_offer3, 'stories/output/scentro_niche_limited_offer_story.png'),
         'offer2': (story_offer2, 'stories/output/scentro_niche_special_offer_story_v2.png'),
         'offer': (story_offer, 'stories/output/scentro_niche_special_offer_story.png'),
         'bd_lovers': (story_bd_lovers, 'stories/output/scentro_bruno_detox_mancera_lovers_story.png'),
