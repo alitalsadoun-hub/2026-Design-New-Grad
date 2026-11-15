@@ -393,8 +393,76 @@ def story_bd_lovers():
     return img
 
 
+# ---------------------------------------------------------------- Niche collection offer Story ("Nocturne Lacquer")
+def dark_scene(arch_top, arch_r, surf_top, surf_front):
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    t = np.clip(yy / H * 0.9 + xx / W * 0.1, 0, 1)[..., None]
+    base = np.array([20, 16, 13], np.float32) * (1 - t) + np.array([8, 7, 6], np.float32) * t
+    base += np.random.default_rng(31).normal(0, 0.9, (H, W, 1))
+    img = Image.fromarray(np.clip(base, 0, 255).astype(np.uint8)).convert('RGBA')
+    glow(img, 540, 1000, 780, 880, (150, 108, 50), 0.30)
+    glow(img, 300, 640, 520, 480, (255, 222, 160), 0.09)
+    glow(img, 540, 1040, 430, 520, (205, 150, 84), 0.20)
+    cx, top, R = 540, arch_top, arch_r
+    m = Image.new('L', (W * 2, H * 2), 0); dm = ImageDraw.Draw(m)
+    dm.ellipse(((cx - R) * 2, top * 2, (cx + R) * 2, (top + 2 * R) * 2), fill=255); dm.rectangle(((cx - R) * 2, (top + R) * 2, (cx + R) * 2, surf_top * 2), fill=255)
+    ar = np.asarray(m.resize((W, H), Image.LANCZOS), np.float32)[..., None] / 255
+    lift = np.clip(1 - np.hypot((xx - 540) / 540, (yy - 1020) / 680), 0, 1)[..., None] ** 1.3
+    a = np.asarray(img, np.float32)[..., :3]
+    niche_col = np.array([28, 22, 17], np.float32) + lift * np.array([46, 32, 16], np.float32)
+    a = a * (1 - ar * 0.93) + niche_col * ar * 0.93
+    img = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert('RGBA')
+    dr = ImageDraw.Draw(img, 'RGBA')
+    dr.arc((cx - R, top, cx + R, top + 2 * R), 180, 360, fill=(205, 170, 112, 205), width=3)
+    dr.line((cx - R, top + R, cx - R, surf_top), fill=(205, 170, 112, 205), width=3); dr.line((cx + R, top + R, cx + R, surf_top), fill=(205, 170, 112, 205), width=3)
+    ys0, ys1 = surf_top, surf_front; h = H - ys0; top_h = ys1 - ys0
+    col = np.zeros((h, W, 3), np.float32)
+    ty = np.linspace(0, 1, top_h, dtype=np.float32)[:, None, None]
+    col[:top_h] = np.array([40, 32, 25], np.float32) * (1 - 0.55 * ty)
+    fy = np.linspace(0, 1, h - top_h, dtype=np.float32)[:, None, None]
+    col[top_h:] = np.array([15, 12, 10], np.float32) * (1 - 0.6 * fy)
+    col += ndi.gaussian_filter(np.random.default_rng(32).normal(0, 1, (h, W)), (0.8, 60))[..., None] * 2.6 + np.random.default_rng(33).normal(0, 0.8, (h, W, 1))
+    img.paste(Image.fromarray(np.clip(col, 0, 255).astype(np.uint8)).convert('RGBA'), (0, ys0))
+    dd = ImageDraw.Draw(img, 'RGBA'); dd.line((0, ys0, W, ys0), fill=(76, 60, 44, 255), width=1); dd.line((0, ys1, W, ys1), fill=(214, 182, 126, 225), width=2)
+    return img
+
+
+def stage_dark(img, b, cx, base_y, refl=110, refl_a=0.30):
+    w, h = b.size; x, y = round(cx - w / 2), base_y - h
+    con = Image.new('L', (W, H), 0); ImageDraw.Draw(con).ellipse((x + 6, base_y - 9, x + w - 6, base_y + 13), fill=235)
+    img.paste(Image.new('RGBA', (W, H), (0, 0, 0, 255)), (0, 0), con.filter(ImageFilter.GaussianBlur(6)).point(lambda v: int(v * .85)))
+    amb = Image.new('L', (W, H), 0); ImageDraw.Draw(amb).ellipse((x - 20, base_y - 14, x + w + 30, base_y + 26), fill=150)
+    img.paste(Image.new('RGBA', (W, H), (0, 0, 0, 255)), (0, 0), amb.filter(ImageFilter.GaussianBlur(16)).point(lambda v: int(v * .55)))
+    fl = b.transpose(Image.FLIP_TOP_BOTTOM).crop((0, 0, w, refl))
+    fade = (np.linspace(refl_a, 0, refl) ** 1.5 / refl_a ** 0.5)[:, None] * np.ones((1, w))
+    ra = Image.fromarray((np.asarray(fl.getchannel('A'), np.float32) * fade).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.6))
+    fl = fl.filter(ImageFilter.GaussianBlur(1.6)); fl.putalpha(ra); img.alpha_composite(fl, (x, base_y))
+    img.alpha_composite(b, (x, y))
+
+
+def story_offer():
+    canvas(arch_top=620, arch_r=480, surf_top=1330, surf_front=1650, base_y=1410)
+    img = dark_scene(620, 480, 1330, 1650)
+    C = 'stories/assets/cutouts/'
+    gs = B.load_clean(C + 'mad_gs_bottle_cc.png', 650)       # Golden Soul - hero, centre
+    rg = B.load_clean(C + 'rouge_hi.png', 570)               # Rouge - left
+    bd = B.load_clean(C + 'bd_bottle.png', 530)              # Bruno Detox - right
+    gs_cx = 540; rg_cx = gs_cx - gs.width / 2 - rg.width / 2 + 22; bd_cx = gs_cx + gs.width / 2 + bd.width / 2 - 22
+    glow(img, gs_cx, 850, 300, 250, (255, 228, 176), 0.24)           # backlight so the clear crystal cap reads as lit glass
+    stage_dark(img, rg, rg_cx, 1398); stage_dark(img, bd, bd_cx, 1398); stage_dark(img, gs, gs_cx, 1416)
+    d = ImageDraw.Draw(img); champ = (216, 186, 132); ivory = (232, 220, 200); gold = (190, 156, 98)
+    tracked_in(d, 540, 282, 'SCENTRO', B.font(CORM, 46, 'Medium'), ivory, 22)
+    d.line((517, 326, 563, 326), fill=gold, width=2)
+    tf, size = B.fit_width(d, 'A SPECIAL OFFER', CORM, 'SemiBold', 98, 900, track_ratio=.10)
+    tracked_in(d, 540, 412, 'A SPECIAL OFFER', tf, champ, size * .10)
+    tracked_in(d, 540, 490, 'ON OUR NICHE COLLECTION', B.font(INTER_M, 25), ivory, 13)
+    check_safe('offer', {'header': (255, 515), 'bottles': (760, 1440)})
+    return img
+
+
 JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
         'gs': (story_gs_v2, 'stories/output/scentro_golden_soul_story.png'),
+        'offer': (story_offer, 'stories/output/scentro_niche_special_offer_story.png'),
         'bd_lovers': (story_bd_lovers, 'stories/output/scentro_bruno_detox_mancera_lovers_story.png'),
         'bd': (story_bd, 'stories/output/scentro_bruno_detox_vs_mancera_roses_vanille_story.png'),
         'nyn_box': (story_nyn, 'stories/output/archive_box_version/scentro_new_york_night_story.png'),

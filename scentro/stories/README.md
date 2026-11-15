@@ -21,3 +21,9 @@ Per the brief: no "Inspired by", no slogans, hand-drawn gold "approx equal" sign
 
 ### Bruno Detox x Mancera - refined v2
 Bigger bottles (670 / 635 px), deeper surface so the "MANCERA / ROSES VANILLE" caption sits directly under its bottle, single Cormorant approx-equal glyph. Ingredients regrouped at the bottle bases: three roses + three petals cut from the official 2000 px Bruno Detox flat-lay rose (rotated / flipped / tinted blush so they are not identical), one real vanilla pod from the official New York Night flat-lay. Real vanilla-orchid flowers could not be sourced (Wikimedia rate-limited, no suitable photo in MAD's flat-lays) - not included.
+
+## Niche collection offer Story ("Nocturne Lacquer")
+`python3 stories/build_stories.py offer` -> `stories/output/scentro_niche_special_offer_story.png` (1080x1920). Design philosophy: `DESIGN_PHILOSOPHY_niche_offer.md` (written with the installed `canvas-design` skill process).
+Niche products (all listed under scentrojo.com "Niche perfumes" categories): MAD Rouge (official MAD SG 2000 px bottle photo), MAD Golden Soul (Fragrantica 120894 bottle-only photo; cap alpha smoothed), MAD Bruno Detox (official MAD SG 2000 px bottle photo).
+Copy: "A SPECIAL OFFER / ON OUR NICHE COLLECTION" + SCENTRO - no prices, percentages, deadline or exclusivity claims. Link-sticker zone left empty: y 1500-1640, x ~190-890.
+Skills installed (project `.claude/skills/`, provenance in `SOURCES.md`): canvas-design, design-critique, brand-review (Anthropic official, markdown only).
