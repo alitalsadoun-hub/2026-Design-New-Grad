@@ -545,8 +545,19 @@ def story_offer3():
     d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87); burg = (112, 28, 44)
     tracked_in(d, 540, 282, 'SCENTRO', B.font(CORM, 46, 'Medium'), brown, 22)
     d.line((517, 326, 563, 326), fill=gold, width=2)
-    tf, size = B.fit_width(d, 'LIMITED-TIME OFFER', CORM, 'SemiBold', 92, 860, track_ratio=.09)
-    tracked_in(d, 540, 410, 'LIMITED-TIME OFFER', tf, burg, size * .09)
+    tf, size = B.fit_width(d, 'LIMITED–TIME OFFER', CORM, 'SemiBold', 92, 860, track_ratio=.09)
+    lay = Image.new('RGBA', (W, H), (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+    tracked_in(ld, 540, 410, 'LIMITED\u2013TIME OFFER', tf, burg, size * .09)
+    a = np.array(lay.getchannel('A')); rows = np.where(a.max(1) > 0)[0]; top, bot = rows.min(), rows.max()   # cap top / baseline
+    # locate the dash: columns whose ink lies entirely inside a thin band, between the 'D' and the 'T'
+    band = (a[top:bot + 1].astype(int) > 0); ink = band.sum(0)
+    cols = np.where((ink > 0) & (ink < (bot - top) * 0.12))[0]
+    groups = np.split(cols, np.where(np.diff(cols) > 3)[0] + 1); dash = max(groups, key=len)
+    x0, x1 = int(dash.min()), int(dash.max()); dy = np.where(a[:, x0 + 2:x1 - 1].max(1) > 0)[0]; th = int(dy.max() - dy.min() + 1)
+    a2 = np.array(lay); a2[:, x0 - 2:x1 + 3] = 0; lay = Image.fromarray(a2)
+    img.alpha_composite(lay)
+    my = (top + bot) // 2 + 1; ImageDraw.Draw(img).rectangle((x0 + 3, my - th // 2, x1 - 3, my - th // 2 + th - 1), fill=burg)
+    d = ImageDraw.Draw(img)
     d.line((500, 462, 580, 462), fill=gold, width=2); d.ellipse((536, 458, 544, 466), fill=gold)
     sf, _ = B.fit_width(d, 'SPECIAL PRICES ON NICHE FRAGRANCES', INTER_M, None, 26, 920, track_px=10)
     tracked_in(d, 540, 508, 'SPECIAL PRICES ON NICHE FRAGRANCES', sf, (143, 105, 52), 10)
