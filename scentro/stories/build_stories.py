@@ -536,10 +536,10 @@ def story_offer3():
     B.niche(img, s); B.travertine(img, s)
     C = 'stories/assets/cutouts/'
     BASE, DEP = 1470, 34
-    P = [(540, 300, 1140, 'rouge_hi.png', 470), (215, 270, 1255, None, 440), (865, 270, 1345, 'bd_bottle.png', 425)]
+    P = [(540, 300, 1140, 'rouge_hi.png', 470), (215, 290, 1255, None, 440), (865, 270, 1345, 'bd_bottle.png', 425)]
     for cx, w, top, _, _ in P: pedestal_shadows(img, cx, w, top, BASE, DEP)
     for cx, w, top, _, _ in sorted(P, key=lambda p: p[2]): pedestal(img, cx, w, top, BASE, DEP)       # tallest first
-    nyn = B.load_clean(prep_nyn_bottle(), 440)
+    nyn = B.load_clean('assets/cutouts/collection2/mad_gumin.png', 425)
     items = {540: B.load_clean(C + 'rouge_hi.png', 470), 215: nyn, 865: B.load_clean(C + 'bd_bottle.png', 425)}
     for cx, w, top, _, _ in P: stage_ped(img, items[cx], cx, top - int(DEP * 0.45))
     d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87); burg = (112, 28, 44)
