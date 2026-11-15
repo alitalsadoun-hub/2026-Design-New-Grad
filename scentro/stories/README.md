@@ -27,3 +27,6 @@ Bigger bottles (670 / 635 px), deeper surface so the "MANCERA / ROSES VANILLE" c
 Niche products (all listed under scentrojo.com "Niche perfumes" categories): MAD Rouge (official MAD SG 2000 px bottle photo), MAD Golden Soul (Fragrantica 120894 bottle-only photo; cap alpha smoothed), MAD Bruno Detox (official MAD SG 2000 px bottle photo).
 Copy: "A SPECIAL OFFER / ON OUR NICHE COLLECTION" + SCENTRO - no prices, percentages, deadline or exclusivity claims. Link-sticker zone left empty: y 1500-1640, x ~190-890.
 Skills installed (project `.claude/skills/`, provenance in `SOURCES.md`): canvas-design, design-critique, brand-review (Anthropic official, markdown only).
+
+### Niche offer Story v2 (current)
+`python3 stories/build_stories.py offer2` -> `stories/output/scentro_niche_special_offer_story_v2.png`. Light SCENTRO arch/travertine style, two bottles (MAD Rouge + MAD Bruno Detox, larger). Golden Soul removed at the owner's request. The dark v1 (`scentro_niche_special_offer_story.png`) is kept unchanged. Link-sticker zone: y 1500-1640, x ~190-890.

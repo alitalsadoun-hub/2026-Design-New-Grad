@@ -460,8 +460,32 @@ def story_offer():
     return img
 
 
+# ---------------------------------------------------------------- Niche offer Story v2 - light SCENTRO arch style, two bottles (Rouge + Bruno Detox)
+def story_offer2():
+    canvas(arch_top=600, arch_r=470, surf_top=1370, surf_front=1655, base_y=1448)
+    s = dict(bg_a=(246, 238, 226), bg_b=(232, 217, 198), niche_rgb=(227, 208, 186), stone=(2, 0, -3))
+    img = B.background(s)
+    glow(img, 360, 1000, 560, 640, (214, 150, 150), 0.10)            # faint rosé warmth on the Rouge side
+    glow(img, 760, 960, 560, 600, (255, 228, 192), 0.20)             # champagne light on the right
+    B.niche(img, s); B.travertine(img, s)
+    C = 'stories/assets/cutouts/'
+    rg = B.load_clean(C + 'rouge_hi.png', 700); bd = B.load_clean(C + 'bd_bottle.png', 650)
+    gap = 96; total = rg.width + gap + bd.width; left = 540 - total / 2
+    B.stage_bottle(img, rg, left + rg.width / 2, B.BASE_Y); B.stage_bottle(img, bd, left + rg.width + gap + bd.width / 2, B.BASE_Y)
+    d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87); burg = (112, 28, 44)
+    tracked_in(d, 540, 282, 'SCENTRO', B.font(CORM, 46, 'Medium'), brown, 22)
+    d.line((517, 326, 563, 326), fill=gold, width=2)
+    tf, size = B.fit_width(d, 'A SPECIAL OFFER', CORM, 'SemiBold', 100, 900, track_ratio=.10)
+    tracked_in(d, 540, 414, 'A SPECIAL OFFER', tf, burg, size * .10)
+    d.line((500, 468, 580, 468), fill=gold, width=2); d.ellipse((536, 464, 544, 472), fill=gold)
+    tracked_in(d, 540, 514, 'ON OUR NICHE COLLECTION', B.font(INTER_M, 25), (143, 105, 52), 13)
+    check_safe('offer2', {'header': (255, 535), 'bottles': (700, 1470)})
+    return img
+
+
 JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
         'gs': (story_gs_v2, 'stories/output/scentro_golden_soul_story.png'),
+        'offer2': (story_offer2, 'stories/output/scentro_niche_special_offer_story_v2.png'),
         'offer': (story_offer, 'stories/output/scentro_niche_special_offer_story.png'),
         'bd_lovers': (story_bd_lovers, 'stories/output/scentro_bruno_detox_mancera_lovers_story.png'),
         'bd': (story_bd, 'stories/output/scentro_bruno_detox_vs_mancera_roses_vanille_story.png'),
