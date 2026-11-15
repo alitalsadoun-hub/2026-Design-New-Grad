@@ -565,8 +565,51 @@ def story_offer3():
     return img
 
 
+def banner_offer(out_w=1000, out_h=483):
+    """Landscape 1000x483 version of the limited-offer Story: text left, pedestal trio right. Built at 2x and downsampled."""
+    global W, H
+    sw, sh = W, H; W, H = out_w * 2, out_h * 2; B.W, B.H = W, H
+    try:
+        B.ARCH_CX = 1470; B.ARCH_TOP = 70; B.ARCH_R = 420
+        B.SURF_TOP = 870; B.SURF_FRONT = 920; B.BASE_Y = 905
+        s_ = dict(bg_a=(247, 239, 227), bg_b=(233, 218, 198), niche_rgb=(225, 206, 182), stone=(2, 0, -3))
+        img = B.background(s_)
+        beam = Image.new('L', (W, H), 0); ImageDraw.Draw(beam).polygon([(-200, -100), (260, -100), (1500, 1000), (1000, 1000)], fill=255)
+        img.paste(Image.new('RGBA', (W, H), (255, 238, 205, 255)), (0, 0), beam.filter(ImageFilter.GaussianBlur(60)).point(lambda v: int(v * .16)))
+        glow(img, 1470, 520, 520, 480, (255, 226, 186), 0.20)
+        B.niche(img, s_); B.travertine(img, s_)
+        C = 'stories/assets/cutouts/'
+        BASE, DEP = 905, 22
+        # (centre x, pedestal width, pedestal top, bottle path, bottle height)
+        P = [(1470, 230, 665, C + 'rouge_hi.png', 345), (1130, 210, 765, 'assets/cutouts/collection2/mad_gumin.png', 300), (1810, 210, 810, C + 'bd_bottle.png', 305)]
+        for cx, w, top, _, _ in P: pedestal_shadows(img, cx, w, top, BASE, DEP)
+        for cx, w, top, _, _ in sorted(P, key=lambda p: p[2]): pedestal(img, cx, w, top, BASE, DEP)
+        for cx, w, top, path, h in P: stage_ped(img, B.load_clean(path, h), cx, top - int(DEP * 0.45))
+        d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87); burg = (112, 28, 44)
+        cx = 480
+        tracked_in(d, cx, 252, 'SCENTRO', B.font(CORM, 50, 'Medium'), brown, 24)
+        d.line((cx - 24, 296, cx + 24, 296), fill=gold, width=2)
+        tf, size = B.fit_width(d, 'LIMITED–TIME OFFER', CORM, 'SemiBold', 92, 780, track_ratio=.09)
+        lay = Image.new('RGBA', (W, H), (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+        tracked_in(ld, cx, 382, 'LIMITED–TIME OFFER', tf, burg, size * .09)
+        a = np.array(lay.getchannel('A')); rows = np.where(a.max(1) > 0)[0]; top, bot = rows.min(), rows.max()
+        ink = (a[top:bot + 1] > 0).sum(0); cols = np.where((ink > 0) & (ink < (bot - top) * 0.12))[0]
+        groups = np.split(cols, np.where(np.diff(cols) > 3)[0] + 1); dash = max(groups, key=len)
+        x0, x1 = int(dash.min()), int(dash.max()); dy = np.where(a[:, x0 + 2:x1 - 1].max(1) > 0)[0]; th = int(dy.max() - dy.min() + 1)
+        a2 = np.array(lay); a2[:, x0 - 2:x1 + 3] = 0; img.alpha_composite(Image.fromarray(a2))
+        my = (top + bot) // 2 + 1; ImageDraw.Draw(img).rectangle((x0 + 3, my - th // 2, x1 - 3, my - th // 2 + th - 1), fill=burg)
+        d = ImageDraw.Draw(img)
+        d.line((cx - 40, 446, cx + 40, 446), fill=gold, width=2); d.ellipse((cx - 4, 442, cx + 4, 450), fill=gold)
+        sf, _ = B.fit_width(d, 'SPECIAL PRICES ON NICHE FRAGRANCES', INTER_M, None, 26, 780, track_px=9)
+        tracked_in(d, cx, 510, 'SPECIAL PRICES ON NICHE FRAGRANCES', sf, (143, 105, 52), 9)
+        return img.convert('RGB').resize((out_w, out_h), Image.LANCZOS)
+    finally:
+        W, H = sw, sh; B.W, B.H = 1080, 1350
+
+
 JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png'),
         'gs': (story_gs_v2, 'stories/output/scentro_golden_soul_story.png'),
+        'banner': (banner_offer, 'stories/output/scentro_niche_limited_offer_banner_1000x483.png'),
         'offer3': (story_offer3, 'stories/output/scentro_niche_limited_offer_story.png'),
         'offer2': (story_offer2, 'stories/output/scentro_niche_special_offer_story_v2.png'),
         'offer': (story_offer, 'stories/output/scentro_niche_special_offer_story.png'),
@@ -578,4 +621,4 @@ JOBS = {'nyn': (story_nyn_v2, 'stories/output/scentro_new_york_night_story.png')
 if __name__ == '__main__':
     os.makedirs('stories/output', exist_ok=True)
     for k in (sys.argv[1:] or ['nyn', 'gs']):
-        fn, out = JOBS[k]; im = fn().convert('RGB'); assert im.size == (W, H); im.save(out, optimize=True); print(out, im.size)
+        fn, out = JOBS[k]; im = fn().convert('RGB'); assert im.size == ((1000, 483) if k == 'banner' else (W, H)); im.save(out, optimize=True); print(out, im.size)
