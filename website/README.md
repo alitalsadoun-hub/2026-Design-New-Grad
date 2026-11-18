@@ -28,3 +28,5 @@ Nothing on the live site was changed.
 - Prototype data lives in the browser (localStorage). Real build: server DB + login; the server must re-price every order (never trust browser totals).
 - Sample promotions in `SEED_RULES` are placeholders, not real offers.
 - Notes: `data/notes_niche.json` (16 niche, from official MAD descriptions) + `data/notes_selective.json` (4 of ~52 so far, read from Scentro's own product-gallery infographics; mapping by product code from other sites proved unreliable – Y102 exists for both men and women).
+
+- v3 update: light hero + Instagram-sampled gold (#D3B66D); all 81 catalogue products (24 niche, 52 selective, 5 body mist) in the store with real stock (sold-out / only-N-left); notes for 36 perfumes (`data/notes_*.json`, provenance per item); product page, search, mobile menu; audit scripts `audit.js`, `probe*.js`, `flow.js`, `test_engine.js`.

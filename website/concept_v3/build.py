@@ -1,26 +1,38 @@
-"""Builds concept_v3/index.html (single file: storefront + promotions engine + dashboard prototype)."""
+"""Builds concept_v3/index.html (single file: storefront + promotions engine + dashboard prototype).
+All 81 catalogue products (niche, selective, body mist) are included; notes are optional and only shown where verified."""
 import json, re, os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 rows = {r['id']: r for r in json.load(open('catalog_snapshot.json'))}
 niche = {k: v for k, v in json.load(open('../data/notes_niche.json')).items() if not k.startswith('_')}
 sel = {k: v for k, v in json.load(open('../data/notes_selective.json')).items() if not k.startswith('_')}
 norm = lambda s: re.sub(r'[^a-z]', '', s.lower())
-ORDER = ['Rouge', 'Gumin', 'New York Night', 'Exotic', 'Detox', 'Adria', 'Treasure', 'Draco', 'Bruno Gold', 'Inviting', 'Prevail', 'Narcotic', 'Oud Sateen', 'Effect', 'Divine Tough', 'Marjorie']
+nkey = {norm({'Treasure': 'Tresure'}.get(k, k)): k for k in niche}          # catalogue spells it "Tresure"
+def gender(nm): nm = nm.lower(); return 'her' if 'women' in nm else 'him' if re.search(r"\bmen", nm) else 'unisex'
 prods = {}
-def gender(nm): nm = nm.lower(); return 'her' if 'women' in nm else 'him' if ' men' in nm else 'unisex'
-for name in ORDER:
-    k = norm({'treasure': 'tresure'}.get(norm(name), name)); hit = None
-    for r in rows.values():
-        m = re.match(r'MAD (.+?) (\d+) ml', r['name'])
-        if 'Niche' in r['cat'] and m and norm(m.group(1)) == k: hit = (r, m); break
-    if not hit: print('NO MATCH', name); continue
-    r, m = hit; n = niche[name]
-    prods[str(r['id'])] = dict(id=str(r['id']), name=name, brand='mad', collection='niche', img=f"img/p{r['id']}.webp", price=r['price'], was=r.get('was'), stock=int(r['stock'] or 0), ml=int(m.group(2)), **{'for': gender(r['name'])}, notes={x: n[x] for x in ('top', 'heart', 'base')})
-for pid, s in sel.items():
-    r = rows[int(pid)]
-    prods[pid] = dict(id=pid, name=s['name'], brand='mad', collection='selective', img=f"img/p{pid}.webp", price=r['price'], was=r.get('was'), stock=int(r['stock'] or 0), ml=100, **{'for': gender(r['name'])}, notes=s['notes'])
-r = rows[83]; prods['83'] = dict(id='83', name='Sweet Beach Body Mist', brand='mad', collection='mist', img='img/p83.webp', price=r['price'], was=None, stock=int(r['stock'] or 0), ml=250, **{'for': 'unisex'})
-print(len(prods), 'products')
+order = sorted(rows.values(), key=lambda r: (0 if 'Niche' in r['cat'] else 1 if 'Selective' in r['cat'] else 2, -r['id']))
+PREFERRED = ['Rouge', 'Gumin', 'New York Night', 'Exotic', 'Detox', 'Adria', 'Treasure', 'Draco']
+def rank(r):
+    m = re.match(r'MAD (.+?) (\d+) ml', r['name']); nm = norm(m.group(1)) if m else ''
+    for i, p in enumerate(PREFERRED):
+        if norm({'Treasure': 'Tresure'}.get(p, p)) == nm: return i
+    return 99
+order.sort(key=lambda r: (0 if 'Niche' in r['cat'] else 1 if 'Selective' in r['cat'] else 2, rank(r) if 'Niche' in r['cat'] else 0))
+for r in order:
+    if r['cat'].startswith('Packages'): continue
+    pid = str(r['id']); coll = 'niche' if 'Niche' in r['cat'] else 'selective' if 'Selective' in r['cat'] else 'mist'
+    base = dict(id=pid, brand='mad', collection=coll, img=f"img/p{pid}.webp", price=r['price'], was=r.get('was'), stock=int(r['stock'] or 0), **{'for': gender(r['name'])})
+    if coll == 'niche':
+        m = re.match(r'MAD (.+?) (\d+) ml', r['name']); nm = m.group(1); k = nkey.get(norm(nm))
+        base.update(name=niche_name if False else (k or nm.title().replace("'S", "'s")), ml=int(m.group(2)))
+        if k: base['notes'] = {x: niche[k][x] for x in ('top', 'heart', 'base')}
+    elif coll == 'selective':
+        m = re.search(r'MAD (\w+) Selective', r['name']); base.update(name=m.group(1), ml=100)
+        if pid in sel: base['notes'] = sel[pid]['notes']
+    else:
+        base.update(name=re.sub(r'^MAD | Body Mist 250 ml$', '', r['name']).strip() + ' Body Mist', ml=250)
+    prods[pid] = base
+withn = sum(1 for p in prods.values() if 'notes' in p)
+print(len(prods), 'products |', withn, 'with notes |', sum(1 for p in prods.values() if p['collection']=='niche'), 'niche,', sum(1 for p in prods.values() if p['collection']=='selective'), 'selective')
 fam = json.load(open('../data/families.json'))
 def pkg(pid, tag):
     r = rows[pid]
@@ -29,5 +41,4 @@ h = open('template.html', encoding='utf-8').read()
 h = h.replace('{{ENGINE}}', open('engine.js').read()).replace('{{ADMIN}}', open('admin.js').read())
 h = h.replace('{{PRODUCTS_JSON}}', json.dumps(prods, ensure_ascii=False)).replace('{{FAMILIES_JSON}}', json.dumps(fam, ensure_ascii=False))
 h = h.replace('{{PKGS}}', ''.join([pkg(98, 'pk_special'), pkg(93, 'pk_summer'), pkg(92, 'pk_sig')]))
-# finder helper: ensure exclusions are honoured (already in template.famOf)
 open('index.html', 'w', encoding='utf-8').write(h); print('ok', len(h))

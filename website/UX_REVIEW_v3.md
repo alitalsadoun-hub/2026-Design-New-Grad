@@ -39,9 +39,11 @@ Arabic/RTL checked on home and product page (mirrored layout, Amiri/IBM Plex San
 - Delivery fee shown before checkout (3 JOD flat) — hidden costs are a top reason for abandonment.
 
 ## Still open (honest list)
-1. **Selective notes: 4 of ~52** transcribed. The finder/product pages are only as good as this data.
+1. **Notes coverage: 36 of 76 perfumes** (niche 16/24, selective 20/52; men's Selective almost entirely pending). Sources: Scentro's own product images (4), official MAD Parfumeur descriptions (32; cross-checked on 8 products against the images — 7 matched, 1 was a typo on MAD's own site). Everything without verified notes shows "notes coming soon" and is left out of the finder. The finder/product pages are only as good as this data.
 2. One photo per product; perfume buyers want 2–4 (box, bottle on white, mood shot).
 3. No order-tracking, About, Contact or policy pages yet (footer items are placeholders).
 4. Prototype stores data in the browser. Real build needs server DB, login for the dashboard, server-side re-pricing, order e-mail.
 5. Not tested with real users or on real low-end Android devices; run a 5-person task test (find a scent for a gift → order) before launch and watch where they hesitate.
 6. Instagram page could not be viewed (login wall); brand colours/fonts were taken from the website wordmark only.
+
+7. Brand alignment after seeing the Instagram page: feed is ivory/white with black serif and a champagne-gold (#D3B66D) accent. Store updated accordingly (light hero, gold sampled from the page); black kept only for the notes finder and footer.

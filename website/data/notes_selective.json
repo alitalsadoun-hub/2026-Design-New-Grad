@@ -1,5 +1,5 @@
 {
- "_about": "Selective notes read from the Top/Heart/Base infographic inside each Scentro product gallery (Ballour). Only 4 transcribed so far; remaining ~48 pending.",
+ "_about": "Selective notes. 'scentro product image' = read from the Top/Heart/Base infographic in the Scentro product gallery; otherwise parsed from the official MAD Parfumeur product description (gender-matched, cleaned). 8/8 comparable cases agreed with the images except one typo on MAD's own site (Petalia vs Peony, G102). Remaining products: notes pending.",
  "48": {
   "name": "A113",
   "notes": {
@@ -13,7 +13,8 @@
     "Vanilla",
     "Cashmere"
    ]
-  }
+  },
+  "source": "scentro product image (Top/Heart/Base infographic)"
  },
  "77": {
   "name": "Z101",
@@ -33,7 +34,8 @@
     "Musk",
     "Balsamic"
    ]
-  }
+  },
+  "source": "scentro product image (Top/Heart/Base infographic)"
  },
  "75": {
   "name": "Y102",
@@ -54,7 +56,8 @@
     "Vanilla",
     "Tonka Bean"
    ]
-  }
+  },
+  "source": "scentro product image (Top/Heart/Base infographic)"
  },
  "73": {
   "name": "W213",
@@ -74,6 +77,331 @@
     "Patchouli",
     "Cedar"
    ]
-  }
+  },
+  "source": "scentro product image (Top/Heart/Base infographic)"
+ },
+ "76": {
+  "name": "Y104",
+  "notes": {
+   "top": [
+    "Cherry",
+    "Mandarin"
+   ],
+   "heart": [
+    "Jasmine",
+    "Orange Blossom",
+    "Green Tea"
+   ],
+   "base": [
+    "Vanilla",
+    "Coffee"
+   ]
+  },
+  "source": "madparfumeur.sg/products/mad-y104-selective-eau-de-parfum-edp-50ml-women-perfume"
+ },
+ "72": {
+  "name": "W201",
+  "notes": {
+   "top": [
+    "Blackcurrant",
+    "Pear"
+   ],
+   "heart": [
+    "Iris",
+    "Jasmine",
+    "Orange Blossom"
+   ],
+   "base": [
+    "Patchouli",
+    "Tonka Bean",
+    "Vanilla",
+    "Praline"
+   ]
+  },
+  "source": "madparfumeur.sg/products/mad-w201-perfume-body-mist-200-ml"
+ },
+ "69": {
+  "name": "V109",
+  "notes": {
+   "top": [
+    "Peach",
+    "Milky Accords",
+    "Aquatic Notes",
+    "Coconut"
+   ],
+   "heart": [
+    "Jasmine",
+    "White Florals",
+    "Violet"
+   ],
+   "base": [
+    "Vanilla",
+    "Amber",
+    "Caramel",
+    "Musk",
+    "Woody Notes"
+   ]
+  },
+  "source": "madparfumeur.sg/products/mad-v109-perfume-body-mist-200-ml"
+ },
+ "65": {
+  "name": "L101",
+  "notes": {
+   "top": [
+    "Bergamot",
+    "Lemon",
+    "Pear",
+    "Ylang-Ylang"
+   ],
+   "heart": [
+    "Jasmine",
+    "Lily",
+    "Rose"
+   ],
+   "base": [
+    "Musk",
+    "Patchouli",
+    "Amber"
+   ]
+  },
+  "source": "madparfumeur.sg/products/mad-l101-perfume-body-mist-200-ml"
+ },
+ "62": {
+  "name": "J102",
+  "notes": {
+   "top": [
+    "Orange",
+    "Gardenia"
+   ],
+   "heart": [
+    "Honey"
+   ],
+   "base": [
+    "Patchouli"
+   ]
+  },
+  "source": "madparfumeur.sg/products/50ml-eau-de-perfume-woman-j-102"
+ },
+ "61": {
+  "name": "H103",
+  "notes": {
+   "top": [
+    "Allspice",
+    "Apricot",
+    "Plum",
+    "Coconut"
+   ],
+   "heart": [
+    "Tuberose",
+    "Jasmine",
+    "Rose"
+   ],
+   "base": [
+    "Sandalwood",
+    "Almond",
+    "Vanilla"
+   ]
+  },
+  "source": "madparfumeur.sg/products/50ml-eau-de-perfume-woman-h-103"
+ },
+ "60": {
+  "name": "G112",
+  "notes": {
+   "top": [
+    "Bergamot",
+    "Leafy Notes",
+    "Peach",
+    "Pear"
+   ],
+   "heart": [
+    "Floral Notes",
+    "Rose",
+    "White Flowers"
+   ],
+   "base": [
+    "Cedarwood",
+    "Musk",
+    "Vanilla",
+    "Vetiver"
+   ]
+  },
+  "source": "madparfumeur.sg/products/mad-g112-selective-eau-de-parfum-edp-50-ml-women-s-perfume"
+ },
+ "59": {
+  "name": "G102",
+  "notes": {
+   "top": [
+    "Bitter Almond"
+   ],
+   "heart": [
+    "Peony",
+    "Patchouli"
+   ],
+   "base": [
+    "Vanilla",
+    "Tonka Bean"
+   ]
+  },
+  "source": "scentro product image (heart note read from the infographic: \"Peony Flower\"; MAD site typo \"Petalia\")"
+ },
+ "55": {
+  "name": "C126",
+  "notes": {
+   "top": [
+    "Pink Pepper",
+    "Bergamot",
+    "Mandarin"
+   ],
+   "heart": [
+    "Gardenia",
+    "Geranium"
+   ],
+   "base": [
+    "Musk",
+    "Vanilla"
+   ]
+  },
+  "source": "madparfumeur.sg/products/50ml-eau-de-perfume-woman-c-126"
+ },
+ "53": {
+  "name": "B107",
+  "notes": {
+   "top": [
+    "Bergamot",
+    "Lavender"
+   ],
+   "heart": [
+    "White Flowers",
+    "Chocolate"
+   ],
+   "base": [
+    "Vanilla",
+    "Sandalwood"
+   ]
+  },
+  "source": "madparfumeur.sg/products/50ml-eau-de-perfume-woman-b-107"
+ },
+ "51": {
+  "name": "B103",
+  "notes": {
+   "top": [
+    "Raspberry",
+    "Blackberry",
+    "Blackcurrant",
+    "Lemon"
+   ],
+   "heart": [
+    "Jasmine",
+    "Cashmere",
+    "Patchouli",
+    "Violet"
+   ],
+   "base": [
+    "Amber",
+    "Oakmoss",
+    "Woody Notes",
+    "Vanilla",
+    "Musk"
+   ]
+  },
+  "source": "madparfumeur.sg/products/mad-b103-200-ml-women-s-body-mist-raspberry-jasmine-vanilla"
+ },
+ "47": {
+  "name": "A112",
+  "notes": {
+   "top": [
+    "Caramel",
+    "Jasmine"
+   ],
+   "heart": [
+    "Cashmere"
+   ],
+   "base": [
+    "Woody Notes",
+    "Amber"
+   ]
+  },
+  "source": "madparfumeur.sg/products/50ml-eau-de-perfume-woman-a-112"
+ },
+ "40": {
+  "name": "W158",
+  "notes": {
+   "top": [
+    "Lavender",
+    "Bergamot",
+    "Cypress"
+   ],
+   "heart": [
+    "Iris",
+    "Amber",
+    "Pear"
+   ],
+   "base": [
+    "Cedarwood",
+    "Vetiver",
+    "Woody Notes"
+   ]
+  },
+  "source": "madparfumeur.sg/products/50ml-eau-de-perfume-man-w-158"
+ },
+ "38": {
+  "name": "P101",
+  "notes": {
+   "top": [
+    "Bergamot",
+    "Cumin",
+    "Heliotrope"
+   ],
+   "heart": [
+    "Jasmine",
+    "Almond",
+    "Lavender"
+   ],
+   "base": [
+    "Amber",
+    "Sandalwood",
+    "Vanilla"
+   ]
+  },
+  "source": "madparfumeur.sg/products/50ml-eau-de-perfume-man-p-101"
+ },
+ "35": {
+  "name": "J101",
+  "notes": {
+   "top": [
+    "Sage",
+    "Mandarin",
+    "Orange",
+    "Lavender"
+   ],
+   "heart": [
+    "Caramel",
+    "Tonka Bean",
+    "Jasmine"
+   ],
+   "base": [
+    "Amber",
+    "Patchouli",
+    "Woody Notes"
+   ]
+  },
+  "source": "madparfumeur.sg/products/50ml-eau-de-perfume-man-j-101"
+ },
+ "28": {
+  "name": "J108",
+  "notes": {
+   "top": [
+    "Bergamot",
+    "Wormwood"
+   ],
+   "heart": [
+    "Lavender",
+    "Benzoin"
+   ],
+   "base": [
+    "Vanilla"
+   ]
+  },
+  "source": "madparfumeur.sg/products/mad-j108-selective-eau-de-parfum-edp-50-ml-men-perfume"
  }
 }
