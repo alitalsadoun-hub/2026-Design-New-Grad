@@ -1,0 +1,157 @@
+[
+ {
+  "id": "citrus",
+  "name": "Citrus",
+  "hint": "Lemon, bergamot, orange",
+  "dot": "#F2C94C",
+  "kw": [
+   "lemon",
+   "lime",
+   "bergamot",
+   "orange",
+   "mandarin",
+   "grapefruit",
+   "citrus"
+  ],
+  "ex": [
+   "blossom"
+  ]
+ },
+ {
+  "id": "fruity",
+  "name": "Fruity",
+  "hint": "Peach, pear, apple, berries",
+  "dot": "#EB8A6B",
+  "kw": [
+   "peach",
+   "pear",
+   "apple",
+   "raspberry",
+   "cherry",
+   "plum",
+   "coconut",
+   "fruity",
+   "pineapple"
+  ],
+  "ex": []
+ },
+ {
+  "id": "floral",
+  "name": "Floral",
+  "hint": "Rose, jasmine, tuberose, lily",
+  "dot": "#E7A1B6",
+  "kw": [
+   "rose",
+   "jasmine",
+   "tuberose",
+   "ylang",
+   "peony",
+   "lily",
+   "orange blossom",
+   "magnolia",
+   "violet",
+   "heliotrope",
+   "marigold",
+   "geranium",
+   "orris",
+   "orchid"
+  ],
+  "ex": []
+ },
+ {
+  "id": "sweet",
+  "name": "Vanilla & sweet",
+  "hint": "Vanilla, tonka, honey, caramel",
+  "dot": "#E8CFA0",
+  "kw": [
+   "vanilla",
+   "tonka",
+   "honey",
+   "caramel",
+   "sugar",
+   "praline",
+   "rum",
+   "sweet",
+   "cream"
+  ],
+  "ex": [
+   "orange"
+  ]
+ },
+ {
+  "id": "woody",
+  "name": "Woody",
+  "hint": "Sandalwood, cedar, patchouli",
+  "dot": "#9A7552",
+  "kw": [
+   "sandalwood",
+   "cedar",
+   "patchouli",
+   "moss",
+   "guaiac",
+   "vetiver",
+   "wood",
+   "fir balsam",
+   "elemi"
+  ],
+  "ex": []
+ },
+ {
+  "id": "amber",
+  "name": "Amber & musk",
+  "hint": "Amber, musk, benzoin",
+  "dot": "#C98A3C",
+  "kw": [
+   "amber",
+   "musk",
+   "benzoin",
+   "labdanum",
+   "powdery"
+  ],
+  "ex": []
+ },
+ {
+  "id": "spicy",
+  "name": "Spicy",
+  "hint": "Cinnamon, pepper, cardamom, saffron",
+  "dot": "#C0492F",
+  "kw": [
+   "cinnamon",
+   "pepper",
+   "cardamom",
+   "saffron",
+   "nutmeg",
+   "anise",
+   "clove"
+  ],
+  "ex": []
+ },
+ {
+  "id": "aromatic",
+  "name": "Fresh & aromatic",
+  "hint": "Lavender, eucalyptus, tea, marine",
+  "dot": "#7FA88A",
+  "kw": [
+   "lavender",
+   "eucalyptus",
+   "olive",
+   "marine",
+   "tea",
+   "mint",
+   "balsamic"
+  ],
+  "ex": []
+ },
+ {
+  "id": "oud",
+  "name": "Oud & smoky",
+  "hint": "Oud, tobacco, incense",
+  "dot": "#5B4636",
+  "kw": [
+   "oud",
+   "tobacco",
+   "incense"
+  ],
+  "ex": []
+ }
+]

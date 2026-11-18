@@ -18,3 +18,13 @@ Nothing on the live site was changed.
 - Finder works on **notes** (9 note families, up to 3), compares with the published Top/Heart/Base notes (`data/notes_niche.json`, transcribed from official MAD descriptions: 16 niche scents so far). Honest copy: "likely to suit you, not a guarantee". No percentages.
 - Checkout is guest-only: name, Jordanian mobile (validated), governorate, address, optional note. Cash on delivery only. Delivery fee is a placeholder ("confirmed when we call you") until decided.
 - Rebuild: `cd concept_v2 && python3 build.py`.
+
+## concept_v3 (Scentro identity · promotions engine · dashboard prototype)
+`concept_v3/index.html` — single file. Store: `#`, Arabic: `#ar`, dashboard: `#admin` (tabs: promotions / orders / brands). Demo hashes: `#ar-demo`, `#promo` (cart with promos), `#co` (checkout).
+- Identity taken from the live SCENTRO wordmark: black · ivory · gold, classic serif. Burgundy (MAD campaign colour) is NOT part of the store identity. Logo processed to transparent PNGs (`img/logo_dark.png`, `img/logo_light.png`); original glyphs unchanged.
+- Delivery: flat 3 JOD everywhere (`DELIVERY_FEE`), waived by a free-delivery promotion.
+- `engine.js` = promotions engine (percent, fixed amount, free delivery, buy X get Y %, bundle price, tiered spend, free gift; coupon codes, schedule, max uses, stackable vs best-of). `node test_engine.js` (25 cases). `node flow.js` = end-to-end store→order→dashboard check (Playwright).
+- Orders are saved first (source of truth); WhatsApp message is an optional button for the customer, and a per-order "WhatsApp customer" button in the dashboard. E-mail to the shop on each order = server feature (not in prototype).
+- Prototype data lives in the browser (localStorage). Real build: server DB + login; the server must re-price every order (never trust browser totals).
+- Sample promotions in `SEED_RULES` are placeholders, not real offers.
+- Notes: `data/notes_niche.json` (16 niche, from official MAD descriptions) + `data/notes_selective.json` (4 of ~52 so far, read from Scentro's own product-gallery infographics; mapping by product code from other sites proved unreliable – Y102 exists for both men and women).

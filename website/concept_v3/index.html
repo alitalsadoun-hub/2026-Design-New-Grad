@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCENTRO — Concept v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== SCENTRO identity: black · ivory · gold, classic serif (matches the wordmark) ===== */
+:root{
+  --ivory:#FAF6EE; --sand:#EFE7D8; --paper:#FFFFFF; --ink:#141210; --black:#0E0C0A; --black2:#17130F;
+  --mute:#6F655A; --line:rgba(20,18,16,.13); --gold:#B8924F; --gold-l:#E2C27D; --gold-d:#8C6A2F;
+  --goldline:linear-gradient(90deg,transparent,#B8924F 18%,#E2C27D 50%,#B8924F 82%,transparent);
+  --serif:'Cormorant Garamond','Amiri',serif; --sans:'Inter','IBM Plex Sans Arabic',system-ui,sans-serif; --r:3px;
+}
+:root[dir=rtl]{--serif:'Amiri','Cormorant Garamond',serif;--sans:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--ivory);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:clamp(20px,4vw,56px)}
+.eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-d);font-weight:500}
+:root[dir=rtl] .eyebrow{letter-spacing:.02em;font-size:13.5px;text-transform:none}
+h1,h2,h3{font-family:var(--serif);font-weight:600;color:var(--ink);line-height:1.08;text-wrap:balance}
+h2{font-size:clamp(32px,3.6vw,48px)}:root[dir=rtl] h1,:root[dir=rtl] h2,:root[dir=rtl] h3{line-height:1.3}
+.rule{height:1px;background:var(--goldline);border:0;width:96px;margin:18px 0}
+.sec{padding-block:clamp(56px,8vw,104px)}
+.sec-h{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:36px;flex-wrap:wrap}
+.link{font-size:13px;letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid var(--gold);padding-bottom:3px;white-space:nowrap}
+:root[dir=rtl] .link{letter-spacing:0;font-size:14px;text-transform:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 30px;border-radius:2px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;transition:.25s}
+:root[dir=rtl] .btn{letter-spacing:0;font-size:15px;text-transform:none}
+.btn.p{background:var(--gold);color:var(--black)}.btn.p:hover{background:var(--gold-l)}
+.btn.k{background:var(--black);color:var(--ivory)}.btn.k:hover{background:#2a241d}
+.btn.o{border:1px solid currentColor}.btn.o:hover{background:var(--ink);color:var(--ivory);border-color:var(--ink)}
+.dark .btn.o:hover{background:var(--ivory);color:var(--black);border-color:var(--ivory)}
+
+.ann{background:var(--black);color:var(--gold-l);font-size:12.5px;letter-spacing:.07em;text-align:center;padding:9px 12px}
+.ann span+span::before{content:"·";margin-inline:14px;opacity:.6}
+header{position:sticky;top:0;z-index:20;background:rgba(250,246,238,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:82px;gap:24px}
+.nav ul{list-style:none;display:flex;gap:30px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+:root[dir=rtl] .nav ul{letter-spacing:0;font-size:15px;text-transform:none}
+.nav li a{position:relative;padding-block:6px}.nav li a:after{content:"";position:absolute;inset-inline:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transition:.3s}.nav li a:hover:after{transform:scaleX(1)}
+.nav li.hot a{color:var(--gold-d);font-weight:600}
+.logo img{height:46px;width:auto}
+.tools{display:flex;justify-content:flex-end;gap:18px;align-items:center}
+.lang{display:flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;font-size:12px}.lang button{padding:6px 12px;color:var(--mute)}.lang button.on{background:var(--black);color:var(--ivory)}
+.ic{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.5}
+.cartbtn{position:relative}.cartbtn b{position:absolute;top:-8px;inset-inline-end:-10px;background:var(--gold);color:var(--black);font-size:10px;border-radius:99px;min-width:16px;height:16px;display:grid;place-items:center}
+.menu{display:none}
+
+/* hero — dark stage (from B) inside an ivory page (from A) */
+.dark{background:var(--black);color:#EFE5D3}.dark h1,.dark h2,.dark h3{color:#F6EEDF}
+.hero{background:radial-gradient(ellipse at 72% 38%,#2b2118 0%,#0E0C0A 64%);overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;min-height:min(80vh,740px);padding-block:48px}
+.hero h1{font-size:clamp(46px,6vw,88px);margin:16px 0 0}.hero h1 em{font-style:italic;color:var(--gold-l);font-weight:500}:root[dir=rtl] .hero h1 em{font-style:normal}
+.hero .lead{font-size:18px;color:#B9AD9B;max-width:46ch;margin-top:6px}
+.cta{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}
+.micro{margin-top:22px;font-size:13px;color:#9C917F;display:flex;gap:18px;flex-wrap:wrap}.micro span:before{content:"✓ ";color:var(--gold)}
+.arch{justify-self:center;width:min(100%,560px);aspect-ratio:.9;border-radius:999px 999px 6px 6px;overflow:hidden;box-shadow:0 0 0 1px rgba(201,164,106,.55),0 0 0 14px #0E0C0A,0 0 0 15px rgba(201,164,106,.3),0 40px 90px -30px #000}
+.arch img{width:100%;height:100%;object-fit:cover;object-position:52% 60%}
+.trust{border-block:1px solid var(--line);background:var(--sand)}
+.trust .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-block:22px}
+.trust div{display:flex;gap:14px;align-items:center;font-size:13.5px;line-height:1.35}
+.trust svg{flex:none;width:30px;height:30px;stroke:var(--gold-d);fill:none;stroke-width:1.3}.trust b{display:block;font-weight:600}.trust span{color:var(--mute);font-size:12.5px}
+/* brands */
+.brands{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:16px;padding:16px 26px 16px 16px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);transition:.25s}.brand:hover{border-color:var(--gold)}
+:root[dir=rtl] .brand{padding:16px 16px 16px 26px}
+.brand img{width:60px;height:60px;border-radius:50%;object-fit:cover;background:#f2f2f2}.brand b{font-family:var(--serif);font-size:24px;font-weight:600;display:block;line-height:1.1}.brand span{font-size:12.5px;color:var(--mute)}
+.brand.soon{border-style:dashed;background:transparent;color:var(--mute);padding:26px 30px;font-size:14px}
+
+/* notes finder (dark) */
+.finder{position:relative;overflow:hidden}.finder:before{content:"";position:absolute;inset-inline-end:-120px;top:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(201,164,106,.16),transparent 65%)}
+.finder .grid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(32px,5vw,80px);align-items:start;position:relative}
+.finder .eyebrow{color:var(--gold-l)}.finder p.lead{color:#B9AD9B;margin-top:6px;max-width:44ch}
+.step{margin-top:28px}.step h4{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-l);font-weight:500;margin-bottom:6px}:root[dir=rtl] .step h4{letter-spacing:0;font-size:14px;text-transform:none}
+.step small{display:block;color:#9C917F;font-size:13px;margin-bottom:12px}
+.notes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nt{text-align:start;padding:14px 14px 13px;border:1px solid rgba(239,229,211,.2);border-radius:var(--r);transition:.2s;color:#EFE5D3;display:flex;flex-direction:column;gap:3px;position:relative}
+.nt b{font-weight:600;font-size:15px}.nt span{font-size:11.5px;color:#9C917F;line-height:1.35}.nt i{position:absolute;top:12px;inset-inline-end:12px;width:10px;height:10px;border-radius:50%;background:var(--dot)}
+.nt:hover{border-color:var(--gold)}.nt.on{background:var(--gold);border-color:var(--gold);color:var(--black)}.nt.on span{color:#4a3a1c}.nt[disabled]{opacity:.35;cursor:not-allowed}
+.chips{display:flex;flex-wrap:wrap;gap:10px}.chip{padding:10px 18px;border:1px solid rgba(239,229,211,.28);border-radius:99px;font-size:14px;transition:.2s;color:#EFE5D3}.chip:hover{border-color:var(--gold)}.chip.on{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.picked{margin-bottom:14px;font-size:13px;color:#9C917F;min-height:20px}
+.results{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.res{background:rgba(255,255,255,.05);border:1px solid rgba(239,229,211,.15);border-radius:var(--r);padding:12px 12px 16px;transition:.3s;display:flex;flex-direction:column}.res:hover{transform:translateY(-4px);border-color:var(--gold)}
+.res img{border-radius:2px;aspect-ratio:1;object-fit:cover;width:100%}.res h3{font-size:26px;margin:12px 0 4px}
+.tier{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-l);font-weight:600}:root[dir=rtl] .tier{letter-spacing:0;font-size:13px;text-transform:none}
+.mt{font-size:12.5px;color:#9C917F;margin:6px 0 2px}.shared{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 12px}.shared em{font-style:normal;font-size:11.5px;padding:3px 9px;border-radius:99px;background:rgba(226,194,125,.17);color:#F0DDB8}
+.res .pr{display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-size:15px}.res .pr button{font-size:12px;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--gold);padding-bottom:2px}:root[dir=rtl] .res .pr button{letter-spacing:0;font-size:13.5px;text-transform:none}
+.honest{margin-top:18px;display:flex;gap:10px;font-size:12.5px;color:#A89C8A;border-top:1px solid rgba(239,229,211,.15);padding-top:14px;line-height:1.5}
+.honest:before{content:"i";flex:none;width:18px;height:18px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;font-size:11px;color:var(--gold-l);font-style:italic;font-family:serif}
+.empty{color:#9C917F;padding:40px 12px;border:1px dashed rgba(239,229,211,.25);border-radius:var(--r);text-align:center}
+
+/* catalogue */
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.cat{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:var(--r);background:var(--sand)}.cat img{width:100%;height:100%;object-fit:cover;transition:transform .8s}.cat:hover img{transform:scale(1.05)}
+.cat:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(14,12,10,.72))}
+.cat div{position:absolute;inset-inline:22px;bottom:20px;z-index:1;color:#fff}.cat h3{color:#fff;font-size:28px}.cat span{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.9}:root[dir=rtl] .cat span{letter-spacing:0;font-size:13px;text-transform:none}
+.filters{display:flex;gap:8px;flex-wrap:wrap}.filters button{padding:8px 16px;border:1px solid var(--line);border-radius:99px;font-size:13.5px;transition:.2s}.filters button:hover{border-color:var(--gold)}.filters button.on{background:var(--black);color:var(--ivory);border-color:var(--black)}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:28px 22px}
+.card .ph{position:relative;display:block;aspect-ratio:1;background:var(--sand);overflow:hidden;border-radius:var(--r)}.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s}.card:hover .ph img{transform:scale(1.05)}
+.badge{position:absolute;top:12px;inset-inline-start:12px;background:var(--black);color:var(--gold-l);font-size:11.5px;padding:3px 9px;border-radius:99px;font-weight:600}
+.card .bn{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);margin-top:14px;font-weight:500}:root[dir=rtl] .card .bn{letter-spacing:0;font-size:12.5px;text-transform:none}
+.card h3{font-size:27px;margin-top:2px}.sub{font-size:12px;color:var(--mute);margin-top:2px}.nl{font-size:12.5px;color:var(--gold-d);margin-top:8px;min-height:19px}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}.price b{font-size:19px;font-weight:600}.price small{font-size:12px;color:var(--mute)}.price s{font-size:13px;color:var(--mute);margin-inline-start:6px}
+.add{font-size:12px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--ink);padding:9px 14px;border-radius:2px;transition:.2s;white-space:nowrap}:root[dir=rtl] .add{letter-spacing:0;font-size:13.5px;text-transform:none}.add:hover{background:var(--ink);color:var(--ivory)}
+.band{background:var(--sand)}.band .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);align-items:center}
+.band p{opacity:.82;margin-top:6px;max-width:48ch}.why{display:grid;grid-template-columns:1fr 1fr;gap:22px 28px;margin-top:30px;border-top:1px solid var(--line);padding-top:26px}
+.why b{display:block;font-family:var(--serif);font-size:22px;font-weight:600;margin-bottom:2px}.why span{font-size:13.5px;color:var(--mute)}
+.band .pic{aspect-ratio:5/4;border-radius:var(--r);overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}.band .pic img{width:100%;height:100%;object-fit:cover}
+.pkgs{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}.pkg{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.pkg img{aspect-ratio:1;object-fit:cover;width:100%}.pkg>div{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1}.pkg h3{font-size:25px}.tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d);font-weight:600}:root[dir=rtl] .tag{letter-spacing:0;font-size:13px;text-transform:none}.pkg .add{margin-top:auto;align-self:flex-start}
+footer{background:var(--black);color:#BFB3A0;padding-block:64px 28px;font-size:14px}footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:40px}
+footer h5{color:#F4E8D8;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;margin-bottom:14px}:root[dir=rtl] footer h5{letter-spacing:0;font-size:14px;text-transform:none}
+footer li{list-style:none;margin:8px 0}footer .flogo{height:46px;margin-bottom:14px}.pay{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(244,232,216,.25);padding:8px 14px;border-radius:99px;color:#F4E8D8;font-size:13px;margin-top:10px}
+.legal{border-top:1px solid rgba(244,232,216,.12);margin-top:44px;padding-top:20px;font-size:12px;opacity:.7;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wa{position:fixed;inset-inline-end:20px;bottom:20px;z-index:30;background:#1FA855;color:#fff;border-radius:99px;padding:13px 20px;font-size:14px;font-weight:500;box-shadow:0 10px 30px -8px rgba(0,0,0,.4)}
+
+/* cart drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,8,6,.6);opacity:0;pointer-events:none;transition:.3s;z-index:50}.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(470px,100%);background:var(--ivory);z-index:60;transform:translateX(105%);transition:transform .35s;display:flex;flex-direction:column;box-shadow:-30px 0 60px -30px rgba(0,0,0,.5)}
+:root[dir=rtl] .drawer:not(.on){transform:translateX(-105%)}.drawer.on{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--line)}.dh h3{font-size:28px}.dh button{font-size:26px;line-height:1;color:var(--mute)}
+.db{flex:1;overflow:auto;padding:8px 24px 20px}.li{display:grid;grid-template-columns:72px 1fr auto;gap:14px;align-items:center;padding-block:14px;border-bottom:1px solid var(--line)}
+.li img{width:72px;height:72px;border-radius:var(--r);object-fit:cover}.li b{display:block;font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.15}.li small{color:var(--mute);font-size:12.5px}
+.li .gift{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:99px;margin-top:6px}.qty button{width:28px;height:28px;font-size:16px}.qty span{min-width:20px;text-align:center;font-size:13px}
+.li .price s{display:block;font-size:12px}
+.nudge{margin:14px 0 0;padding:11px 14px;background:var(--black);color:#F2E7D3;border-radius:var(--r);font-size:13.5px}.nudge b{color:var(--gold-l)}
+.bar{height:3px;background:rgba(255,255,255,.18);border-radius:3px;margin-top:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--goldline);background:var(--gold)}
+.df{padding:18px 24px;border-top:1px solid var(--line);background:var(--sand)}
+.tot{display:flex;justify-content:space-between;font-size:14px;color:var(--mute);margin-bottom:6px}.tot.big{color:var(--ink);font-size:18px;font-weight:600;margin-top:10px}.tot.promo{color:#2F6B3C}.tot.free span:last-child{color:#2F6B3C;font-weight:600}
+.coupon{display:flex;gap:8px;margin-bottom:12px}.coupon input{flex:1;min-width:0;font:inherit;padding:11px 12px;border:1px solid var(--line);background:#fff;border-radius:var(--r);text-transform:uppercase;letter-spacing:.06em}
+.coupon button{padding:0 16px;border:1px solid var(--ink);border-radius:var(--r);font-size:13px}.cmsg{font-size:12.5px;margin:-6px 0 10px}.cmsg.ok{color:#2F6B3C}.cmsg.bad{color:#B3382C}
+.codnote{display:flex;gap:10px;align-items:center;font-size:13px;background:var(--ivory);border:1px dashed var(--gold);border-radius:var(--r);padding:10px 12px;margin-block:12px}.btn.full{width:100%}
+.field{margin-bottom:14px}.field label{display:block;font-size:12.5px;color:var(--mute);margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;font:inherit;padding:13px 14px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:var(--r);outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
+.field.err input,.field.err select,.field.err textarea{border-color:#B3382C}.field .em{display:none;color:#B3382C;font-size:12px;margin-top:4px}.field.err .em{display:block}
+.done{text-align:center;padding:36px 4px}.done .ok{width:64px;height:64px;border-radius:50%;border:1.5px solid var(--gold);display:grid;place-items:center;margin:0 auto 18px;color:var(--gold-d);font-size:28px}.done h3{font-size:34px;margin-bottom:10px}.done p{color:var(--mute)}
+.btn.wa2{background:#1FA855;color:#fff;margin-top:14px}
+.toast{position:fixed;inset-inline-start:50%;bottom:28px;transform:translate(-50%,40px);background:var(--black);color:var(--gold-l);padding:11px 18px;border-radius:99px;font-size:13.5px;opacity:0;transition:.3s;z-index:90;pointer-events:none}:root[dir=rtl] .toast{transform:translate(50%,40px)}.toast.on{opacity:1;transform:translate(-50%,0)}:root[dir=rtl] .toast.on{transform:translate(50%,0)}
+
+/* ===== admin dashboard prototype ===== */
+#admin{display:none;min-height:100vh;background:#F3EEE4;font-family:'Inter',sans-serif}body.isadmin #admin{display:block}body.isadmin #store,body.isadmin .wa{display:none}
+.ad-top{background:var(--black);color:#EFE5D3;padding:14px 28px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}.ad-top img{height:30px}.ad-top .tabs{display:flex;gap:4px;margin-inline-start:18px}
+.ad-top .tabs button{padding:8px 16px;border-radius:99px;font-size:14px;color:#BFB3A0}.ad-top .tabs button.on{background:var(--gold);color:var(--black);font-weight:600}.ad-top a{margin-inline-start:auto;font-size:13px;color:var(--gold-l);border-bottom:1px solid var(--gold)}
+.ad{max-width:1180px;margin:0 auto;padding:28px}.ad h2{font-size:34px;margin-bottom:6px}.ad .hint{color:var(--mute);font-size:14px;margin-bottom:22px;max-width:70ch}
+.ad .card2{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin-bottom:12px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.ad .card2 .t{font-weight:600;font-size:15.5px}.ad .card2 .d{font-size:13px;color:var(--mute);margin-top:3px}.pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:99px;background:var(--sand);color:var(--gold-d);margin-inline-end:6px;font-weight:600;letter-spacing:.03em}
+.pill.code{background:var(--black);color:var(--gold-l)}.pill.off{background:#eee;color:#888}
+.sw2{position:relative;width:42px;height:24px;background:#cfc7b8;border-radius:99px;transition:.2s;flex:none}.sw2:after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}.sw2.on{background:#2F8A4A}.sw2.on:after{inset-inline-start:21px}
+.acts{display:flex;gap:10px;align-items:center}.acts button.s{font-size:13px;padding:6px 12px;border:1px solid var(--line);border-radius:4px;background:#fff}.acts button.s.del{color:#B3382C}
+.ad .btnbar{display:flex;gap:10px;margin-bottom:18px}.ad .btn{padding:11px 20px;font-size:13px;letter-spacing:.04em;text-transform:none}
+.form{background:#fff;border:1px solid var(--gold);border-radius:6px;padding:22px;margin-bottom:20px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px 18px}.form .full{grid-column:1/-1}.form h3{grid-column:1/-1;font-size:26px}
+.form label{display:block;font-size:12.5px;color:var(--mute);margin-bottom:5px}.form input,.form select{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:4px;background:#fff}.form .chk{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:22px}.form .chk input{width:auto}
+.form .note{font-size:12.5px;color:var(--mute);grid-column:1/-1;background:var(--sand);padding:10px 12px;border-radius:4px}
+table.t{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;font-size:14px}table.t th{text-align:start;background:var(--sand);padding:11px 14px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}table.t td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top}
+.st{font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:4px}.wal{display:inline-block;margin-top:6px;font-size:12.5px;background:#1FA855;color:#fff;padding:5px 11px;border-radius:99px}
+.empty2{padding:40px;text-align:center;color:var(--mute);background:#fff;border:1px dashed var(--line);border-radius:6px}
+
+@media(max-width:980px){
+  .nav{grid-template-columns:auto 1fr auto}.nav ul{display:none}.menu{display:block}.logo{justify-self:center}.logo img{height:38px}
+  .hero .wrap{grid-template-columns:1fr;min-height:0;gap:30px;padding-block:36px}.arch{width:min(100%,380px)}
+  .trust .wrap{grid-template-columns:1fr 1fr}.finder .grid,.band .wrap{grid-template-columns:1fr}.grid4,.cats{grid-template-columns:repeat(2,1fr)}.pkgs{grid-template-columns:1fr}footer .cols{grid-template-columns:1fr 1fr}
+  .results{gap:10px}.res h3{font-size:20px}.form{grid-template-columns:1fr}
+}
+@media(max-width:560px){.tools .hide-m{display:none}.notes-grid{grid-template-columns:1fr 1fr}.results{grid-template-columns:1fr}.sec-h{flex-direction:column;align-items:start}.wa{padding:11px 14px;font-size:13px;bottom:14px}.res{display:grid;grid-template-columns:96px 1fr;gap:12px}.res img{grid-row:span 3}.res h3{margin:0}.ad .card2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="store">
+<div class="ann" id="ann"></div>
+<header><div class="wrap nav">
+  <div style="display:flex;gap:18px;align-items:center"><button class="menu" aria-label="menu"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+  <ul><li class="hot"><a href="#finder" data-i18n="n_finder"></a></li><li><a href="#shop" data-i18n="n_shop"></a></li><li><a href="#brands" data-i18n="n_brands"></a></li><li><a href="#pk" data-i18n="n_pk"></a></li></ul></div>
+  <a class="logo" href="#"><img src="img/logo_dark.png" alt="SCENTRO"></a>
+  <div class="tools"><div class="lang" role="group"><button id="en" class="on">EN</button><button id="ar">عربي</button></div>
+  <svg class="ic hide-m" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+  <button class="cartbtn" id="cartbtn" aria-label="cart"><svg class="ic" viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11H6.2zM9 8a3 3 0 0 1 6 0"/></svg><b id="cc">0</b></button></div></div></header>
+
+<section class="hero dark"><div class="wrap"><div><span class="eyebrow" style="color:var(--gold-l)" data-i18n="h_eye"></span>
+  <h1 data-i18n-html="h_h1"></h1><hr class="rule"><p class="lead" data-i18n="h_lead"></p>
+  <div class="cta"><a class="btn p" href="#finder" data-i18n="h_cta1"></a><a class="btn o" href="#shop" data-i18n="h_cta2"></a></div>
+  <div class="micro"><span data-i18n="m1"></span><span data-i18n="m2"></span><span data-i18n="m3"></span></div></div>
+  <div class="arch"><img src="img/hero_scene.jpg" alt="MAD Parfumeur Gumin, Rouge and Bruno Detox on travertine pedestals"></div></div></section>
+
+<section class="trust"><div class="wrap">
+  <div><svg viewBox="0 0 32 32"><rect x="3" y="9" width="26" height="15" rx="2"/><circle cx="16" cy="16.5" r="3.5"/></svg><p><b data-i18n="t1"></b><span data-i18n="t1s"></span></p></div>
+  <div><svg viewBox="0 0 32 32"><path d="M3 8h17v13H3zM20 12h6l3 4v5h-9"/><circle cx="9" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/></svg><p><b data-i18n="t2"></b><span data-i18n="t2s"></span></p></div>
+  <div><svg viewBox="0 0 32 32"><path d="M16 3 6 7v8c0 7 4 11 10 14 6-3 10-7 10-14V7z"/><path d="m11 16 4 4 7-8"/></svg><p><b data-i18n="t3"></b><span data-i18n="t3s"></span></p></div>
+  <div><svg viewBox="0 0 32 32"><path d="M6 12a10 10 0 0 1 18-3l2 2M26 20a10 10 0 0 1-18 3l-2-2"/><path d="M26 6v5h-5M6 26v-5h5"/></svg><p><b data-i18n="t4"></b><span data-i18n="t4s"></span></p></div>
+</div></section>
+
+<section class="sec" id="brands" style="padding-block:56px 0"><div class="wrap"><div class="sec-h" style="margin-bottom:22px"><div><span class="eyebrow" data-i18n="br_eye"></span><h2 data-i18n="br_h2" style="margin-top:10px"></h2></div></div>
+  <div class="brands"><a class="brand" href="#shop"><img src="img/brand_mad.webp" alt="MAD Parfumeur"><div><b>MAD Parfumeur</b><span data-i18n="br_mad"></span></div></a><div class="brand soon" data-i18n="br_soon"></div></div></div></section>
+
+<section class="sec finder dark" id="finder" style="margin-top:56px"><div class="wrap grid">
+  <div><span class="eyebrow" data-i18n="f_eye"></span><h2 data-i18n="f_h2" style="margin-top:14px"></h2><hr class="rule"><p class="lead" data-i18n="f_lead"></p>
+  <div class="step"><h4 data-i18n="f_s1"></h4><small id="cnt"></small><div class="notes-grid" id="notesGrid"></div></div>
+  <div class="step"><h4 data-i18n="f_s2"></h4><div class="chips" id="forChips"><button class="chip on" data-v="any" data-i18n="f_any"></button><button class="chip" data-v="her" data-i18n="f_her"></button><button class="chip" data-v="him" data-i18n="f_him"></button></div></div></div>
+  <div><div class="picked" id="picked"></div><div class="results" id="results"></div><p class="honest" id="honest"></p></div>
+</div></section>
+
+<section class="sec" id="cats"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow" data-i18n="c_eye"></span><h2 data-i18n="c_h2" style="margin-top:12px"></h2></div></div>
+  <div class="cats">
+    <a class="cat" href="#shop" data-col="niche"><img src="img/p19.webp" alt=""><div><span data-i18n="c1s"></span><h3 data-i18n="c1"></h3></div></a>
+    <a class="cat" href="#shop" data-col="selective"><img src="img/sel48_1.webp" alt=""><div><span data-i18n="c2s"></span><h3 data-i18n="c2"></h3></div></a>
+    <a class="cat" href="#pk"><img src="img/hero_scene.jpg" alt="" style="object-position:70% 50%"><div><span data-i18n="c3s"></span><h3 data-i18n="c3"></h3></div></a>
+    <a class="cat" href="#shop"><img src="img/p83.webp" alt=""><div><span data-i18n="c4s"></span><h3 data-i18n="c4"></h3></div></a>
+  </div></div></section>
+
+<section class="sec" id="shop" style="padding-top:0"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow" data-i18n="b_eye"></span><h2 data-i18n="b_h2" style="margin-top:12px"></h2></div><div class="filters" id="filters"></div></div>
+  <div class="grid4" id="best"></div></div></section>
+
+<section class="sec band"><div class="wrap">
+  <div><span class="eyebrow" data-i18n="s_eye"></span><h2 data-i18n="s_h2" style="margin-top:14px"></h2><hr class="rule"><p data-i18n="s_p"></p>
+  <div class="why"><div><b data-i18n="w1"></b><span data-i18n="w1s"></span></div><div><b data-i18n="w2"></b><span data-i18n="w2s"></span></div><div><b data-i18n="w3"></b><span data-i18n="w3s"></span></div><div><b data-i18n="w4"></b><span data-i18n="w4s"></span></div></div></div>
+  <div class="pic"><img src="img/p9.webp" alt=""></div></div></section>
+
+<section class="sec" id="pk"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow" data-i18n="p_eye"></span><h2 data-i18n="p_h2" style="margin-top:12px"></h2></div></div>
+  <div class="pkgs"><article class="pkg"><img src="img/p98.webp" alt=""><div><span class="tag" data-i18n="pk_special"></span><h3>1 Niche + 1 Selective - For your special nights</h3><div class="price"><b>55</b> <small>JOD</small> <s>81</s></div><button class="add" data-i18n="add"></button></div></article><article class="pkg"><img src="img/p93.webp" alt=""><div><span class="tag" data-i18n="pk_summer"></span><h3>Adria & Gumin - Spring/Summer Duo</h3><div class="price"><b>60</b> <small>JOD</small> <s>103</s></div><button class="add" data-i18n="add"></button></div></article><article class="pkg"><img src="img/p92.webp" alt=""><div><span class="tag" data-i18n="pk_sig"></span><h3>Detox & Exotic - Signature Unisex Duo</h3><div class="price"><b>60</b> <small>JOD</small> <s>96</s></div><button class="add" data-i18n="add"></button></div></article></div></div></section>
+
+<footer><div class="wrap"><div class="cols">
+  <div><img class="flogo" src="img/logo_light.png" alt="SCENTRO"><p data-i18n="fo_p"></p><span class="pay">💵 <span data-i18n="fo_cod"></span></span></div>
+  <div><h5 data-i18n="fo_h1"></h5><ul><li data-i18n="n_shop"></li><li data-i18n="n_brands"></li><li data-i18n="n_pk"></li></ul></div>
+  <div><h5 data-i18n="fo_h2"></h5><ul><li data-i18n="fo_a"></li><li data-i18n="fo_t"></li><li data-i18n="fo_pr"></li></ul></div>
+  <div><h5 data-i18n="fo_h3"></h5><ul><li>Amman · Jordan</li><li>+962 79 790 6211</li><li>@scentrojo</li></ul></div>
+</div><div class="legal"><span>© 2026 SCENTRO</span><span><span data-i18n="fo_c"></span> · <a href="#admin" style="border-bottom:1px solid var(--gold)">Dashboard prototype</a></span></div></div></footer>
+<a class="wa" href="#" id="waFloat">WhatsApp</a>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer"><div class="dh"><h3 id="dtitle"></h3><button id="dclose" aria-label="close">×</button></div><div class="db" id="dbody"></div><div class="df" id="dfoot"></div></aside>
+<div class="toast" id="toast"></div>
+
+<!-- ===== dashboard prototype (English). Real version: server-side, behind login. ===== -->
+<div id="admin">
+ <div class="ad-top"><img src="img/logo_light.png" alt="SCENTRO"><div class="tabs"><button data-tab="promos" class="on">Promotions</button><button data-tab="orders">Orders</button><button data-tab="brands">Brands</button></div><a href="#">← Back to store</a></div>
+ <div class="ad" id="adbody"></div>
+</div>
+
+<script>
+/* SCENTRO promotions engine (pure functions, no DOM).  Same code will run on the server at checkout (never trust the browser's totals).
+ *
+ * rule = { id, name, type, active, code?, start?, end?, stackable, priority, maxUses?, scope:{type:'all|brand|collection|product',value}, ...params }
+ * types:
+ *   percent        pct, minSpend          % off the items in scope
+ *   amount_cart    amount, minSpend       fixed JOD off the cart
+ *   free_delivery  minSpend               delivery fee waived
+ *   bxgy           buyQty, getQty, pct, repeat   buy N, get M of the cheapest at pct% off (100 = free)
+ *   bundle         qty, price, repeat     any `qty` items in scope for a fixed price
+ *   tiered         tiers:[{min,pct}]      spend more, save more
+ *   gift           minSpend, giftId       free gift product above a spend
+ */
+(function (root) {
+  const r2 = n => Math.round(n * 100) / 100;
+  const inScope = (p, s) => !s || s.type === 'all' || (s.type === 'brand' && p.brand === s.value) || (s.type === 'collection' && p.collection === s.value) || (s.type === 'product' && String(p.id) === String(s.value));
+  const live = (rule, now, code, used) => {
+    if (!rule.active) return false;
+    if (rule.start && now < new Date(rule.start)) return false;
+    if (rule.end && now > new Date(rule.end + 'T23:59:59')) return false;
+    if (rule.code && (!code || code.trim().toUpperCase() !== rule.code.trim().toUpperCase())) return false;
+    if (rule.maxUses && (used[rule.id] || 0) >= rule.maxUses) return false;
+    return true;
+  };
+  // each unit: {pid, price, disc}; helpers work on the remaining price (price - disc)
+  const rem = u => u.price - u.disc;
+  function applyRule(rule, st) {
+    const units = st.units, sc = u => inScope(st.products[u.pid], rule.scope);
+    let amount = 0, delivery = null, gift = null;
+    const spend = list => list.reduce((a, u) => a + rem(u), 0);
+    const take = (u, d) => { d = Math.min(d, rem(u)); u.disc += d; amount += d; };
+    switch (rule.type) {
+      case 'percent': { const L = units.filter(sc); if (spend(L) >= (rule.minSpend || 0)) L.forEach(u => take(u, rem(u) * rule.pct / 100)); break; }
+      case 'amount_cart': { const t = spend(units); if (t >= (rule.minSpend || 0) && t > 0) { const d = Math.min(rule.amount, t); units.forEach(u => take(u, d * rem(u) / t)); } break; }
+      case 'free_delivery': { if (spend(units) >= (rule.minSpend || 0)) delivery = 0; break; }
+      case 'bxgy': {
+        const L = units.filter(sc).sort((a, b) => rem(b) - rem(a)), size = rule.buyQty + rule.getQty;
+        for (let i = 0; i + size <= L.length; i += size) {
+          L.slice(i + rule.buyQty, i + size).forEach(u => take(u, rem(u) * rule.pct / 100));
+          if (!rule.repeat) break;
+        }
+        break;
+      }
+      case 'bundle': {
+        const L = units.filter(sc).sort((a, b) => rem(b) - rem(a));
+        for (let i = 0; i + rule.qty <= L.length; i += rule.qty) {
+          const g = L.slice(i, i + rule.qty), tot = spend(g);
+          if (tot > rule.price) g.forEach(u => take(u, (tot - rule.price) * rem(u) / tot));
+          if (!rule.repeat) break;
+        }
+        break;
+      }
+      case 'tiered': {
+        const L = units.filter(sc), t = spend(L), tier = [...rule.tiers].sort((a, b) => b.min - a.min).find(x => t >= x.min);
+        if (tier) L.forEach(u => take(u, rem(u) * tier.pct / 100));
+        break;
+      }
+      case 'gift': { if (spend(units) >= (rule.minSpend || 0) && st.products[rule.giftId]) gift = rule.giftId; break; }
+    }
+    return { amount: r2(amount), delivery, gift };
+  }
+  function nudge(rule, st, subtotal) {
+    const need = (min) => Math.max(0, r2(min - subtotal));
+    if (rule.type === 'free_delivery' && st.delivery !== 0 && need(rule.minSpend) > 0) return { rule: rule.id, kind: 'free_delivery', need: need(rule.minSpend), target: rule.minSpend };
+    if (rule.type === 'gift' && !st.gifts.includes(rule.giftId) && need(rule.minSpend) > 0) return { rule: rule.id, kind: 'gift', need: need(rule.minSpend), target: rule.minSpend, giftId: rule.giftId };
+    if (rule.type === 'tiered') { const next = [...rule.tiers].sort((a, b) => a.min - b.min).find(x => x.min > subtotal); if (next) return { rule: rule.id, kind: 'tier', need: need(next.min), target: next.min, pct: next.pct }; }
+    return null;
+  }
+  /* price(cart, ctx) -> {lines,gifts,applied,subtotal,discount,delivery,deliveryFee,total,nudges,couponOk}
+     cart: {pid: qty}; ctx: {products, rules, code, now, deliveryFee, used} */
+  function price(cart, ctx) {
+    const now = ctx.now || new Date(), used = ctx.used || {}, fee = ctx.deliveryFee == null ? 3 : ctx.deliveryFee;
+    const units = [];
+    Object.entries(cart).forEach(([pid, q]) => { for (let i = 0; i < q; i++) units.push({ pid, price: ctx.products[pid].price, disc: 0 }); });
+    const subtotal = r2(units.reduce((a, u) => a + u.price, 0));
+    const st = { units, products: ctx.products, delivery: fee, gifts: [] };
+    const applied = [];
+    const eligible = ctx.rules.filter(r => live(r, now, ctx.code, used));
+    const couponOk = !!(ctx.code && ctx.rules.some(r => r.code && r.code.trim().toUpperCase() === ctx.code.trim().toUpperCase() && live(r, now, ctx.code, used)));
+    // 1) exclusive rules: only the single most generous one applies
+    const excl = eligible.filter(r => !r.stackable && r.type !== 'free_delivery' && r.type !== 'gift');
+    let best = null;
+    excl.forEach(r => { const sim = { ...st, units: units.map(u => ({ ...u })) }; const res = applyRule(r, sim); if (res.amount > (best ? best.amount : 0)) best = { r, amount: res.amount }; });
+    const order = [...(best ? [best.r] : []), ...eligible.filter(r => r.stackable && r.type !== 'free_delivery' && r.type !== 'gift').sort((a, b) => (a.priority || 0) - (b.priority || 0))];
+    order.forEach(r => { const res = applyRule(r, st); if (res.amount > 0) applied.push({ id: r.id, name: r.name, amount: res.amount, type: r.type }); });
+    // 2) delivery + gifts are judged on the discounted subtotal
+    const after = r2(units.reduce((a, u) => a + rem(u), 0));
+    eligible.filter(r => r.type === 'free_delivery' || r.type === 'gift').forEach(r => {
+      const res = applyRule(r, st);
+      if (res.delivery === 0) { st.delivery = 0; applied.push({ id: r.id, name: r.name, amount: fee, type: r.type, delivery: true }); }
+      if (res.gift) { st.gifts.push(res.gift); applied.push({ id: r.id, name: r.name, amount: ctx.products[res.gift].price, type: 'gift', gift: res.gift }); }
+    });
+    const lines = Object.entries(cart).map(([pid, q]) => { const mine = units.filter(u => u.pid === pid); const d = r2(mine.reduce((a, u) => a + u.disc, 0)); return { pid, qty: q, unit: ctx.products[pid].price, gross: r2(ctx.products[pid].price * q), discount: d, net: r2(ctx.products[pid].price * q - d) }; });
+    const nudges = eligible.concat(ctx.rules.filter(r => r.active && !live(r, now, ctx.code, used) && !r.code && false)).map(r => nudge(r, st, after)).filter(Boolean);
+    const discount = r2(subtotal - after), delivery = Object.keys(cart).length ? st.delivery : 0;
+    return { lines, gifts: st.gifts, applied, subtotal, discount, delivery, deliveryFee: fee, total: r2(after + delivery), nudges, couponOk };
+  }
+  const api = { price, inScope, r2 };
+  if (typeof module !== 'undefined') module.exports = api; else root.PromoEngine = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+const PRODUCTS={"9": {"id": "9", "name": "Rouge", "brand": "mad", "collection": "niche", "img": "img/p9.webp", "price": 30, "was": 72, "ml": 100, "for": "unisex", "notes": {"top": ["Orange", "Marigold", "Fir Balsam"], "heart": ["Jasmine", "Saffron", "Cedarwood"], "base": ["Ambergris", "Oakmoss", "Sugar Accord"]}}, "19": {"id": "19", "name": "Gumin", "brand": "mad", "collection": "niche", "img": "img/p19.webp", "price": 30, "was": 48, "ml": 100, "for": "him", "notes": {"top": ["Bergamot", "Orange", "Anise", "Cardamom"], "heart": ["Jasmine", "Rose", "Lily of the Valley", "Tea", "Orris Root"], "base": ["Sandalwood", "Dry Woods", "Powdery Notes", "Ambergris"]}}, "4": {"id": "4", "name": "New York Night", "brand": "mad", "collection": "niche", "img": "img/p4.webp", "price": 30, "was": 55, "ml": 100, "for": "her", "notes": {"top": ["Lily of the Valley", "Coconut", "Peach"], "heart": ["Amber", "Vanilla", "Marine Notes"], "base": ["White Musk", "Patchouli", "Sandalwood"]}}, "15": {"id": "15", "name": "Exotic", "brand": "mad", "collection": "niche", "img": "img/p15.webp", "price": 30, "was": 48, "ml": 100, "for": "unisex", "notes": {"top": ["Lemon", "Grapefruit", "Cinnamon", "Eucalyptus"], "heart": ["Jasmine", "Magnolia"], "base": ["Cedarwood", "Amber", "Tonka Bean", "Sandalwood"]}}, "12": {"id": "12", "name": "Detox", "brand": "mad", "collection": "niche", "img": "img/p12.webp", "price": 30, "was": 48, "ml": 100, "for": "unisex", "notes": {"top": ["Cherry", "Rose", "Sweet Accords"], "heart": ["Rose", "Jasmine"], "base": ["Amber", "Musk", "Vanilla"]}}, "14": {"id": "14", "name": "Adria", "brand": "mad", "collection": "niche", "img": "img/p14.webp", "price": 30, "was": 55, "ml": 100, "for": "unisex", "notes": {"top": ["Lemon", "Cardamom"], "heart": ["Lavender", "Olive Accord", "Coconut"], "base": ["Sandalwood", "Tonka Bean", "Patchouli"]}}, "26": {"id": "26", "name": "Treasure", "brand": "mad", "collection": "niche", "img": "img/p26.webp", "price": 39, "was": 55, "ml": 100, "for": "unisex", "notes": {"top": ["Bergamot", "Lemon", "Lavender"], "heart": ["Cinnamon", "Honey"], "base": ["Tonka Bean", "Vanilla", "Tobacco"]}}, "25": {"id": "25", "name": "Draco", "brand": "mad", "collection": "niche", "img": "img/p25.webp", "price": 30, "was": 55, "ml": 100, "for": "unisex", "notes": {"top": ["Lemon"], "heart": ["Rose", "Jasmine"], "base": ["Amber", "Musk"]}}, "7": {"id": "7", "name": "Bruno Gold", "brand": "mad", "collection": "niche", "img": "img/p7.webp", "price": 30, "was": 52, "ml": 100, "for": "unisex", "notes": {"top": ["Apple", "Peach", "Pear", "Raspberry"], "heart": ["Lily of the Valley", "Heliotrope"], "base": ["Musk", "Sandalwood", "Amber"]}}, "2": {"id": "2", "name": "Inviting", "brand": "mad", "collection": "niche", "img": "img/p2.webp", "price": 30, "was": 52, "ml": 100, "for": "her", "notes": {"top": ["Fruity Notes", "Pear", "Pepper"], "heart": ["Tuberose", "Jasmine", "Ylang-Ylang"], "base": ["Amber", "Patchouli", "Musk"]}}, "3": {"id": "3", "name": "Prevail", "brand": "mad", "collection": "niche", "img": "img/p3.webp", "price": 30, "was": 55, "ml": 100, "for": "her", "notes": {"top": ["Orange Blossom", "Mandarin", "Sweet Orange"], "heart": ["Tuberose", "Ylang-Ylang"], "base": ["Vanilla", "Sandalwood", "Cedarwood", "Musk"]}}, "10": {"id": "10", "name": "Narcotic", "brand": "mad", "collection": "niche", "img": "img/p10.webp", "price": 39, "was": 49, "ml": 100, "for": "unisex", "notes": {"top": ["Lemon", "Lime", "Bergamot", "Peach"], "heart": ["Orange Blossom", "Jasmine"], "base": ["Amber", "Oakmoss", "Woody Notes"]}}, "13": {"id": "13", "name": "Oud Sateen", "brand": "mad", "collection": "niche", "img": "img/p13.webp", "price": 30, "was": 48, "ml": 100, "for": "unisex", "notes": {"top": ["Rose", "Pepper", "Geranium", "Violet"], "heart": ["Patchouli", "Cedarwood", "Vanilla"], "base": ["Benzoin", "Oud", "Guaiac Wood"]}}, "11": {"id": "11", "name": "Effect", "brand": "mad", "collection": "niche", "img": "img/p11.webp", "price": 30, "was": 55, "ml": 100, "for": "unisex", "notes": {"top": ["Rum", "Sweet Accords", "Black Pepper", "Cinnamon"], "heart": ["Plum", "Balsamic Accord"], "base": ["Vanilla", "Amber", "Sandalwood", "Musk", "Woody Notes"]}}, "21": {"id": "21", "name": "Divine Tough", "brand": "mad", "collection": "niche", "img": "img/p21.webp", "price": 30, "was": 55, "ml": 100, "for": "him", "notes": {"top": ["Pear", "Pepper"], "heart": ["Tuberose", "Jasmine", "Ylang-Ylang"], "base": ["Amber", "Musk", "Patchouli"]}}, "6": {"id": "6", "name": "Marjorie", "brand": "mad", "collection": "niche", "img": "img/p6.webp", "price": 30, "was": 48, "ml": 50, "for": "her", "notes": {"top": ["Bergamot", "Peach", "Mandarin", "Pink Pepper"], "heart": ["Peony", "Jasmine", "Cinnamon", "Nutmeg", "Cardamom"], "base": ["Sandalwood", "Amber", "Moss", "Elemi", "Musk"]}}, "48": {"id": "48", "name": "A113", "brand": "mad", "collection": "selective", "img": "img/p48.webp", "price": 25, "was": 33, "ml": 100, "for": "her", "notes": {"top": ["Bergamot"], "heart": ["Jasmine"], "base": ["Vanilla", "Cashmere"]}}, "77": {"id": "77", "name": "Z101", "brand": "mad", "collection": "selective", "img": "img/p77.webp", "price": 25, "was": 33, "ml": 100, "for": "her", "notes": {"top": ["Pepper", "Jasmine"], "heart": ["Cream", "Vanilla", "Amber"], "base": ["Sandalwood", "Cashmere", "Musk", "Balsamic"]}}, "75": {"id": "75", "name": "Y102", "brand": "mad", "collection": "selective", "img": "img/p75.webp", "price": 25, "was": 33, "ml": 100, "for": "her", "notes": {"top": ["Lavender", "Mandarin", "Orange", "Bergamot"], "heart": ["Lavender", "Orange Blossom", "Jasmine", "Orchid"], "base": ["Vanilla", "Tonka Bean"]}}, "73": {"id": "73", "name": "W213", "brand": "mad", "collection": "selective", "img": "img/p73.webp", "price": 25, "was": 33, "ml": 100, "for": "her", "notes": {"top": ["Pear", "Orange Blossom", "Pink Pepper"], "heart": ["Coffee", "Jasmine", "Vetiver"], "base": ["Vanilla", "Patchouli", "Cedar"]}}, "83": {"id": "83", "name": "Sweet Beach Body Mist", "brand": "mad", "collection": "mist", "img": "img/p83.webp", "price": 10, "was": null, "ml": 250, "for": "unisex"}};
+const BRANDS={mad:{name:'MAD Parfumeur',logo:'img/brand_mad.webp'}};
+const FAMILIES=[{"id": "citrus", "name": "Citrus", "hint": "Lemon, bergamot, orange", "dot": "#F2C94C", "kw": ["lemon", "lime", "bergamot", "orange", "mandarin", "grapefruit", "citrus"], "ex": ["blossom"]}, {"id": "fruity", "name": "Fruity", "hint": "Peach, pear, apple, berries", "dot": "#EB8A6B", "kw": ["peach", "pear", "apple", "raspberry", "cherry", "plum", "coconut", "fruity", "pineapple"], "ex": []}, {"id": "floral", "name": "Floral", "hint": "Rose, jasmine, tuberose, lily", "dot": "#E7A1B6", "kw": ["rose", "jasmine", "tuberose", "ylang", "peony", "lily", "orange blossom", "magnolia", "violet", "heliotrope", "marigold", "geranium", "orris", "orchid"], "ex": []}, {"id": "sweet", "name": "Vanilla & sweet", "hint": "Vanilla, tonka, honey, caramel", "dot": "#E8CFA0", "kw": ["vanilla", "tonka", "honey", "caramel", "sugar", "praline", "rum", "sweet", "cream"], "ex": ["orange"]}, {"id": "woody", "name": "Woody", "hint": "Sandalwood, cedar, patchouli", "dot": "#9A7552", "kw": ["sandalwood", "cedar", "patchouli", "moss", "guaiac", "vetiver", "wood", "fir balsam", "elemi"], "ex": []}, {"id": "amber", "name": "Amber & musk", "hint": "Amber, musk, benzoin", "dot": "#C98A3C", "kw": ["amber", "musk", "benzoin", "labdanum", "powdery"], "ex": []}, {"id": "spicy", "name": "Spicy", "hint": "Cinnamon, pepper, cardamom, saffron", "dot": "#C0492F", "kw": ["cinnamon", "pepper", "cardamom", "saffron", "nutmeg", "anise", "clove"], "ex": []}, {"id": "aromatic", "name": "Fresh & aromatic", "hint": "Lavender, eucalyptus, tea, marine", "dot": "#7FA88A", "kw": ["lavender", "eucalyptus", "olive", "marine", "tea", "mint", "balsamic"], "ex": []}, {"id": "oud", "name": "Oud & smoky", "hint": "Oud, tobacco, incense", "dot": "#5B4636", "kw": ["oud", "tobacco", "incense"], "ex": []}];
+const WA_NUMBER='962797906211', DELIVERY_FEE=3;
+const store={get(k,d){try{const v=localStorage.getItem('scentro_'+k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem('scentro_'+k,JSON.stringify(v))}catch{}}};
+const SEED_RULES=[
+ {id:'r1',name:'Free delivery over 60 JOD',nameAr:'توصيل مجاني فوق ٦٠ دينار',type:'free_delivery',minSpend:60,active:true,stackable:false,priority:1,scope:{type:'all'}},
+ {id:'r2',name:'Buy a niche, get the 2nd at 20% off',nameAr:'اشترِ عطر نيش والثاني بخصم ٢٠٪',type:'bxgy',buyQty:1,getQty:1,pct:20,repeat:true,scope:{type:'collection',value:'niche'},active:true,stackable:false,priority:2},
+ {id:'r3',name:'Welcome code — 10% off',nameAr:'كود الترحيب — خصم ١٠٪',type:'percent',pct:10,minSpend:0,code:'WELCOME10',active:true,stackable:false,priority:3,scope:{type:'all'}},
+ {id:'r4',name:'Any 2 Selective for 40 JOD',nameAr:'أي عطرين Selective بـ ٤٠ دينار',type:'bundle',qty:2,price:40,repeat:true,scope:{type:'collection',value:'selective'},active:true,stackable:false,priority:4},
+ {id:'r5',name:'Spend more, save more',nameAr:'كلما اشتريت أكثر وفّرت أكثر',type:'tiered',tiers:[{min:80,pct:5},{min:120,pct:10}],active:false,stackable:false,priority:5,scope:{type:'all'}},
+ {id:'r6',name:'Free body mist over 100 JOD',nameAr:'بودي ميست مجاني فوق ١٠٠ دينار',type:'gift',minSpend:100,giftId:'83',active:false,stackable:true,priority:6,scope:{type:'all'}}];
+const T={
+en:{n_finder:'Find by notes',n_shop:'Shop',n_brands:'Brands',n_pk:'Packages',
+ h_eye:'Curated by Scentro',h_h1:'The scent they <em>remember.</em>',h_lead:'Niche and selective fragrances from the houses we trust — chosen by notes you love, delivered across Jordan.',h_cta1:'Find my scent',h_cta2:'Shop all',m1:'Cash on delivery',m2:'Same-day in Amman',m3:'Delivery 3 JOD · all Jordan',
+ t1:'Cash on delivery',t1s:'Pay when it arrives',t2:'Same-day in Amman',t2s:'3 JOD flat, anywhere in Jordan',t3:'Original brands',t3s:'Sealed, authentic',t4:'Chosen by notes',t4s:'Find scents you will love',
+ br_eye:'Our brands',br_h2:'Houses we carry',br_mad:'Niche & selective perfumes',br_soon:'More houses coming soon',
+ f_eye:'Find by notes',f_h2:'Start with the notes you love.',f_lead:'Pick up to three notes you enjoy. We compare them with the published notes of each fragrance and show the ones that share the most — and exactly which notes they share.',
+ f_s1:'1 · Choose up to 3 notes you love',f_s2:'2 · For whom? (optional)',f_any:'Anyone',f_her:'For her',f_him:'For him',f_cnt:'selected',
+ f_none:'Pick a note to see matching scents.',f_picked:'You chose',f_of:'of your',f_notes:'notes',f_best:'Closest to your notes',f_close:'Close to your notes',f_part:'Shares some notes',
+ f_honest:'Scent is personal. These matches are based on the notes you chose, so they show what you are likely to enjoy — not a guarantee. Not sure? Message us on WhatsApp and we will help.',f_add:'Add',
+ c_eye:'Collections',c_h2:'Shop by collection',c1:'Niche',c1s:'24 scents',c2:'Selective',c2s:'50+ scents',c3:'Packages',c3s:'Special prices',c4:'Body mist',c4s:'250 ml',
+ b_eye:'The collection',b_h2:'Most loved right now',all:'All',niche:'Niche',selective:'Selective',add:'Add to cart',extrait:'Extrait de parfum',edp:'Eau de parfum',for_her:'For Women',for_him:'For Men',for_unisex:'Unisex',
+ s_eye:'Why Scentro',s_h2:'Curated, not crowded.',s_p:'We pick fragrances we would wear ourselves, describe them honestly by their notes, and deliver them to your door.',w1:'Honest descriptions',w1s:'Every scent explained by its real notes.',w2:'Authentic & sealed',w2s:'Original products, delivered sealed.',w3:'Pay on delivery',w3s:'No card, no account.',w4:'Simple delivery',w4s:'3 JOD flat across Jordan.',
+ p_eye:'Packages',p_h2:'Better together',pk_special:'For your special nights',pk_summer:'Spring / Summer duo',pk_sig:'Signature unisex duo',
+ fo_p:'Curated premium fragrances, crafted to reflect elegance, character and lasting impression.',fo_cod:'Cash on delivery',fo_h1:'Shop',fo_h2:'Help',fo_h3:'Contact',fo_a:'About us',fo_t:'Track order',fo_pr:'Privacy policy',fo_c:'Concept v3 — design preview, not live',
+ cart:'Your cart',empty:'Your cart is empty.',sub:'Subtotal',deliv:'Delivery',free:'Free',total:'Total (pay on delivery)',checkout:'Checkout',cod1:'Cash on delivery — you pay when your order arrives. No account, no card.',
+ coupon:'Promo code',apply:'Apply',c_ok:'Code applied',c_bad:'This code is not valid for your cart',gift:'Free gift',
+ nd_free:'Add <b>{n} JOD</b> more for free delivery',nd_gift:'Add <b>{n} JOD</b> more for a free gift',nd_tier:'Add <b>{n} JOD</b> more to save {p}%',
+ co:'Your details',name:'Full name',phone:'Mobile number',gov:'Governorate',addr:'Address (area, street, building)',note:'Notes for delivery (optional)',place:'Place order',back:'Back',
+ e_name:'Please enter your name',e_phone:'Enter a Jordanian mobile, e.g. 079 123 4567',e_addr:'Please enter your address',
+ ok:'Thank you!',ok1:'Your order is in. We will call you to confirm the details and delivery time.',ok2:'Order number',ok3:'Pay in cash on delivery',ok_wa:'Send order details on WhatsApp',ok_wa_s:'Optional — it helps us confirm faster.',cont:'Continue shopping',added:'Added to cart'},
+ar:{n_finder:'اختر حسب النوتات',n_shop:'تسوّق',n_brands:'الماركات',n_pk:'الباقات',
+ h_eye:'بتنسيق سنترو',h_h1:'العطر الذي <em>لا يُنسى.</em>',h_lead:'عطور نيش وسيليكتف من بيوت نثق بها — نختارها لك حسب النوتات التي تحبها، ونوصلها لكل الأردن.',h_cta1:'اكتشف عطري',h_cta2:'تسوّق الكل',m1:'الدفع عند الاستلام',m2:'توصيل اليوم في عمّان',m3:'التوصيل ٣ دنانير · كل الأردن',
+ t1:'الدفع عند الاستلام',t1s:'ادفع عند وصول طلبك',t2:'توصيل اليوم في عمّان',t2s:'٣ دنانير ثابتة لكل الأردن',t3:'ماركات أصلية',t3s:'مختومة ومضمونة',t4:'اختيار حسب النوتات',t4s:'اعثر على عطور ستحبها',
+ br_eye:'ماركاتنا',br_h2:'البيوت التي نقدّمها',br_mad:'عطور نيش وسيليكتف',br_soon:'ماركات جديدة قريباً',
+ f_eye:'اختر حسب النوتات',f_h2:'ابدأ من النوتات التي تحبها.',f_lead:'اختر حتى ثلاث نوتات تحبها. نقارنها بالنوتات المعلنة لكل عطر ونعرض لك الأقرب إليها — مع توضيح النوتات المشتركة بالضبط.',
+ f_s1:'١ · اختر حتى ٣ نوتات تحبها',f_s2:'٢ · لمن العطر؟ (اختياري)',f_any:'للجميع',f_her:'لها',f_him:'له',f_cnt:'مختارة',
+ f_none:'اختر نوتة لتظهر العطور المطابقة.',f_picked:'اخترت',f_of:'من أصل',f_notes:'نوتات',f_best:'الأقرب لنوتاتك',f_close:'قريب من نوتاتك',f_part:'يشترك في بعض النوتات',
+ f_honest:'الرائحة شيء شخصي. هذه الاقتراحات مبنية على النوتات التي اخترتها، أي أنها ترجيح لما قد يعجبك وليست ضماناً. غير متأكد؟ راسلنا على واتساب ونساعدك.',f_add:'أضف',
+ c_eye:'المجموعات',c_h2:'تسوّق حسب المجموعة',c1:'نيش',c1s:'٢٤ عطراً',c2:'سيليكتف',c2s:'+٥٠ عطراً',c3:'الباقات',c3s:'أسعار خاصة',c4:'بودي ميست',c4s:'٢٥٠ مل',
+ b_eye:'المجموعة',b_h2:'الأكثر طلباً الآن',all:'الكل',niche:'نيش',selective:'سيليكتف',add:'أضف للسلة',extrait:'إكستريت دو بارفان',edp:'أو دو بارفان',for_her:'للنساء',for_him:'للرجال',for_unisex:'للجنسين',
+ s_eye:'لماذا سنترو',s_h2:'منتقى، لا مزدحم.',s_p:'نختار عطوراً نلبسها نحن، ونصفها بصدق حسب نوتاتها، ونوصلها إلى باب بيتك.',w1:'وصف صادق',w1s:'كل عطر موضّح بنوتاته الحقيقية.',w2:'أصلي ومختوم',w2s:'منتجات أصلية تصلك مختومة.',w3:'الدفع عند الاستلام',w3s:'بدون بطاقة وبدون حساب.',w4:'توصيل بسيط',w4s:'٣ دنانير ثابتة لكل الأردن.',
+ p_eye:'الباقات',p_h2:'أجمل معاً',pk_special:'لسهراتك الخاصة',pk_summer:'ثنائي الربيع / الصيف',pk_sig:'الثنائي المميز للجنسين',
+ fo_p:'تشكيلة منتقاة من العطور الفاخرة، تعكس الأناقة والشخصية والأثر الباقي.',fo_cod:'الدفع عند الاستلام',fo_h1:'تسوّق',fo_h2:'مساعدة',fo_h3:'تواصل',fo_a:'من نحن',fo_t:'تتبّع الطلب',fo_pr:'سياسة الخصوصية',fo_c:'النسخة التجريبية ٣ — معاينة تصميم، غير منشور',
+ cart:'سلتك',empty:'سلتك فارغة.',sub:'المجموع الفرعي',deliv:'التوصيل',free:'مجاني',total:'الإجمالي (الدفع عند الاستلام)',checkout:'إتمام الطلب',cod1:'الدفع عند الاستلام — تدفع عندما يصلك طلبك. بدون حساب وبدون بطاقة.',
+ coupon:'كود الخصم',apply:'تطبيق',c_ok:'تم تطبيق الكود',c_bad:'هذا الكود غير صالح لسلتك',gift:'هدية مجانية',
+ nd_free:'أضف <b>{n} دينار</b> للحصول على توصيل مجاني',nd_gift:'أضف <b>{n} دينار</b> للحصول على هدية مجانية',nd_tier:'أضف <b>{n} دينار</b> لتوفّر {p}٪',
+ co:'بياناتك',name:'الاسم الكامل',phone:'رقم الموبايل',gov:'المحافظة',addr:'العنوان (المنطقة، الشارع، البناية)',note:'ملاحظات للتوصيل (اختياري)',place:'تأكيد الطلب',back:'رجوع',
+ e_name:'الرجاء إدخال الاسم',e_phone:'أدخل رقم موبايل أردني، مثال 079 123 4567',e_addr:'الرجاء إدخال العنوان',
+ ok:'شكراً لك!',ok1:'وصلنا طلبك. سنتصل بك لتأكيد التفاصيل وموعد التوصيل.',ok2:'رقم الطلب',ok3:'الدفع نقداً عند الاستلام',ok_wa:'أرسل تفاصيل الطلب على واتساب',ok_wa_s:'اختياري — يساعدنا على التأكيد أسرع.',cont:'متابعة التسوق',added:'أُضيف إلى السلة'}};
+const FAM_AR={citrus:['حمضيات','ليمون، برغموت، برتقال'],fruity:['فواكه','خوخ، كمثرى، تفاح، توت'],floral:['زهور','ورد، ياسمين، توبروز، زنبق'],sweet:['فانيلا وحلاوة','فانيلا، تونكا، عسل، كراميل'],woody:['خشب','صندل، أرز، باتشولي'],amber:['عنبر ومسك','عنبر، مسك'],spicy:['توابل','قرفة، فلفل، هيل، زعفران'],aromatic:['عشبي ومنعش','لافندر، أوكالبتوس، شاي، بحري'],oud:['عود ودخان','عود، تبغ، بخور']};
+const GOV={en:['Amman','Zarqa','Irbid','Aqaba','Balqa (Salt)','Madaba','Karak','Mafraq','Jerash','Ajloun','Tafilah',"Ma'an"],ar:['عمّان','الزرقاء','إربد','العقبة','البلقاء (السلط)','مادبا','الكرك','المفرق','جرش','عجلون','الطفيلة','معان']};
+let lang='en',forV='any',colV='all',picked=[],cart=store.get('cart',{}),step='cart',code='',couponMsg='';
+let RULES=store.get('rules',null)||SEED_RULES;const $=s=>document.querySelector(s);const t=k=>T[lang][k];
+const num=n=>(Math.round(n*100)/100).toLocaleString(lang==='ar'?'ar-JO':'en-US',{maximumFractionDigits:2});
+const rname=r=>lang==='ar'&&r.nameAr?r.nameAr:r.name;
+const used=()=>store.get('uses',{});
+const quote=()=>PromoEngine.price(cart,{products:PRODUCTS,rules:RULES,code,deliveryFee:DELIVERY_FEE,used:used()});
+function applyLang(){const d=T[lang];document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+ document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(d[k]!==undefined)e.textContent=d[k]});
+ document.querySelectorAll('[data-i18n-html]').forEach(e=>{e.innerHTML=d[e.dataset.i18nHtml]});
+ $('#en').classList.toggle('on',lang==='en');$('#ar').classList.toggle('on',lang==='ar');renderAll()}
+function renderAnn(){const fd=RULES.find(r=>r.active&&r.type==='free_delivery'&&!r.code);
+ $('#ann').innerHTML=`<span>${lang==='ar'?'توصيل في نفس اليوم داخل عمّان':'Same-day delivery within Amman'}</span><span>${lang==='ar'?'الدفع عند الاستلام':'Cash on delivery'}</span>`+(fd?`<span>${lang==='ar'?'توصيل مجاني فوق '+num(fd.minSpend)+' دينار':'Free delivery over '+num(fd.minSpend)+' JOD'}</span>`:`<span>${lang==='ar'?'التوصيل ٣ دنانير':'Delivery 3 JOD'}</span>`)}
+function renderAll(){renderAnn();renderNotes();renderResults();renderFilters();renderBest();renderDrawer();updateCount()}
+/* ---- notes finder ---- */
+const famName=f=>lang==='ar'?FAM_AR[f.id][0]:f.name,famHint=f=>lang==='ar'?FAM_AR[f.id][1]:f.hint;
+function renderNotes(){$('#notesGrid').innerHTML=FAMILIES.map(f=>{const on=picked.includes(f.id),dis=!on&&picked.length>=3;return `<button class="nt ${on?'on':''}" data-f="${f.id}" ${dis?'disabled':''} style="--dot:${f.dot}"><i></i><b>${famName(f)}</b><span>${famHint(f)}</span></button>`}).join('');
+ $('#cnt').textContent=picked.length+' / 3 '+t('f_cnt');document.querySelectorAll('.nt').forEach(b=>b.onclick=()=>{const id=b.dataset.f;picked=picked.includes(id)?picked.filter(x=>x!==id):[...picked,id];renderNotes();renderResults()})}
+function famOf(note){const n=note.toLowerCase();return FAMILIES.filter(f=>f.kw.some(k=>n.includes(k))&&!(f.ex||[]).some(e=>n.includes(e))).map(f=>f.id)}
+function score(p){const hits={};['top','heart','base'].forEach(lay=>p.notes[lay].forEach(n=>famOf(n).forEach(f=>{if(picked.includes(f))(hits[f]=hits[f]||[]).push({n,w:lay==='top'?.6:1})})));return{m:Object.keys(hits).length,w:Object.values(hits).flat().reduce((a,x)=>a+x.w,0),hits}}
+function renderResults(){const n=picked.length;$('#honest').textContent=t('f_honest');
+ if(!n){$('#picked').textContent='';$('#results').innerHTML=`<div class="empty" style="grid-column:1/-1">${t('f_none')}</div>`;return}
+ const list=Object.values(PRODUCTS).filter(p=>p.notes&&(forV==='any'||p.for==='unisex'||p.for===forV)).map(p=>({p,...score(p)})).filter(x=>x.m>0).sort((a,b)=>b.m-a.m||b.w-a.w).slice(0,3);
+ $('#picked').textContent=t('f_picked')+': '+picked.map(id=>famName(FAMILIES.find(f=>f.id===id))).join(' · ');
+ $('#results').innerHTML=list.map(x=>{const tier=x.m===n?t('f_best'):x.m===n-1?t('f_close'):t('f_part');const shared=[...new Set(Object.values(x.hits).flat().map(h=>h.n))];
+  return `<div class="res"><img src="${x.p.img}" alt=""><div><span class="tier">${tier}</span><h3>${x.p.name}</h3></div><p class="mt">${x.m} ${t('f_of')} ${n} ${t('f_notes')}</p><div class="shared">${shared.slice(0,5).map(s=>`<em>${s}</em>`).join('')}</div><div class="pr"><span><b>${x.p.price}</b> JOD</span><button data-add="${x.p.id}">${t('f_add')}</button></div></div>`}).join('')||`<div class="empty" style="grid-column:1/-1">—</div>`;bindAdd()}
+/* ---- catalogue ---- */
+function renderFilters(){$('#filters').innerHTML=['all','niche','selective'].map(c=>`<button class="${colV===c?'on':''}" data-c="${c}">${t(c)}</button>`).join('');document.querySelectorAll('#filters button').forEach(b=>b.onclick=()=>{colV=b.dataset.c;renderFilters();renderBest()})}
+function renderBest(){const ids=Object.keys(PRODUCTS).filter(id=>PRODUCTS[id].notes&&(colV==='all'||PRODUCTS[id].collection===colV)).slice(0,12);
+ $('#best').innerHTML=ids.map(id=>{const p=PRODUCTS[id],disc=p.was?`-${Math.round((1-p.price/p.was)*100)}%`:'';const nl=p.notes?[...p.notes.top.slice(0,1),...p.notes.heart.slice(0,1),...p.notes.base.slice(0,1)].join(' · '):'';
+ return `<article class="card"><a class="ph" href="#"><img src="${p.img}" alt="${p.name}">${disc?`<span class="badge">${disc}</span>`:''}</a><div class="bn">${BRANDS[p.brand].name}</div><h3>${p.name}</h3><p class="sub">${t(p.collection==='niche'?'extrait':'edp')} · ${p.ml} ml · ${t('for_'+p.for)}</p><p class="nl">${nl}</p><div class="row"><div class="price"><b>${p.price}</b> <small>JOD</small>${p.was?` <s>${p.was}</s>`:''}</div><button class="add" data-add="${p.id}">${t('add')}</button></div></article>`}).join('');bindAdd()}
+document.querySelectorAll('.cat[data-col]').forEach(c=>c.onclick=()=>{colV=c.dataset.col;renderFilters();renderBest()});
+function bindAdd(){document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addCart(b.dataset.add))}
+/* ---- cart, promotions, guest checkout (cash on delivery) ---- */
+function saveCart(){store.set('cart',cart)}
+function addCart(id){cart[id]=(cart[id]||0)+1;saveCart();toast(t('added'));renderDrawer();updateCount()}
+function updateCount(){$('#cc').textContent=Object.values(cart).reduce((a,b)=>a+b,0)}
+function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1600)}
+function openDrawer(){$('#drawer').classList.add('on');$('#scrim').classList.add('on')}
+function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');if(step==='done'){cart={};saveCart();step='cart';code='';couponMsg='';renderDrawer();updateCount()}}
+function nudgeHtml(q){const n=q.nudges.sort((a,b)=>a.need-b.need)[0];if(!n)return'';const key=n.kind==='free_delivery'?'nd_free':n.kind==='gift'?'nd_gift':'nd_tier';
+ const msg=t(key).replace('{n}',num(n.need)).replace('{p}',n.pct||'');const pct=Math.max(4,Math.min(100,100*(q.subtotal-q.discount)/n.target));return `<div class="nudge">${msg}<div class="bar"><i style="width:${pct}%"></i></div></div>`}
+function summary(q){let h=`<div class="tot"><span>${t('sub')}</span><span>${num(q.subtotal)} JOD</span></div>`;
+ q.applied.filter(a=>!a.delivery&&a.type!=='gift').forEach(a=>{h+=`<div class="tot promo"><span>${rname(RULES.find(r=>r.id===a.id)||{name:a.name})}</span><span>− ${num(a.amount)} JOD</span></div>`});
+ h+=q.delivery===0&&q.deliveryFee?`<div class="tot free"><span>${t('deliv')}</span><span>${t('free')} <s style="color:var(--mute);font-weight:400">${num(q.deliveryFee)}</s></span></div>`:`<div class="tot"><span>${t('deliv')}</span><span>${num(q.delivery)} JOD</span></div>`;
+ return h+`<div class="tot big"><span>${t('total')}</span><span>${num(q.total)} JOD</span></div>`}
+function renderDrawer(){const ids=Object.keys(cart);$('#dtitle').textContent=step==='details'?t('co'):step==='done'?'':t('cart');const b=$('#dbody'),f=$('#dfoot');
+ if(step==='done'){const o=lastOrder;b.innerHTML=`<div class="done"><div class="ok">✓</div><h3>${t('ok')}</h3><p>${t('ok1')}</p><p style="margin-top:16px"><b>${t('ok2')}:</b> ${o.no}<br>${t('ok3')}</p><a class="btn wa2 full" target="_blank" href="${waLink(WA_NUMBER,orderText(o))}">${t('ok_wa')}</a><p style="font-size:12.5px;margin-top:8px">${t('ok_wa_s')}</p></div>`;f.innerHTML=`<button class="btn k full" id="cont">${t('cont')}</button>`;$('#cont').onclick=closeDrawer;return}
+ if(!ids.length){b.innerHTML=`<p style="color:var(--mute);padding-top:20px">${t('empty')}</p>`;f.innerHTML='';return}
+ const q=quote();
+ if(step==='cart'){const gifts=q.gifts.map(g=>`<div class="li"><img src="${PRODUCTS[g].img}" alt=""><div><span class="gift">${t('gift')}</span><b>${PRODUCTS[g].name}</b></div><div class="price"><b>0</b> <small>JOD</small></div></div>`).join('');
+  b.innerHTML=ids.map(id=>{const p=PRODUCTS[id],l=q.lines.find(x=>x.pid===id);return `<div class="li"><img src="${p.img}" alt=""><div><b>${p.name}</b><small>${BRANDS[p.brand].name} · ${p.ml} ml</small><div class="qty"><button data-q="${id}" data-d="-1">−</button><span>${cart[id]}</span><button data-q="${id}" data-d="1">+</button></div></div><div class="price">${l.discount>0?`<s>${num(l.gross)}</s>`:''}<b>${num(l.net)}</b> <small>JOD</small></div></div>`}).join('')+gifts+nudgeHtml(q);
+  f.innerHTML=`<div class="coupon"><input id="cin" placeholder="${t('coupon')}" value="${code}"><button id="cap">${t('apply')}</button></div>${couponMsg?`<div class="cmsg ${q.couponOk?'ok':'bad'}">${q.couponOk?t('c_ok'):t('c_bad')}</div>`:''}`+summary(q)+`<div class="codnote">💵 ${t('cod1')}</div><button class="btn k full" id="go">${t('checkout')}</button>`;
+  document.querySelectorAll('[data-q]').forEach(x=>x.onclick=()=>{const id=x.dataset.q;cart[id]+=+x.dataset.d;if(cart[id]<=0)delete cart[id];saveCart();updateCount();renderDrawer()});
+  $('#cap').onclick=()=>{code=$('#cin').value.trim();couponMsg=code?'x':'';renderDrawer()};$('#go').onclick=()=>{step='details';renderDrawer()}}
+ else{b.innerHTML=`<form id="frm" novalidate style="padding-top:18px"><div class="field" id="f1"><label>${t('name')}</label><input name="n" autocomplete="name"><div class="em">${t('e_name')}</div></div>
+  <div class="field" id="f2"><label>${t('phone')}</label><input name="p" inputmode="tel" autocomplete="tel" placeholder="07X XXX XXXX" dir="ltr"><div class="em">${t('e_phone')}</div></div>
+  <div class="field"><label>${t('gov')}</label><select name="g">${GOV[lang].map(g=>`<option>${g}</option>`).join('')}</select></div>
+  <div class="field" id="f3"><label>${t('addr')}</label><textarea name="a" rows="2"></textarea><div class="em">${t('e_addr')}</div></div>
+  <div class="field"><label>${t('note')}</label><input name="x"></div><div class="codnote">💵 ${t('cod1')}</div></form>`;
+  f.innerHTML=summary(q)+`<div style="display:grid;grid-template-columns:auto 1fr;gap:10px;margin-top:12px"><button class="btn o" id="bk">${t('back')}</button><button class="btn k" id="pl">${t('place')}</button></div>`;
+  $('#bk').onclick=()=>{step='cart';renderDrawer()};
+  $('#pl').onclick=()=>{const fm=$('#frm'),ok=(id,v)=>{$(id).classList.toggle('err',!v);return v};
+   const a=ok('#f1',fm.n.value.trim().length>1),bb=ok('#f2',/^(\+?962|0)?7[789]\d{7}$/.test(fm.p.value.replace(/[\s-]/g,''))),c=ok('#f3',fm.a.value.trim().length>4);
+   if(a&&bb&&c)placeOrder({name:fm.n.value.trim(),phone:fm.p.value.replace(/[\s-]/g,''),gov:GOV.en[fm.g.selectedIndex],address:fm.a.value.trim(),note:fm.x.value.trim()})}}}
+/* ---- orders: saved in the system first (source of truth); WhatsApp is the optional fast lane ---- */
+let lastOrder=null;
+function normPhone(p){p=p.replace(/\D/g,'');if(p.startsWith('962'))return p;if(p.startsWith('0'))return '962'+p.slice(1);return '962'+p}
+function orderText(o){const L=o.lines.map(l=>`• ${PRODUCTS[l.pid].name} × ${l.qty}`).join('\n')+o.gifts.map(g=>`\n• ${PRODUCTS[g].name} (gift)`).join('');
+ return `Hello SCENTRO 👋\nOrder ${o.no}\n${L}\nTotal: ${o.total} JOD (cash on delivery, delivery ${o.delivery} JOD)\n${o.customer.name} · ${o.customer.phone}\n${o.customer.gov} — ${o.customer.address}`}
+const waLink=(num,text)=>`https://wa.me/${num}?text=${encodeURIComponent(text)}`;
+function placeOrder(customer){const q=quote(),no='SC-'+Math.floor(10000+Math.random()*89999);
+ const o={no,at:new Date().toISOString(),status:'new',customer:{...customer,phone:normPhone(customer.phone)},lines:q.lines.map(l=>({pid:l.pid,qty:l.qty,net:l.net})),gifts:q.gifts,applied:q.applied.map(a=>({name:a.name,amount:a.amount})),subtotal:q.subtotal,discount:q.discount,delivery:q.delivery,total:q.total,code:q.couponOk?code:''};
+ const orders=store.get('orders',[]);orders.unshift(o);store.set('orders',orders);
+ const u=used();q.applied.forEach(a=>u[a.id]=(u[a.id]||0)+1);store.set('uses',u);
+ lastOrder=o;step='done';renderDrawer()}
+/* ---- misc ---- */
+$('#cartbtn').onclick=openDrawer;$('#dclose').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;
+$('#en').onclick=()=>{lang='en';applyLang()};$('#ar').onclick=()=>{lang='ar';applyLang()};
+document.querySelectorAll('#forChips .chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('#forChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');forV=c.dataset.v;renderResults()});
+$('#waFloat').href=waLink(WA_NUMBER,'Hello SCENTRO 👋');
+/* ---- dashboard prototype: promotions · orders · brands ---- */
+let adTab='promos',editing=null;
+const TYPES={percent:'Percentage off',amount_cart:'Fixed amount off the cart',free_delivery:'Free delivery',bxgy:'Buy X, get Y at a discount',bundle:'Bundle price (any N for a fixed price)',tiered:'Spend more, save more',gift:'Free gift with purchase'};
+const scopeLabel=s=>!s||s.type==='all'?'all products':s.type==='brand'?'brand: '+(BRANDS[s.value]||{}).name:s.type==='collection'?s.value+' collection':'product: '+((PRODUCTS[s.value]||{}).name||s.value);
+function describe(r){const sc=scopeLabel(r.scope);switch(r.type){
+ case'percent':return `${r.pct}% off ${sc}${r.minSpend?` · min spend ${r.minSpend} JOD`:''}`;
+ case'amount_cart':return `${r.amount} JOD off the cart${r.minSpend?` over ${r.minSpend} JOD`:''}`;
+ case'free_delivery':return `Delivery free${r.minSpend?` over ${r.minSpend} JOD`:' on every order'}`;
+ case'bxgy':return `Buy ${r.buyQty} get ${r.getQty} at ${r.pct===100?'100% (free)':r.pct+'% off'} · ${sc}${r.repeat?' · repeats':''}`;
+ case'bundle':return `Any ${r.qty} for ${r.price} JOD · ${sc}${r.repeat?' · repeats':''}`;
+ case'tiered':return `Spend ${r.tiers.map(x=>x.min+'→'+x.pct+'%').join(', ')} · ${sc}`;
+ case'gift':return `Free ${(PRODUCTS[r.giftId]||{}).name||'gift'} over ${r.minSpend} JOD`}return''}
+function saveRules(){store.set('rules',RULES);renderAnn();renderDrawer()}
+function renderAdmin(tab){adTab=tab||adTab;document.querySelectorAll('.ad-top .tabs button').forEach(b=>{b.classList.toggle('on',b.dataset.tab===adTab);b.onclick=()=>{location.hash='admin-'+b.dataset.tab}});
+ const el=$('#adbody');if(adTab==='promos')el.innerHTML=promosHtml();else if(adTab==='orders')el.innerHTML=ordersHtml();else el.innerHTML=brandsHtml();
+ if(adTab==='promos')bindPromos();if(adTab==='orders')bindOrders()}
+function promosHtml(){const list=RULES.map(r=>{const pills=[`<span class="pill">${TYPES[r.type]}</span>`,r.code?`<span class="pill code">CODE ${r.code}</span>`:'',r.stackable?'<span class="pill">stackable</span>':'<span class="pill">best-of</span>',(r.start||r.end)?`<span class="pill">${r.start||'…'} → ${r.end||'…'}</span>`:'',r.maxUses?`<span class="pill">max ${r.maxUses} uses</span>`:'',r.active?'':'<span class="pill off">off</span>'].join('');
+  return `<div class="card2"><div><div class="t">${r.name}${r.nameAr?` <span style="color:var(--mute);font-weight:400">· ${r.nameAr}</span>`:''}</div><div class="d">${describe(r)}</div><div style="margin-top:8px">${pills}</div></div><div class="acts"><button class="sw2 ${r.active?'on':''}" data-tg="${r.id}" aria-label="toggle"></button><button class="s" data-ed="${r.id}">Edit</button><button class="s del" data-del="${r.id}">Delete</button></div></div>`}).join('');
+ return `<h2>Promotions</h2><p class="hint">Create discounts without touching code. They apply automatically in the cart (or with a code). Delivery is 3 JOD flat; a free-delivery promotion waives it. Prototype: stored in this browser only — the real dashboard saves to the server and re-checks every total at checkout.</p>
+ <div class="btnbar"><button class="btn k" id="newp">+ New promotion</button><button class="btn o" id="resetp" style="color:var(--ink)">Reset to samples</button></div>${editing?formHtml():''}${list}`}
+function sel(name,opts,val){return `<select name="${name}">${opts.map(([v,l])=>`<option value="${v}" ${String(v)===String(val)?'selected':''}>${l}</option>`).join('')}</select>`}
+function scopeVals(type){return type==='brand'?Object.entries(BRANDS).map(([k,v])=>[k,v.name]):type==='collection'?[['niche','Niche'],['selective','Selective']]:type==='product'?Object.values(PRODUCTS).map(p=>[p.id,p.name]):[]}
+function formHtml(){const r=editing,sc=r.scope||{type:'all'};
+ const f=(l,n,v,ty='text',ph='')=>`<div><label>${l}</label><input name="${n}" type="${ty}" value="${v==null?'':v}" placeholder="${ph}"></div>`;
+ let typeFields='';
+ if(r.type==='percent')typeFields=f('Discount %','pct',r.pct,'number')+f('Minimum spend (JOD, optional)','minSpend',r.minSpend,'number');
+ if(r.type==='amount_cart')typeFields=f('Amount off (JOD)','amount',r.amount,'number')+f('Minimum spend (JOD)','minSpend',r.minSpend,'number');
+ if(r.type==='free_delivery')typeFields=f('Minimum spend (JOD, blank = always free)','minSpend',r.minSpend,'number');
+ if(r.type==='bxgy')typeFields=f('Customer buys (qty)','buyQty',r.buyQty,'number')+f('Gets (qty)','getQty',r.getQty,'number')+f('Discount on those (%, 100 = free)','pct',r.pct,'number')+`<div class="chk"><input type="checkbox" name="repeat" ${r.repeat?'checked':''}> Repeat for every set in the cart</div>`;
+ if(r.type==='bundle')typeFields=f('Items in the bundle','qty',r.qty,'number')+f('Bundle price (JOD)','price',r.price,'number')+`<div class="chk"><input type="checkbox" name="repeat" ${r.repeat?'checked':''}> Repeat for every set in the cart</div>`;
+ if(r.type==='tiered')typeFields=`<div class="full">${f('Tiers — "spend:percent", comma separated','tiers',(r.tiers||[]).map(x=>x.min+':'+x.pct).join(', '),'text','80:5, 120:10')}</div>`;
+ if(r.type==='gift')typeFields=f('Minimum spend (JOD)','minSpend',r.minSpend,'number')+`<div><label>Gift product</label>${sel('giftId',Object.values(PRODUCTS).map(p=>[p.id,p.name]),r.giftId)}</div>`;
+ const noScope=['free_delivery','amount_cart','gift'].includes(r.type);
+ return `<form class="form" id="pf"><h3>${r._new?'New promotion':'Edit promotion'}</h3>
+  ${f('Name (shown to customers)','name',r.name)}${f('Arabic name (optional)','nameAr',r.nameAr)}
+  <div><label>Type</label>${sel('type',Object.entries(TYPES),r.type)}</div>
+  ${noScope?'<div></div>':`<div><label>Applies to</label>${sel('scopeType',[['all','All products'],['brand','A brand'],['collection','A collection'],['product','One product']],sc.type)}</div>`}
+  ${noScope||sc.type==='all'?'':`<div><label>Which</label>${sel('scopeValue',scopeVals(sc.type),sc.value)}</div>`}
+  ${typeFields}
+  ${f('Coupon code (leave empty = automatic)','code',r.code,'text','e.g. RAMADAN15')}${f('Max total uses (optional)','maxUses',r.maxUses,'number')}
+  ${f('Starts (optional)','start',r.start,'date')}${f('Ends (optional)','end',r.end,'date')}
+  <div class="chk"><input type="checkbox" name="stackable" ${r.stackable?'checked':''}> Can combine with other promotions</div><div class="chk"><input type="checkbox" name="active" ${r.active?'checked':''}> Active</div>
+  <div class="note">Rules that cannot combine compete: the customer automatically gets the single most generous one. Combinable rules stack in priority order.</div>
+  <div class="full btnbar"><button class="btn k" type="submit">Save promotion</button><button class="btn o" type="button" id="cancelp" style="color:var(--ink)">Cancel</button></div></form>`}
+function newRule(){return{id:'r'+Date.now(),_new:true,name:'',nameAr:'',type:'percent',pct:10,minSpend:0,active:true,stackable:false,priority:RULES.length+1,scope:{type:'all'}}}
+function bindPromos(){
+ $('#newp').onclick=()=>{editing=newRule();renderAdmin()};$('#resetp').onclick=()=>{if(confirm('Replace all promotions with the sample set?')){RULES=JSON.parse(JSON.stringify(SEED_RULES));saveRules();editing=null;renderAdmin()}};
+ document.querySelectorAll('[data-tg]').forEach(b=>b.onclick=()=>{const r=RULES.find(x=>x.id===b.dataset.tg);r.active=!r.active;saveRules();renderAdmin()});
+ document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(confirm('Delete this promotion?')){RULES=RULES.filter(x=>x.id!==b.dataset.del);saveRules();renderAdmin()}});
+ document.querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>{editing=JSON.parse(JSON.stringify(RULES.find(x=>x.id===b.dataset.ed)));renderAdmin()});
+ const fm=$('#pf');if(!fm)return;
+ const reread=()=>{const d=new FormData(fm),n=k=>d.get(k)===''||d.get(k)==null?undefined:+d.get(k);
+  const r={...editing,name:d.get('name'),nameAr:d.get('nameAr'),type:d.get('type'),code:(d.get('code')||'').trim()||undefined,maxUses:n('maxUses'),start:d.get('start')||undefined,end:d.get('end')||undefined,stackable:fm.stackable.checked,active:fm.active.checked};
+  const st=d.get('scopeType');r.scope=st&&st!=='all'?{type:st,value:d.get('scopeValue')||(scopeVals(st)[0]||[])[0]}:{type:'all'};
+  ['pct','minSpend','amount','buyQty','getQty','qty','price'].forEach(k=>{if(d.has(k))r[k]=n(k)});if(fm.repeat)r.repeat=fm.repeat.checked;if(d.has('giftId'))r.giftId=d.get('giftId');
+  if(d.has('tiers'))r.tiers=d.get('tiers').split(',').map(s=>s.trim().split(':').map(Number)).filter(a=>a[0]>0&&a[1]>0).map(a=>({min:a[0],pct:a[1]}));return r};
+ fm.type.onchange=()=>{const r=reread();const defaults={percent:{pct:10},amount_cart:{amount:5,minSpend:40},free_delivery:{minSpend:60},bxgy:{buyQty:1,getQty:1,pct:50,repeat:true},bundle:{qty:2,price:40,repeat:true},tiered:{tiers:[{min:80,pct:5},{min:120,pct:10}]},gift:{minSpend:100,giftId:'83'}};editing={...r,...defaults[r.type]};renderAdmin()};
+ if(fm.scopeType)fm.scopeType.onchange=()=>{const r=reread();editing=r;renderAdmin()};
+ $('#cancelp').onclick=()=>{editing=null;renderAdmin()};
+ fm.onsubmit=e=>{e.preventDefault();const r=reread();if(!r.name){fm.name.focus();return}delete r._new;const i=RULES.findIndex(x=>x.id===r.id);if(i>=0)RULES[i]=r;else RULES.push(r);saveRules();editing=null;renderAdmin()}}
+function ordersHtml(){const os=store.get('orders',[]);if(!os.length)return `<h2>Orders</h2><p class="hint">Every order placed on the store is saved here first, so nothing depends on the customer pressing “send” in WhatsApp. Place a test order on the store to see it appear.</p><div class="empty2">No orders yet.</div>`;
+ return `<h2>Orders</h2><p class="hint">Saved on the server in the real build, with an instant e-mail to the shop. “WhatsApp” opens a chat with the customer, message ready.</p><table class="t"><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th></tr>${os.map((o,i)=>`<tr><td><b>${o.no}</b><br><small>${new Date(o.at).toLocaleString()}</small></td><td>${o.customer.name}<br><small>${o.customer.phone}<br>${o.customer.gov} — ${o.customer.address}</small><br><a class="wal" target="_blank" href="${waLink(o.customer.phone,`Hello ${o.customer.name}, this is SCENTRO about your order ${o.no}. We are confirming your details and delivery time.`)}">WhatsApp customer</a></td>
+ <td>${o.lines.map(l=>`${PRODUCTS[l.pid].name} × ${l.qty}`).join('<br>')}${o.gifts.map(g=>`<br>${PRODUCTS[g].name} <small>(gift)</small>`).join('')}${o.applied.length?`<br><small style="color:#2F6B3C">${o.applied.map(a=>a.name).join(' · ')}</small>`:''}</td><td><b>${o.total} JOD</b><br><small>delivery ${o.delivery} · cash on delivery</small></td>
+ <td><select class="st" data-st="${i}">${['new','confirmed','out for delivery','delivered','cancelled'].map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join('')}</table>`}
+function bindOrders(){document.querySelectorAll('[data-st]').forEach(s=>s.onchange=()=>{const os=store.get('orders',[]);os[+s.dataset.st].status=s.value;store.set('orders',os)})}
+function brandsHtml(){const n=b=>Object.values(PRODUCTS).filter(p=>p.brand===b).length;return `<h2>Brands</h2><p class="hint">Scentro is the store; each brand is a record. Products, notes and promotions can target a brand. A Scentro-own label can be added the same way later.</p>
+ ${Object.entries(BRANDS).map(([k,b])=>`<div class="card2"><div style="display:flex;gap:14px;align-items:center"><img src="${b.logo}" style="width:48px;height:48px;border-radius:50%" alt=""><div><div class="t">${b.name}</div><div class="d">${n(k)} products in this demo · 96 in the live catalogue</div></div></div><span class="pill">active</span></div>`).join('')}
+ <div class="empty2" style="margin-top:12px">+ Add brand — name, logo, description (built in the real dashboard)</div>`}
+
+/* ---- routing / demo hashes ---- */
+function route(){const h=location.hash.replace('#','').split('-');document.body.classList.toggle('isadmin',h[0]==='admin');if(h[0]==='admin')renderAdmin(h[1]||adTab);}
+window.addEventListener('hashchange',route);
+const hs=location.hash.replace('#','').split('-');if(hs.includes('ar'))lang='ar';
+if(hs.includes('demo'))picked=['sweet','woody','spicy'];
+if(hs.includes('cart')||hs.includes('co')||hs.includes('promo')){const ids=Object.keys(PRODUCTS).filter(i=>PRODUCTS[i].collection==='niche');cart=hs.includes('promo')?{[ids[0]]:1,[ids[1]]:1,[ids[2]]:1}:{[ids[0]]:1,[ids[4]]:2}}
+applyLang();route();
+if(hs.includes('cart')||hs.includes('promo')){if(hs.includes('promo')){code='welcome10';couponMsg='x'}renderDrawer();openDrawer()}
+if(hs.includes('co')){step='details';renderDrawer();openDrawer()}
+</script>
+</body></html>

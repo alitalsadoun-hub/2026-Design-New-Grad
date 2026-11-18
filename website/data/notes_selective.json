@@ -1,0 +1,79 @@
+{
+ "_about": "Selective notes read from the Top/Heart/Base infographic inside each Scentro product gallery (Ballour). Only 4 transcribed so far; remaining ~48 pending.",
+ "48": {
+  "name": "A113",
+  "notes": {
+   "top": [
+    "Bergamot"
+   ],
+   "heart": [
+    "Jasmine"
+   ],
+   "base": [
+    "Vanilla",
+    "Cashmere"
+   ]
+  }
+ },
+ "77": {
+  "name": "Z101",
+  "notes": {
+   "top": [
+    "Pepper",
+    "Jasmine"
+   ],
+   "heart": [
+    "Cream",
+    "Vanilla",
+    "Amber"
+   ],
+   "base": [
+    "Sandalwood",
+    "Cashmere",
+    "Musk",
+    "Balsamic"
+   ]
+  }
+ },
+ "75": {
+  "name": "Y102",
+  "notes": {
+   "top": [
+    "Lavender",
+    "Mandarin",
+    "Orange",
+    "Bergamot"
+   ],
+   "heart": [
+    "Lavender",
+    "Orange Blossom",
+    "Jasmine",
+    "Orchid"
+   ],
+   "base": [
+    "Vanilla",
+    "Tonka Bean"
+   ]
+  }
+ },
+ "73": {
+  "name": "W213",
+  "notes": {
+   "top": [
+    "Pear",
+    "Orange Blossom",
+    "Pink Pepper"
+   ],
+   "heart": [
+    "Coffee",
+    "Jasmine",
+    "Vetiver"
+   ],
+   "base": [
+    "Vanilla",
+    "Patchouli",
+    "Cedar"
+   ]
+  }
+ }
+}
