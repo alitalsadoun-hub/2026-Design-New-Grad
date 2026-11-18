@@ -1,0 +1,379 @@
+{
+ "mobile": {
+  "small": [
+   {
+    "t": "menu",
+    "w": 20,
+    "h": 27
+   },
+   {
+    "t": "logo",
+    "w": 133,
+    "h": 38
+   },
+   {
+    "t": "EN",
+    "w": 40,
+    "h": 31
+   },
+   {
+    "t": "عربي",
+    "w": 43,
+    "h": 31
+   },
+   {
+    "t": "0",
+    "w": 20,
+    "h": 27
+   },
+   {
+    "t": "All",
+    "w": 50,
+    "h": 39
+   },
+   {
+    "t": "Niche",
+    "w": 71,
+    "h": 39
+   },
+   {
+    "t": "Selective",
+    "w": 92,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "Dashboard prototype",
+    "w": 120,
+    "h": 16
+   },
+   {
+    "t": "WhatsApp",
+    "w": 93,
+    "h": 42
+   }
+  ],
+  "tiny": {
+   "SPAN 11.5": 9,
+   "badge 11.5": 12,
+   "bn 11": 12,
+   "tag 11": 3
+  },
+  "lowContrast": [
+   {
+    "k": "btn p|rgb(14, 12, 10) on rgb(14,12,10)",
+    "ratio": 1,
+    "need": 4.5,
+    "n": 1,
+    "sample": "FIND MY SCENT"
+   },
+   {
+    "k": "chip on|rgb(14, 12, 10) on rgb(14,12,10)",
+    "ratio": 1,
+    "need": 4.5,
+    "n": 1,
+    "sample": "Anyone"
+   },
+   {
+    "k": "wa|rgb(255, 255, 255) on rgb(31,168,85)",
+    "ratio": 3.09,
+    "need": 4.5,
+    "n": 1,
+    "sample": "WhatsApp"
+   },
+   {
+    "k": "eyebrow|rgb(140, 106, 47) on rgb(239,231,216)",
+    "ratio": 4.05,
+    "need": 4.5,
+    "n": 1,
+    "sample": "WHY SCENTRO"
+   }
+  ],
+  "imgNoAlt": 0,
+  "imgEmptyAlt": 8,
+  "imgs": 25,
+  "lazy": 0,
+  "h1": 1,
+  "headings": 52,
+  "iconBtnNoLabel": 1,
+  "hrefHash": 13,
+  "overflowX": false,
+  "lang": "en/ltr",
+  "focusRing": false,
+  "reducedMotion": false,
+  "deadControls": [
+   ".menu"
+  ],
+  "escClosesDrawer": false,
+  "dialogRole": false,
+  "addOpensCartOrCTA": false,
+  "loadMs": 1206,
+  "errors": []
+ },
+ "desktop": {
+  "small": [
+   {
+    "t": "FIND BY NOTES",
+    "w": 120,
+    "h": 28
+   },
+   {
+    "t": "SHOP",
+    "w": 43,
+    "h": 28
+   },
+   {
+    "t": "BRANDS",
+    "w": 63,
+    "h": 28
+   },
+   {
+    "t": "PACKAGES",
+    "w": 81,
+    "h": 28
+   },
+   {
+    "t": "EN",
+    "w": 40,
+    "h": 31
+   },
+   {
+    "t": "عربي",
+    "w": 43,
+    "h": 31
+   },
+   {
+    "t": "0",
+    "w": 20,
+    "h": 27
+   },
+   {
+    "t": "All",
+    "w": 50,
+    "h": 39
+   },
+   {
+    "t": "Niche",
+    "w": 71,
+    "h": 39
+   },
+   {
+    "t": "Selective",
+    "w": 92,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "ADD TO CART",
+    "w": 124,
+    "h": 39
+   },
+   {
+    "t": "Dashboard prototype",
+    "w": 120,
+    "h": 16
+   }
+  ],
+  "tiny": {
+   "SPAN 11.5": 9,
+   "badge 11.5": 12,
+   "bn 11": 12,
+   "tag 11": 3
+  },
+  "lowContrast": [
+   {
+    "k": "btn p|rgb(14, 12, 10) on rgb(14,12,10)",
+    "ratio": 1,
+    "need": 4.5,
+    "n": 1,
+    "sample": "FIND MY SCENT"
+   },
+   {
+    "k": "chip on|rgb(14, 12, 10) on rgb(14,12,10)",
+    "ratio": 1,
+    "need": 4.5,
+    "n": 1,
+    "sample": "Anyone"
+   },
+   {
+    "k": "wa|rgb(255, 255, 255) on rgb(31,168,85)",
+    "ratio": 3.09,
+    "need": 4.5,
+    "n": 1,
+    "sample": "WhatsApp"
+   },
+   {
+    "k": "eyebrow|rgb(140, 106, 47) on rgb(239,231,216)",
+    "ratio": 4.05,
+    "need": 4.5,
+    "n": 1,
+    "sample": "WHY SCENTRO"
+   }
+  ],
+  "imgNoAlt": 0,
+  "imgEmptyAlt": 8,
+  "imgs": 25,
+  "lazy": 0,
+  "h1": 1,
+  "headings": 52,
+  "iconBtnNoLabel": 1,
+  "hrefHash": 13,
+  "overflowX": false,
+  "lang": "en/ltr",
+  "focusRing": false,
+  "reducedMotion": false,
+  "deadControls": [
+   ".tools svg.ic"
+  ],
+  "escClosesDrawer": false,
+  "dialogRole": false,
+  "addOpensCartOrCTA": false,
+  "loadMs": 326,
+  "errors": []
+ },
+ "mobileFinderResultsInViewport": false,
+ "mobileFinderResultsDistancePx": 159
+}

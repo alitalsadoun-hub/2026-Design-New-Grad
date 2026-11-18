@@ -15,16 +15,16 @@ for name in ORDER:
         if 'Niche' in r['cat'] and m and norm(m.group(1)) == k: hit = (r, m); break
     if not hit: print('NO MATCH', name); continue
     r, m = hit; n = niche[name]
-    prods[str(r['id'])] = dict(id=str(r['id']), name=name, brand='mad', collection='niche', img=f"img/p{r['id']}.webp", price=r['price'], was=r.get('was'), ml=int(m.group(2)), **{'for': gender(r['name'])}, notes={x: n[x] for x in ('top', 'heart', 'base')})
+    prods[str(r['id'])] = dict(id=str(r['id']), name=name, brand='mad', collection='niche', img=f"img/p{r['id']}.webp", price=r['price'], was=r.get('was'), stock=int(r['stock'] or 0), ml=int(m.group(2)), **{'for': gender(r['name'])}, notes={x: n[x] for x in ('top', 'heart', 'base')})
 for pid, s in sel.items():
     r = rows[int(pid)]
-    prods[pid] = dict(id=pid, name=s['name'], brand='mad', collection='selective', img=f"img/p{pid}.webp", price=r['price'], was=r.get('was'), ml=100, **{'for': gender(r['name'])}, notes=s['notes'])
-r = rows[83]; prods['83'] = dict(id='83', name='Sweet Beach Body Mist', brand='mad', collection='mist', img='img/p83.webp', price=r['price'], was=None, ml=250, **{'for': 'unisex'})
+    prods[pid] = dict(id=pid, name=s['name'], brand='mad', collection='selective', img=f"img/p{pid}.webp", price=r['price'], was=r.get('was'), stock=int(r['stock'] or 0), ml=100, **{'for': gender(r['name'])}, notes=s['notes'])
+r = rows[83]; prods['83'] = dict(id='83', name='Sweet Beach Body Mist', brand='mad', collection='mist', img='img/p83.webp', price=r['price'], was=None, stock=int(r['stock'] or 0), ml=250, **{'for': 'unisex'})
 print(len(prods), 'products')
 fam = json.load(open('../data/families.json'))
 def pkg(pid, tag):
     r = rows[pid]
-    return f'<article class="pkg"><img src="img/p{pid}.webp" alt=""><div><span class="tag" data-i18n="{tag}"></span><h3>{re.sub(chr(92)+"s+", " ", r["name"])}</h3><div class="price"><b>{r["price"]}</b> <small>JOD</small> <s>{r["was"]}</s></div><button class="add" data-i18n="add"></button></div></article>'
+    return f'<article class="pkg"><img src="img/p{pid}.webp" alt="" loading="lazy"><div><span class="tag" data-i18n="{tag}"></span><h3>{re.sub(chr(92)+"s+", " ", r["name"])}</h3><div class="price"><b>{r["price"]}</b> <small>JOD</small> <s>{r["was"]}</s></div><button class="add" data-i18n="add"></button></div></article>'
 h = open('template.html', encoding='utf-8').read()
 h = h.replace('{{ENGINE}}', open('engine.js').read()).replace('{{ADMIN}}', open('admin.js').read())
 h = h.replace('{{PRODUCTS_JSON}}', json.dumps(prods, ensure_ascii=False)).replace('{{FAMILIES_JSON}}', json.dumps(fam, ensure_ascii=False))

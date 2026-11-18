@@ -10,7 +10,7 @@
 /* ===== SCENTRO identity: black · ivory · gold, classic serif (matches the wordmark) ===== */
 :root{
   --ivory:#FAF6EE; --sand:#EFE7D8; --paper:#FFFFFF; --ink:#141210; --black:#0E0C0A; --black2:#17130F;
-  --mute:#6F655A; --line:rgba(20,18,16,.13); --gold:#B8924F; --gold-l:#E2C27D; --gold-d:#8C6A2F;
+  --mute:#6F655A; --line:rgba(20,18,16,.13); --gold:#B8924F; --gold-l:#E2C27D; --gold-d:#7A5B22;
   --goldline:linear-gradient(90deg,transparent,#B8924F 18%,#E2C27D 50%,#B8924F 82%,transparent);
   --serif:'Cormorant Garamond','Amiri',serif; --sans:'Inter','IBM Plex Sans Arabic',system-ui,sans-serif; --r:3px;
 }
@@ -41,7 +41,7 @@ header{position:sticky;top:0;z-index:20;background:rgba(250,246,238,.93);backdro
 .nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:82px;gap:24px}
 .nav ul{list-style:none;display:flex;gap:30px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
 :root[dir=rtl] .nav ul{letter-spacing:0;font-size:15px;text-transform:none}
-.nav li a{position:relative;padding-block:6px}.nav li a:after{content:"";position:absolute;inset-inline:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transition:.3s}.nav li a:hover:after{transform:scaleX(1)}
+.nav li a{position:relative;padding-block:6px;display:inline-block;line-height:32px}.nav li a:after{content:"";position:absolute;inset-inline:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transition:.3s}.nav li a:hover:after{transform:scaleX(1)}
 .nav li.hot a{color:var(--gold-d);font-weight:600}
 .logo img{height:46px;width:auto}
 .tools{display:flex;justify-content:flex-end;gap:18px;align-items:center}
@@ -94,13 +94,14 @@ header{position:sticky;top:0;z-index:20;background:rgba(250,246,238,.93);backdro
 .empty{color:#9C917F;padding:40px 12px;border:1px dashed rgba(239,229,211,.25);border-radius:var(--r);text-align:center}
 
 /* catalogue */
-.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 .cat{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:var(--r);background:var(--sand)}.cat img{width:100%;height:100%;object-fit:cover;transition:transform .8s}.cat:hover img{transform:scale(1.05)}
 .cat:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(14,12,10,.72))}
 .cat div{position:absolute;inset-inline:22px;bottom:20px;z-index:1;color:#fff}.cat h3{color:#fff;font-size:28px}.cat span{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.9}:root[dir=rtl] .cat span{letter-spacing:0;font-size:13px;text-transform:none}
 .filters{display:flex;gap:8px;flex-wrap:wrap}.filters button{padding:8px 16px;border:1px solid var(--line);border-radius:99px;font-size:13.5px;transition:.2s}.filters button:hover{border-color:var(--gold)}.filters button.on{background:var(--black);color:var(--ivory);border-color:var(--black)}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:28px 22px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 22px}
 .card .ph{position:relative;display:block;aspect-ratio:1;background:var(--sand);overflow:hidden;border-radius:var(--r)}.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s}.card:hover .ph img{transform:scale(1.05)}
+.badge.so{background:#fff;color:var(--ink);border:1px solid var(--ink)}.lowq{font-size:12.5px;color:#8A3A1E;font-weight:600;margin-top:6px}
 .badge{position:absolute;top:12px;inset-inline-start:12px;background:var(--black);color:var(--gold-l);font-size:11.5px;padding:3px 9px;border-radius:99px;font-weight:600}
 .card .bn{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);margin-top:14px;font-weight:500}:root[dir=rtl] .card .bn{letter-spacing:0;font-size:12.5px;text-transform:none}
 .card h3{font-size:27px;margin-top:2px}.sub{font-size:12px;color:var(--mute);margin-top:2px}.nl{font-size:12.5px;color:var(--gold-d);margin-top:8px;min-height:19px}
@@ -116,7 +117,7 @@ footer{background:var(--black);color:#BFB3A0;padding-block:64px 28px;font-size:1
 footer h5{color:#F4E8D8;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;margin-bottom:14px}:root[dir=rtl] footer h5{letter-spacing:0;font-size:14px;text-transform:none}
 footer li{list-style:none;margin:8px 0}footer .flogo{height:46px;margin-bottom:14px}.pay{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(244,232,216,.25);padding:8px 14px;border-radius:99px;color:#F4E8D8;font-size:13px;margin-top:10px}
 .legal{border-top:1px solid rgba(244,232,216,.12);margin-top:44px;padding-top:20px;font-size:12px;opacity:.7;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.wa{position:fixed;inset-inline-end:20px;bottom:20px;z-index:30;background:#1FA855;color:#fff;border-radius:99px;padding:13px 20px;font-size:14px;font-weight:500;box-shadow:0 10px 30px -8px rgba(0,0,0,.4)}
+.wa{min-height:44px;display:inline-flex;align-items:center;position:fixed;inset-inline-end:20px;bottom:20px;z-index:30;background:#12703A;color:#fff;border-radius:99px;padding:13px 20px;font-size:14px;font-weight:500;box-shadow:0 10px 30px -8px rgba(0,0,0,.4)}
 
 /* cart drawer */
 .scrim{position:fixed;inset:0;background:rgba(10,8,6,.6);opacity:0;pointer-events:none;transition:.3s;z-index:50}.scrim.on{opacity:1;pointer-events:auto}
@@ -160,31 +161,79 @@ table.t{width:100%;border-collapse:collapse;background:#fff;border:1px solid var
 .st{font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:4px}.wal{display:inline-block;margin-top:6px;font-size:12.5px;background:#1FA855;color:#fff;padding:5px 11px;border-radius:99px}
 .empty2{padding:40px;text-align:center;color:var(--mute);background:#fff;border:1px dashed var(--line);border-radius:6px}
 
+
+/* ---- UX pass: accessibility, touch targets, new components ---- */
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+.dark :focus-visible{outline-color:var(--gold-l)}
+.skip{position:absolute;inset-inline-start:12px;top:-60px;background:var(--black);color:var(--gold-l);padding:10px 16px;z-index:100;border-radius:0 0 6px 6px}.skip:focus{top:0}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+.lang button{min-height:44px;min-width:44px;font-size:13px}.filters button{min-height:44px}.add{min-height:44px;padding-inline:18px}
+.icbtn{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;position:relative}.icbtn:hover{background:rgba(20,18,16,.06)}
+.menu.icbtn{display:none}.logo{display:inline-flex;min-height:44px;align-items:center}
+.qty button{width:40px;height:40px;font-size:18px}.res .pr button{min-height:44px;padding-inline:6px}
+.chip{min-height:44px}.nt{min-height:64px}
+.badge,.card .bn,.tag,.res .tier{font-size:12px}.nt span,.shared em,.mt,.sub{font-size:12.5px}
+.card h3 a,.res h3 a,.sres a{display:inline-block;padding-block:11px}.card h3 a:hover,.res h3 a:hover{border-bottom:1px solid var(--gold)}.legal a{display:inline-block;padding:14px 4px}.card h3{margin-top:0}
+.cartbtn b{top:2px;inset-inline-end:0}.cartbtn.pulse b{animation:pulse .5s}@keyframes pulse{50%{transform:scale(1.5)}}
+.toast{display:flex;align-items:center;gap:14px;pointer-events:auto;width:max-content;max-width:calc(100vw - 32px)}.toast button{white-space:nowrap;min-height:36px}.toast span{line-height:1.3}
+body.ispdp .toast{bottom:92px}@media(min-width:981px){body.ispdp .toast{bottom:28px}}.toast a,.toast button{color:var(--black);background:var(--gold);padding:6px 14px;border-radius:99px;font-weight:600;font-size:13px}
+.fab{position:fixed;inset-inline:16px;bottom:16px;z-index:40;display:none;justify-content:center;pointer-events:none}.fab button{pointer-events:auto}body.fabon .wa{opacity:0;pointer-events:none}.fab button{background:var(--gold);color:var(--black);padding:14px 26px;border-radius:99px;font-weight:600;box-shadow:0 12px 30px -8px rgba(0,0,0,.5);min-height:48px}.fab.on{display:flex}
+/* mobile menu + search */
+.mnav{position:fixed;inset:0;z-index:70;background:var(--black);color:#F1E6D2;transform:translateY(-100%);transition:transform .35s;display:flex;flex-direction:column;padding:20px 28px;visibility:hidden}
+.mnav.on{transform:none;visibility:visible}.mnav .top{display:flex;justify-content:space-between;align-items:center}.mnav .top img{height:40px}.mnav .top button{font-size:34px;line-height:1;min-width:44px;min-height:44px;color:var(--gold-l)}
+.mnav nav{margin-top:36px;display:flex;flex-direction:column}.mnav nav a{font-family:var(--serif);font-size:38px;padding:12px 0;border-bottom:1px solid rgba(239,229,211,.12);color:#F6EEDF}.mnav nav a.hot{color:var(--gold-l)}
+.mnav .foot{margin-top:auto;display:flex;gap:12px;flex-wrap:wrap}.mnav .foot a{border:1px solid rgba(239,229,211,.3);border-radius:99px;padding:12px 20px;min-height:44px;font-size:14px}
+.search{position:fixed;inset:0;z-index:70;background:#0E0C0A;color:#F1E6D2;display:none;flex-direction:column;padding:24px clamp(20px,5vw,64px);overflow:auto}.search.on{display:flex}
+.search .bar2{display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--gold);padding-bottom:10px;max-width:760px;width:100%;margin:40px auto 0}
+.search input{flex:1;background:none;border:0;color:#F6EEDF;font:500 28px var(--serif);outline:none;min-width:0}.search .bar2 button{font-size:30px;color:var(--gold-l);min-width:44px;min-height:44px}
+.sres{max-width:760px;width:100%;margin:22px auto}.sres a{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(239,229,211,.12)}
+.sres img{width:64px;height:64px;border-radius:3px;object-fit:cover}.sres b{font-family:var(--serif);font-size:24px;font-weight:600;display:block;color:#F6EEDF}.sres small{color:#A99D8A;font-size:13px}.sres p.h{color:#A99D8A;font-size:14px}
+/* product page */
+#pdp{display:none}body.ispdp #pdp{display:block}body.ispdp #home{display:none}
+.crumbs{font-size:13px;color:var(--mute);padding-block:22px 6px}.crumbs a{border-bottom:1px solid var(--line)}
+.pdp{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,5vw,72px);padding-block:12px 70px;align-items:start}
+.pdp .gal{position:sticky;top:100px}.pdp .gal .main{aspect-ratio:1;border-radius:var(--r);overflow:hidden;background:var(--sand)}.pdp .gal img{width:100%;height:100%;object-fit:cover}
+.pdp h1{font-size:clamp(40px,5vw,64px);margin-top:6px}.pdp .meta{color:var(--mute);margin-top:6px;font-size:15px}
+.pdp .pr{display:flex;align-items:baseline;gap:12px;margin:18px 0 4px}.pdp .pr b{font-size:32px;font-weight:600}.pdp .pr small{color:var(--mute);font-size:14px}.pdp .pr s{color:var(--mute)}.pdp .pr .badge{position:static}
+.pdp .buy{display:flex;gap:12px;margin-top:18px;align-items:stretch}.pdp .buy .qty{margin:0;height:56px}.pdp .buy .qty button{height:54px;width:48px}.pdp .buy .btn{flex:1;min-height:56px}
+.pdp .info{margin-top:20px;border:1px solid var(--line);border-radius:var(--r);background:var(--paper)}.pdp .info div{display:flex;gap:12px;padding:13px 16px;font-size:14px;border-top:1px solid var(--line)}.pdp .info div:first-child{border-top:0}.pdp .info b{font-weight:600}
+.pdp .info span.i{width:22px;flex:none;color:var(--gold-d);text-align:center}
+.pyr{margin-top:34px}.pyr h3{font-size:30px;margin-bottom:6px}.pyr .hn{font-size:13.5px;color:var(--mute);margin-bottom:14px}
+.lay{display:grid;grid-template-columns:96px 1fr;gap:6px 14px;padding:14px 0;border-top:1px solid var(--line);align-items:center}.lay .lb{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-d);font-weight:600}:root[dir=rtl] .lay .lb{letter-spacing:0;font-size:13.5px;text-transform:none}
+.lay .ns{display:flex;flex-wrap:wrap;gap:7px}.lay .ns em{font-style:normal;font-size:14px;padding:5px 13px;border-radius:99px;background:var(--sand)}
+.fams{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.fams span{font-size:13px;border:1px solid var(--gold);padding:5px 14px;border-radius:99px;color:var(--gold-d)}
+.askwa{display:inline-flex;align-items:center;gap:10px;margin-top:16px;font-size:14px;border-bottom:1px solid var(--gold);padding-bottom:3px;min-height:44px}
+.sim{padding-block:60px 90px;border-top:1px solid var(--line)}
+.stick{position:fixed;inset-inline:0;bottom:0;z-index:35;background:rgba(250,246,238,.97);border-top:1px solid var(--line);padding:10px 16px;display:none;gap:12px;align-items:center}.stick .pp{font-weight:600;line-height:1.2;font-size:15px}.stick .pp small{display:block;color:var(--mute);font-weight:400;font-size:12.5px}.stick .btn{margin-inline-start:auto;min-height:48px;padding:12px 22px}
+@media(max-width:980px){.menu.icbtn{display:grid}.pdp{grid-template-columns:1fr}.pdp .gal{position:static}.pdp .buy{display:none}body.ispdp .stick{display:flex}body.ispdp .wa{bottom:84px}.lang button{min-height:44px}}
 @media(max-width:980px){
   .nav{grid-template-columns:auto 1fr auto}.nav ul{display:none}.menu{display:block}.logo{justify-self:center}.logo img{height:38px}
   .hero .wrap{grid-template-columns:1fr;min-height:0;gap:30px;padding-block:36px}.arch{width:min(100%,380px)}
-  .trust .wrap{grid-template-columns:1fr 1fr}.finder .grid,.band .wrap{grid-template-columns:1fr}.grid4,.cats{grid-template-columns:repeat(2,1fr)}.pkgs{grid-template-columns:1fr}footer .cols{grid-template-columns:1fr 1fr}
+  .trust .wrap{grid-template-columns:1fr 1fr}.finder .grid,.band .wrap{grid-template-columns:1fr}.grid4,.cats{grid-template-columns:repeat(2,minmax(0,1fr))}.pkgs{grid-template-columns:1fr}footer .cols{grid-template-columns:1fr 1fr}
   .results{gap:10px}.res h3{font-size:20px}.form{grid-template-columns:1fr}
 }
-@media(max-width:560px){.tools .hide-m{display:none}.notes-grid{grid-template-columns:1fr 1fr}.results{grid-template-columns:1fr}.sec-h{flex-direction:column;align-items:start}.wa{padding:11px 14px;font-size:13px;bottom:14px}.res{display:grid;grid-template-columns:96px 1fr;gap:12px}.res img{grid-row:span 3}.res h3{margin:0}.ad .card2{grid-template-columns:1fr}}
+@media(max-width:560px){.card .row{flex-wrap:wrap}.card .add{width:100%;text-align:center}.card h3{font-size:24px}.tools .hide-m{display:none}.notes-grid{grid-template-columns:1fr 1fr}.results{grid-template-columns:1fr}.sec-h{flex-direction:column;align-items:start}.wa{padding:11px 14px;font-size:13px;bottom:14px}.res{display:grid;grid-template-columns:96px 1fr;gap:12px}.res img{grid-row:span 3}.res h3{margin:0}.ad .card2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 <div id="store">
 <div class="ann" id="ann"></div>
 <header><div class="wrap nav">
-  <div style="display:flex;gap:18px;align-items:center"><button class="menu" aria-label="menu"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+  <div style="display:flex;gap:18px;align-items:center"><button class="menu icbtn" id="menubtn" aria-label="Menu" aria-expanded="false" aria-controls="mnav"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
   <ul><li class="hot"><a href="#finder" data-i18n="n_finder"></a></li><li><a href="#shop" data-i18n="n_shop"></a></li><li><a href="#brands" data-i18n="n_brands"></a></li><li><a href="#pk" data-i18n="n_pk"></a></li></ul></div>
   <a class="logo" href="#"><img src="img/logo_dark.png" alt="SCENTRO"></a>
   <div class="tools"><div class="lang" role="group"><button id="en" class="on">EN</button><button id="ar">عربي</button></div>
-  <svg class="ic hide-m" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-  <button class="cartbtn" id="cartbtn" aria-label="cart"><svg class="ic" viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11H6.2zM9 8a3 3 0 0 1 6 0"/></svg><b id="cc">0</b></button></div></div></header>
+  <button class="icbtn" id="searchbtn" aria-label="Search" aria-haspopup="dialog"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+  <button class="cartbtn icbtn" id="cartbtn" aria-label="Cart"><svg class="ic" viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11H6.2zM9 8a3 3 0 0 1 6 0"/></svg><b id="cc">0</b></button></div></div></header>
 
+<main id="main">
+<div id="home">
 <section class="hero dark"><div class="wrap"><div><span class="eyebrow" style="color:var(--gold-l)" data-i18n="h_eye"></span>
   <h1 data-i18n-html="h_h1"></h1><hr class="rule"><p class="lead" data-i18n="h_lead"></p>
   <div class="cta"><a class="btn p" href="#finder" data-i18n="h_cta1"></a><a class="btn o" href="#shop" data-i18n="h_cta2"></a></div>
   <div class="micro"><span data-i18n="m1"></span><span data-i18n="m2"></span><span data-i18n="m3"></span></div></div>
-  <div class="arch"><img src="img/hero_scene.jpg" alt="MAD Parfumeur Gumin, Rouge and Bruno Detox on travertine pedestals"></div></div></section>
+  <div class="arch"><img src="img/hero_scene.jpg" alt="MAD Parfumeur Gumin, Rouge and Bruno Detox on travertine pedestals" fetchpriority="high"></div></div></section>
 
 <section class="trust"><div class="wrap">
   <div><svg viewBox="0 0 32 32"><rect x="3" y="9" width="26" height="15" rx="2"/><circle cx="16" cy="16.5" r="3.5"/></svg><p><b data-i18n="t1"></b><span data-i18n="t1s"></span></p></div>
@@ -199,17 +248,17 @@ table.t{width:100%;border-collapse:collapse;background:#fff;border:1px solid var
 <section class="sec finder dark" id="finder" style="margin-top:56px"><div class="wrap grid">
   <div><span class="eyebrow" data-i18n="f_eye"></span><h2 data-i18n="f_h2" style="margin-top:14px"></h2><hr class="rule"><p class="lead" data-i18n="f_lead"></p>
   <div class="step"><h4 data-i18n="f_s1"></h4><small id="cnt"></small><div class="notes-grid" id="notesGrid"></div></div>
-  <div class="step"><h4 data-i18n="f_s2"></h4><div class="chips" id="forChips"><button class="chip on" data-v="any" data-i18n="f_any"></button><button class="chip" data-v="her" data-i18n="f_her"></button><button class="chip" data-v="him" data-i18n="f_him"></button></div></div></div>
+  <div class="step"><h4 data-i18n="f_s2"></h4><div class="chips" id="forChips"><button class="chip on" data-v="any" aria-pressed="true" data-i18n="f_any"></button><button class="chip" data-v="her" data-i18n="f_her"></button><button class="chip" data-v="him" data-i18n="f_him"></button></div></div></div>
   <div><div class="picked" id="picked"></div><div class="results" id="results"></div><p class="honest" id="honest"></p></div>
 </div></section>
 
 <section class="sec" id="cats"><div class="wrap">
   <div class="sec-h"><div><span class="eyebrow" data-i18n="c_eye"></span><h2 data-i18n="c_h2" style="margin-top:12px"></h2></div></div>
   <div class="cats">
-    <a class="cat" href="#shop" data-col="niche"><img src="img/p19.webp" alt=""><div><span data-i18n="c1s"></span><h3 data-i18n="c1"></h3></div></a>
-    <a class="cat" href="#shop" data-col="selective"><img src="img/sel48_1.webp" alt=""><div><span data-i18n="c2s"></span><h3 data-i18n="c2"></h3></div></a>
-    <a class="cat" href="#pk"><img src="img/hero_scene.jpg" alt="" style="object-position:70% 50%"><div><span data-i18n="c3s"></span><h3 data-i18n="c3"></h3></div></a>
-    <a class="cat" href="#shop"><img src="img/p83.webp" alt=""><div><span data-i18n="c4s"></span><h3 data-i18n="c4"></h3></div></a>
+    <a class="cat" href="#shop" data-col="niche"><img src="img/p19.webp" alt="" loading="lazy"><div><span data-i18n="c1s"></span><h3 data-i18n="c1"></h3></div></a>
+    <a class="cat" href="#shop" data-col="selective"><img src="img/sel48_1.webp" alt="" loading="lazy"><div><span data-i18n="c2s"></span><h3 data-i18n="c2"></h3></div></a>
+    <a class="cat" href="#pk"><img src="img/hero_scene.jpg" alt="" loading="lazy" style="object-position:70% 50%"><div><span data-i18n="c3s"></span><h3 data-i18n="c3"></h3></div></a>
+    <a class="cat" href="#shop"><img src="img/p83.webp" alt="" loading="lazy"><div><span data-i18n="c4s"></span><h3 data-i18n="c4"></h3></div></a>
   </div></div></section>
 
 <section class="sec" id="shop" style="padding-top:0"><div class="wrap">
@@ -219,24 +268,31 @@ table.t{width:100%;border-collapse:collapse;background:#fff;border:1px solid var
 <section class="sec band"><div class="wrap">
   <div><span class="eyebrow" data-i18n="s_eye"></span><h2 data-i18n="s_h2" style="margin-top:14px"></h2><hr class="rule"><p data-i18n="s_p"></p>
   <div class="why"><div><b data-i18n="w1"></b><span data-i18n="w1s"></span></div><div><b data-i18n="w2"></b><span data-i18n="w2s"></span></div><div><b data-i18n="w3"></b><span data-i18n="w3s"></span></div><div><b data-i18n="w4"></b><span data-i18n="w4s"></span></div></div></div>
-  <div class="pic"><img src="img/p9.webp" alt=""></div></div></section>
+  <div class="pic"><img src="img/p9.webp" alt="" loading="lazy"></div></div></section>
 
 <section class="sec" id="pk"><div class="wrap">
   <div class="sec-h"><div><span class="eyebrow" data-i18n="p_eye"></span><h2 data-i18n="p_h2" style="margin-top:12px"></h2></div></div>
   <div class="pkgs">{{PKGS}}</div></div></section>
 
+</div>
+<div id="pdp"></div>
+</main>
 <footer><div class="wrap"><div class="cols">
   <div><img class="flogo" src="img/logo_light.png" alt="SCENTRO"><p data-i18n="fo_p"></p><span class="pay">💵 <span data-i18n="fo_cod"></span></span></div>
   <div><h5 data-i18n="fo_h1"></h5><ul><li data-i18n="n_shop"></li><li data-i18n="n_brands"></li><li data-i18n="n_pk"></li></ul></div>
   <div><h5 data-i18n="fo_h2"></h5><ul><li data-i18n="fo_a"></li><li data-i18n="fo_t"></li><li data-i18n="fo_pr"></li></ul></div>
   <div><h5 data-i18n="fo_h3"></h5><ul><li>Amman · Jordan</li><li>+962 79 790 6211</li><li>@scentrojo</li></ul></div>
 </div><div class="legal"><span>© 2026 SCENTRO</span><span><span data-i18n="fo_c"></span> · <a href="#admin" style="border-bottom:1px solid var(--gold)">Dashboard prototype</a></span></div></div></footer>
-<a class="wa" href="#" id="waFloat">WhatsApp</a>
+<a class="wa" href="#" id="waFloat" target="_blank" rel="noopener">WhatsApp</a>
+<div class="fab" id="fab"><button id="fabbtn"></button></div>
+<div class="stick" id="stick"></div>
 </div>
+<nav class="mnav" id="mnav" aria-label="Menu"><div class="top"><img src="img/logo_light.png" alt="SCENTRO"><button id="mclose" aria-label="Close">×</button></div><nav><a class="hot" href="#finder" data-i18n="n_finder"></a><a href="#shop" data-i18n="n_shop"></a><a href="#brands" data-i18n="n_brands"></a><a href="#pk" data-i18n="n_pk"></a></nav><div class="foot"><a href="#" id="mwa" target="_blank" rel="noopener">WhatsApp</a><a href="#" id="mlang"></a></div></nav>
+<div class="search" id="search" role="dialog" aria-modal="true" aria-label="Search"><div class="bar2"><svg class="ic" style="stroke:#E2C27D" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="sin" type="search" autocomplete="off" data-ph="s_ph"><button id="sclose" aria-label="Close">×</button></div><div class="sres" id="sres"></div></div>
 
 <div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer"><div class="dh"><h3 id="dtitle"></h3><button id="dclose" aria-label="close">×</button></div><div class="db" id="dbody"></div><div class="df" id="dfoot"></div></aside>
-<div class="toast" id="toast"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dtitle" aria-hidden="true"><div class="dh"><h3 id="dtitle"></h3><button id="dclose" aria-label="close">×</button></div><div class="db" id="dbody"></div><div class="df" id="dfoot"></div></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ===== dashboard prototype (English). Real version: server-side, behind login. ===== -->
 <div id="admin">
@@ -259,7 +315,9 @@ const SEED_RULES=[
  {id:'r5',name:'Spend more, save more',nameAr:'كلما اشتريت أكثر وفّرت أكثر',type:'tiered',tiers:[{min:80,pct:5},{min:120,pct:10}],active:false,stackable:false,priority:5,scope:{type:'all'}},
  {id:'r6',name:'Free body mist over 100 JOD',nameAr:'بودي ميست مجاني فوق ١٠٠ دينار',type:'gift',minSpend:100,giftId:'83',active:false,stackable:true,priority:6,scope:{type:'all'}}];
 const T={
-en:{n_finder:'Find by notes',n_shop:'Shop',n_brands:'Brands',n_pk:'Packages',
+en:{skip:'Skip to content',sold:'Sold out',low:'Only {n} left',notify:'Ask us when it is back',maxq:'Only {n} available',s_ph:'Search a scent, a note or a brand…',s_none:'No results. Try a note like vanilla, rose or oud.',s_hint:'Try: vanilla · oud · rose · MAD',view_cart:'View cart',in_cart:'in your cart',fab:'See your matches',lang_other:'عربي',home:'Home',crumb_shop:'Shop',
+ pd_top:'Top',pd_heart:'Heart',pd_base:'Base',pd_pyr:'The notes',pd_hn:'Top notes are what you smell first. Heart notes appear after a few minutes. Base notes stay the longest.',pd_fam:'Scent profile',pd_cod:'Cash on delivery',pd_cods:'Pay in cash when your order arrives. No account, no card.',pd_del:'Delivery 3 JOD',pd_dels:'Same-day in Amman · all of Jordan',pd_free:'Free delivery over {n} JOD',pd_orig:'Original & sealed',pd_origs:'Authentic MAD Parfumeur, delivered sealed.',pd_ask:'Ask us about this scent on WhatsApp',pd_sim:'You may also love',pd_sim_s:'Sharing the same note families',pd_add:'Add to cart',pd_qty:'Quantity',pd_for:'For',pd_nf:'Notes for this scent are coming soon.',
+n_finder:'Find by notes',n_shop:'Shop',n_brands:'Brands',n_pk:'Packages',
  h_eye:'Curated by Scentro',h_h1:'The scent they <em>remember.</em>',h_lead:'Niche and selective fragrances from the houses we trust — chosen by notes you love, delivered across Jordan.',h_cta1:'Find my scent',h_cta2:'Shop all',m1:'Cash on delivery',m2:'Same-day in Amman',m3:'Delivery 3 JOD · all Jordan',
  t1:'Cash on delivery',t1s:'Pay when it arrives',t2:'Same-day in Amman',t2s:'3 JOD flat, anywhere in Jordan',t3:'Original brands',t3s:'Sealed, authentic',t4:'Chosen by notes',t4s:'Find scents you will love',
  br_eye:'Our brands',br_h2:'Houses we carry',br_mad:'Niche & selective perfumes',br_soon:'More houses coming soon',
@@ -278,7 +336,9 @@ en:{n_finder:'Find by notes',n_shop:'Shop',n_brands:'Brands',n_pk:'Packages',
  co:'Your details',name:'Full name',phone:'Mobile number',gov:'Governorate',addr:'Address (area, street, building)',note:'Notes for delivery (optional)',place:'Place order',back:'Back',
  e_name:'Please enter your name',e_phone:'Enter a Jordanian mobile, e.g. 079 123 4567',e_addr:'Please enter your address',
  ok:'Thank you!',ok1:'Your order is in. We will call you to confirm the details and delivery time.',ok2:'Order number',ok3:'Pay in cash on delivery',ok_wa:'Send order details on WhatsApp',ok_wa_s:'Optional — it helps us confirm faster.',cont:'Continue shopping',added:'Added to cart'},
-ar:{n_finder:'اختر حسب النوتات',n_shop:'تسوّق',n_brands:'الماركات',n_pk:'الباقات',
+ar:{skip:'تخطَّ إلى المحتوى',sold:'نفدت الكمية',low:'بقي {n} فقط',notify:'اسألنا متى يتوفر',maxq:'المتوفر {n} فقط',s_ph:'ابحث عن عطر أو نوتة أو ماركة…',s_none:'لا نتائج. جرّب نوتة مثل فانيلا أو ورد أو عود.',s_hint:'جرّب: فانيلا · عود · ورد · ماد',view_cart:'عرض السلة',in_cart:'في سلتك',fab:'شاهد اقتراحاتك',lang_other:'English',home:'الرئيسية',crumb_shop:'تسوّق',
+ pd_top:'القمة',pd_heart:'القلب',pd_base:'القاعدة',pd_pyr:'النوتات',pd_hn:'نوتات القمة هي أول ما تشمّه. نوتات القلب تظهر بعد دقائق. نوتات القاعدة تبقى الأطول.',pd_fam:'ملف الرائحة',pd_cod:'الدفع عند الاستلام',pd_cods:'ادفع نقداً عند وصول طلبك. بدون حساب وبدون بطاقة.',pd_del:'التوصيل ٣ دنانير',pd_dels:'نفس اليوم في عمّان · وكل الأردن',pd_free:'توصيل مجاني فوق {n} دينار',pd_orig:'أصلي ومختوم',pd_origs:'ماد بارفيمر الأصلي يصلك مختوماً.',pd_ask:'اسألنا عن هذا العطر على واتساب',pd_sim:'قد يعجبك أيضاً',pd_sim_s:'يشترك معه في نفس عائلات النوتات',pd_add:'أضف للسلة',pd_qty:'الكمية',pd_for:'لـ',pd_nf:'نوتات هذا العطر ستُضاف قريباً.',
+n_finder:'اختر حسب النوتات',n_shop:'تسوّق',n_brands:'الماركات',n_pk:'الباقات',
  h_eye:'بتنسيق سنترو',h_h1:'العطر الذي <em>لا يُنسى.</em>',h_lead:'عطور نيش وسيليكتف من بيوت نثق بها — نختارها لك حسب النوتات التي تحبها، ونوصلها لكل الأردن.',h_cta1:'اكتشف عطري',h_cta2:'تسوّق الكل',m1:'الدفع عند الاستلام',m2:'توصيل اليوم في عمّان',m3:'التوصيل ٣ دنانير · كل الأردن',
  t1:'الدفع عند الاستلام',t1s:'ادفع عند وصول طلبك',t2:'توصيل اليوم في عمّان',t2s:'٣ دنانير ثابتة لكل الأردن',t3:'ماركات أصلية',t3s:'مختومة ومضمونة',t4:'اختيار حسب النوتات',t4s:'اعثر على عطور ستحبها',
  br_eye:'ماركاتنا',br_h2:'البيوت التي نقدّمها',br_mad:'عطور نيش وسيليكتف',br_soon:'ماركات جديدة قريباً',
@@ -299,45 +359,47 @@ ar:{n_finder:'اختر حسب النوتات',n_shop:'تسوّق',n_brands:'ال
  ok:'شكراً لك!',ok1:'وصلنا طلبك. سنتصل بك لتأكيد التفاصيل وموعد التوصيل.',ok2:'رقم الطلب',ok3:'الدفع نقداً عند الاستلام',ok_wa:'أرسل تفاصيل الطلب على واتساب',ok_wa_s:'اختياري — يساعدنا على التأكيد أسرع.',cont:'متابعة التسوق',added:'أُضيف إلى السلة'}};
 const FAM_AR={citrus:['حمضيات','ليمون، برغموت، برتقال'],fruity:['فواكه','خوخ، كمثرى، تفاح، توت'],floral:['زهور','ورد، ياسمين، توبروز، زنبق'],sweet:['فانيلا وحلاوة','فانيلا، تونكا، عسل، كراميل'],woody:['خشب','صندل، أرز، باتشولي'],amber:['عنبر ومسك','عنبر، مسك'],spicy:['توابل','قرفة، فلفل، هيل، زعفران'],aromatic:['عشبي ومنعش','لافندر، أوكالبتوس، شاي، بحري'],oud:['عود ودخان','عود، تبغ، بخور']};
 const GOV={en:['Amman','Zarqa','Irbid','Aqaba','Balqa (Salt)','Madaba','Karak','Mafraq','Jerash','Ajloun','Tafilah',"Ma'an"],ar:['عمّان','الزرقاء','إربد','العقبة','البلقاء (السلط)','مادبا','الكرك','المفرق','جرش','عجلون','الطفيلة','معان']};
-let lang='en',forV='any',colV='all',picked=[],cart=store.get('cart',{}),step='cart',code='',couponMsg='';
+let lang=(()=>{try{const s=localStorage.getItem('scentro_lang');if(s)return JSON.parse(s)}catch{}return (navigator.language||'en').toLowerCase().startsWith('ar')?'ar':'en'})(),forV='any',colV='all',picked=[],cart=store.get('cart',{}),step='cart',code='',couponMsg='';
 let RULES=store.get('rules',null)||SEED_RULES;const $=s=>document.querySelector(s);const t=k=>T[lang][k];
 const num=n=>(Math.round(n*100)/100).toLocaleString(lang==='ar'?'ar-JO':'en-US',{maximumFractionDigits:2});
 const rname=r=>lang==='ar'&&r.nameAr?r.nameAr:r.name;
 const used=()=>store.get('uses',{});
 const quote=()=>PromoEngine.price(cart,{products:PRODUCTS,rules:RULES,code,deliveryFee:DELIVERY_FEE,used:used()});
-function applyLang(){const d=T[lang];document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+function applyLang(){const d=T[lang];store.set('lang',lang);document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
  document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(d[k]!==undefined)e.textContent=d[k]});
  document.querySelectorAll('[data-i18n-html]').forEach(e=>{e.innerHTML=d[e.dataset.i18nHtml]});
- $('#en').classList.toggle('on',lang==='en');$('#ar').classList.toggle('on',lang==='ar');renderAll()}
+ document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=d[e.dataset.ph]);$('#mlang').textContent=d.lang_other;$('#waFloat').setAttribute('aria-label','WhatsApp');
+ $('#en').classList.toggle('on',lang==='en');$('#ar').classList.toggle('on',lang==='ar');$('#en').setAttribute('aria-pressed',lang==='en');$('#ar').setAttribute('aria-pressed',lang==='ar');renderAll();route()}
 function renderAnn(){const fd=RULES.find(r=>r.active&&r.type==='free_delivery'&&!r.code);
  $('#ann').innerHTML=`<span>${lang==='ar'?'توصيل في نفس اليوم داخل عمّان':'Same-day delivery within Amman'}</span><span>${lang==='ar'?'الدفع عند الاستلام':'Cash on delivery'}</span>`+(fd?`<span>${lang==='ar'?'توصيل مجاني فوق '+num(fd.minSpend)+' دينار':'Free delivery over '+num(fd.minSpend)+' JOD'}</span>`:`<span>${lang==='ar'?'التوصيل ٣ دنانير':'Delivery 3 JOD'}</span>`)}
 function renderAll(){renderAnn();renderNotes();renderResults();renderFilters();renderBest();renderDrawer();updateCount()}
 /* ---- notes finder ---- */
 const famName=f=>lang==='ar'?FAM_AR[f.id][0]:f.name,famHint=f=>lang==='ar'?FAM_AR[f.id][1]:f.hint;
-function renderNotes(){$('#notesGrid').innerHTML=FAMILIES.map(f=>{const on=picked.includes(f.id),dis=!on&&picked.length>=3;return `<button class="nt ${on?'on':''}" data-f="${f.id}" ${dis?'disabled':''} style="--dot:${f.dot}"><i></i><b>${famName(f)}</b><span>${famHint(f)}</span></button>`}).join('');
+function renderNotes(){$('#notesGrid').innerHTML=FAMILIES.map(f=>{const on=picked.includes(f.id),dis=!on&&picked.length>=3;return `<button class="nt ${on?'on':''}" aria-pressed="${on}" data-f="${f.id}" ${dis?'disabled':''} style="--dot:${f.dot}"><i></i><b>${famName(f)}</b><span>${famHint(f)}</span></button>`}).join('');
  $('#cnt').textContent=picked.length+' / 3 '+t('f_cnt');document.querySelectorAll('.nt').forEach(b=>b.onclick=()=>{const id=b.dataset.f;picked=picked.includes(id)?picked.filter(x=>x!==id):[...picked,id];renderNotes();renderResults()})}
 function famOf(note){const n=note.toLowerCase();return FAMILIES.filter(f=>f.kw.some(k=>n.includes(k))&&!(f.ex||[]).some(e=>n.includes(e))).map(f=>f.id)}
 function score(p){const hits={};['top','heart','base'].forEach(lay=>p.notes[lay].forEach(n=>famOf(n).forEach(f=>{if(picked.includes(f))(hits[f]=hits[f]||[]).push({n,w:lay==='top'?.6:1})})));return{m:Object.keys(hits).length,w:Object.values(hits).flat().reduce((a,x)=>a+x.w,0),hits}}
 function renderResults(){const n=picked.length;$('#honest').textContent=t('f_honest');
  if(!n){$('#picked').textContent='';$('#results').innerHTML=`<div class="empty" style="grid-column:1/-1">${t('f_none')}</div>`;return}
- const list=Object.values(PRODUCTS).filter(p=>p.notes&&(forV==='any'||p.for==='unisex'||p.for===forV)).map(p=>({p,...score(p)})).filter(x=>x.m>0).sort((a,b)=>b.m-a.m||b.w-a.w).slice(0,3);
+ const list=Object.values(PRODUCTS).filter(p=>p.notes&&!soldOut(p)&&(forV==='any'||p.for==='unisex'||p.for===forV)).map(p=>({p,...score(p)})).filter(x=>x.m>0).sort((a,b)=>b.m-a.m||b.w-a.w).slice(0,3);
  $('#picked').textContent=t('f_picked')+': '+picked.map(id=>famName(FAMILIES.find(f=>f.id===id))).join(' · ');
  $('#results').innerHTML=list.map(x=>{const tier=x.m===n?t('f_best'):x.m===n-1?t('f_close'):t('f_part');const shared=[...new Set(Object.values(x.hits).flat().map(h=>h.n))];
-  return `<div class="res"><img src="${x.p.img}" alt=""><div><span class="tier">${tier}</span><h3>${x.p.name}</h3></div><p class="mt">${x.m} ${t('f_of')} ${n} ${t('f_notes')}</p><div class="shared">${shared.slice(0,5).map(s=>`<em>${s}</em>`).join('')}</div><div class="pr"><span><b>${x.p.price}</b> JOD</span><button data-add="${x.p.id}">${t('f_add')}</button></div></div>`}).join('')||`<div class="empty" style="grid-column:1/-1">—</div>`;bindAdd()}
+  return `<div class="res"><a href="#p-${x.p.id}" tabindex="-1"><img src="${x.p.img}" alt="" loading="lazy" decoding="async"></a><div><span class="tier">${tier}</span><h3><a href="#p-${x.p.id}">${x.p.name}</a></h3></div><p class="mt">${x.m} ${t('f_of')} ${n} ${t('f_notes')}</p><div class="shared">${shared.slice(0,5).map(s=>`<em>${s}</em>`).join('')}</div><div class="pr"><span><b>${x.p.price}</b> JOD</span><button data-add="${x.p.id}">${t('f_add')}</button></div></div>`}).join('')||`<div class="empty" style="grid-column:1/-1">—</div>`;bindAdd()}
 /* ---- catalogue ---- */
-function renderFilters(){$('#filters').innerHTML=['all','niche','selective'].map(c=>`<button class="${colV===c?'on':''}" data-c="${c}">${t(c)}</button>`).join('');document.querySelectorAll('#filters button').forEach(b=>b.onclick=()=>{colV=b.dataset.c;renderFilters();renderBest()})}
+function renderFilters(){$('#filters').innerHTML=['all','niche','selective'].map(c=>`<button class="${colV===c?'on':''}" aria-pressed="${colV===c}" data-c="${c}">${t(c)}</button>`).join('');document.querySelectorAll('#filters button').forEach(b=>b.onclick=()=>{colV=b.dataset.c;renderFilters();renderBest()})}
 function renderBest(){const ids=Object.keys(PRODUCTS).filter(id=>PRODUCTS[id].notes&&(colV==='all'||PRODUCTS[id].collection===colV)).slice(0,12);
  $('#best').innerHTML=ids.map(id=>{const p=PRODUCTS[id],disc=p.was?`-${Math.round((1-p.price/p.was)*100)}%`:'';const nl=p.notes?[...p.notes.top.slice(0,1),...p.notes.heart.slice(0,1),...p.notes.base.slice(0,1)].join(' · '):'';
- return `<article class="card"><a class="ph" href="#"><img src="${p.img}" alt="${p.name}">${disc?`<span class="badge">${disc}</span>`:''}</a><div class="bn">${BRANDS[p.brand].name}</div><h3>${p.name}</h3><p class="sub">${t(p.collection==='niche'?'extrait':'edp')} · ${p.ml} ml · ${t('for_'+p.for)}</p><p class="nl">${nl}</p><div class="row"><div class="price"><b>${p.price}</b> <small>JOD</small>${p.was?` <s>${p.was}</s>`:''}</div><button class="add" data-add="${p.id}">${t('add')}</button></div></article>`}).join('');bindAdd()}
+ return `<article class="card"><a class="ph" href="#p-${id}"><img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async">${soldOut(p)?`<span class="badge so">${t('sold')}</span>`:disc?`<span class="badge">${disc}</span>`:''}</a><div class="bn">${BRANDS[p.brand].name}</div><h3><a href="#p-${id}">${p.name}</a></h3><p class="sub">${t(p.collection==='niche'?'extrait':'edp')} · ${p.ml} ml · ${t('for_'+p.for)}</p><p class="nl">${nl}</p><div class="row"><div class="price"><b>${p.price}</b> <small>JOD</small>${p.was?` <s>${p.was}</s>`:''}</div>${soldOut(p)?`<a class="add" target="_blank" rel="noopener" href="${waLink(WA_NUMBER,`Hello SCENTRO 👋 Please tell me when ${p.name} is back in stock.`)}">${t('notify')}</a>`:`<button class="add" data-add="${p.id}">${t('add')}</button>`}</div>${lowStock(p)?`<p class="lowq">${t('low').replace('{n}',p.stock)}</p>`:''}</article>`}).join('');bindAdd()}
 document.querySelectorAll('.cat[data-col]').forEach(c=>c.onclick=()=>{colV=c.dataset.col;renderFilters();renderBest()});
 function bindAdd(){document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addCart(b.dataset.add))}
 /* ---- cart, promotions, guest checkout (cash on delivery) ---- */
 function saveCart(){store.set('cart',cart)}
-function addCart(id){cart[id]=(cart[id]||0)+1;saveCart();toast(t('added'));renderDrawer();updateCount()}
+const soldOut=p=>p.stock<=0,lowStock=p=>p.stock>0&&p.stock<=3;
+function addCart(id,q=1){const p0=PRODUCTS[id];if(soldOut(p0))return;if((cart[id]||0)+q>p0.stock){cart[id]=p0.stock;saveCart();renderDrawer();updateCount();toast(t('maxq').replace('{n}',p0.stock));return}cart[id]=(cart[id]||0)+q;saveCart();renderDrawer();updateCount();const n=Object.values(cart).reduce((a,b)=>a+b,0);toast(`${PRODUCTS[id].name} — ${t('added')}`,{label:t('view_cart')+' ('+n+')',fn:openDrawer});const b=$('#cartbtn');b.classList.remove('pulse');void b.offsetWidth;b.classList.add('pulse')}
 function updateCount(){$('#cc').textContent=Object.values(cart).reduce((a,b)=>a+b,0)}
-function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1600)}
-function openDrawer(){$('#drawer').classList.add('on');$('#scrim').classList.add('on')}
-function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');if(step==='done'){cart={};saveCart();step='cart';code='';couponMsg='';renderDrawer();updateCount()}}
+function toast(m,act){const e=$('#toast');e.innerHTML='<span></span>';e.firstChild.textContent=m;if(act){const b=document.createElement('button');b.textContent=act.label;b.onclick=()=>{e.classList.remove('on');act.fn()};e.appendChild(b)}e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),act?5000:1800)}
+let lastFocus=null;function openDrawer(){lastFocus=document.activeElement;$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>$('#dclose').focus(),50)}
+function closeDrawer(){$('#drawer').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on');if(lastFocus&&lastFocus.focus)lastFocus.focus();if(step==='done'){cart={};saveCart();step='cart';code='';couponMsg='';renderDrawer();updateCount()}}
 function nudgeHtml(q){const n=q.nudges.sort((a,b)=>a.need-b.need)[0];if(!n)return'';const key=n.kind==='free_delivery'?'nd_free':n.kind==='gift'?'nd_gift':'nd_tier';
  const msg=t(key).replace('{n}',num(n.need)).replace('{p}',n.pct||'');const pct=Math.max(4,Math.min(100,100*(q.subtotal-q.discount)/n.target));return `<div class="nudge">${msg}<div class="bar"><i style="width:${pct}%"></i></div></div>`}
 function summary(q){let h=`<div class="tot"><span>${t('sub')}</span><span>${num(q.subtotal)} JOD</span></div>`;
@@ -351,7 +413,7 @@ function renderDrawer(){const ids=Object.keys(cart);$('#dtitle').textContent=ste
  if(step==='cart'){const gifts=q.gifts.map(g=>`<div class="li"><img src="${PRODUCTS[g].img}" alt=""><div><span class="gift">${t('gift')}</span><b>${PRODUCTS[g].name}</b></div><div class="price"><b>0</b> <small>JOD</small></div></div>`).join('');
   b.innerHTML=ids.map(id=>{const p=PRODUCTS[id],l=q.lines.find(x=>x.pid===id);return `<div class="li"><img src="${p.img}" alt=""><div><b>${p.name}</b><small>${BRANDS[p.brand].name} · ${p.ml} ml</small><div class="qty"><button data-q="${id}" data-d="-1">−</button><span>${cart[id]}</span><button data-q="${id}" data-d="1">+</button></div></div><div class="price">${l.discount>0?`<s>${num(l.gross)}</s>`:''}<b>${num(l.net)}</b> <small>JOD</small></div></div>`}).join('')+gifts+nudgeHtml(q);
   f.innerHTML=`<div class="coupon"><input id="cin" placeholder="${t('coupon')}" value="${code}"><button id="cap">${t('apply')}</button></div>${couponMsg?`<div class="cmsg ${q.couponOk?'ok':'bad'}">${q.couponOk?t('c_ok'):t('c_bad')}</div>`:''}`+summary(q)+`<div class="codnote">💵 ${t('cod1')}</div><button class="btn k full" id="go">${t('checkout')}</button>`;
-  document.querySelectorAll('[data-q]').forEach(x=>x.onclick=()=>{const id=x.dataset.q;cart[id]+=+x.dataset.d;if(cart[id]<=0)delete cart[id];saveCart();updateCount();renderDrawer()});
+  document.querySelectorAll('[data-q]').forEach(x=>x.onclick=()=>{const id=x.dataset.q;cart[id]=Math.min(PRODUCTS[id].stock,cart[id]+ +x.dataset.d);if(cart[id]<=0)delete cart[id];saveCart();updateCount();renderDrawer()});
   $('#cap').onclick=()=>{code=$('#cin').value.trim();couponMsg=code?'x':'';renderDrawer()};$('#go').onclick=()=>{step='details';renderDrawer()}}
  else{b.innerHTML=`<form id="frm" novalidate style="padding-top:18px"><div class="field" id="f1"><label>${t('name')}</label><input name="n" autocomplete="name"><div class="em">${t('e_name')}</div></div>
   <div class="field" id="f2"><label>${t('phone')}</label><input name="p" inputmode="tel" autocomplete="tel" placeholder="07X XXX XXXX" dir="ltr"><div class="em">${t('e_phone')}</div></div>
@@ -380,10 +442,51 @@ $('#en').onclick=()=>{lang='en';applyLang()};$('#ar').onclick=()=>{lang='ar';app
 document.querySelectorAll('#forChips .chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('#forChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');forV=c.dataset.v;renderResults()});
 $('#waFloat').href=waLink(WA_NUMBER,'Hello SCENTRO 👋');
 {{ADMIN}}
+/* ---- mobile menu, search, finder shortcut, product page ---- */
+function setOpen(el,on){el.classList.toggle('on',on)}
+function openMenu(){setOpen($('#mnav'),true);$('#menubtn').setAttribute('aria-expanded','true');setTimeout(()=>$('#mclose').focus(),50)}
+function closeMenu(){setOpen($('#mnav'),false);$('#menubtn').setAttribute('aria-expanded','false')}
+$('#menubtn').onclick=openMenu;$('#mclose').onclick=closeMenu;document.querySelectorAll('#mnav nav a').forEach(a=>a.onclick=closeMenu);
+$('#mwa').href=waLink(WA_NUMBER,'Hello SCENTRO 👋');$('#mlang').onclick=e=>{e.preventDefault();lang=lang==='en'?'ar':'en';closeMenu();applyLang()};
+function openSearch(){setOpen($('#search'),true);$('#sin').value='';renderSearch('');setTimeout(()=>$('#sin').focus(),50)}
+function closeSearch(restore){setOpen($('#search'),false);if(restore===true)$('#searchbtn').focus()}
+$('#searchbtn').onclick=openSearch;$('#sclose').onclick=()=>closeSearch();$('#sin').oninput=e=>renderSearch(e.target.value);
+function famsOf(p){const s=new Set();if(!p.notes)return s;['top','heart','base'].forEach(l=>p.notes[l].forEach(n=>famOf(n).forEach(f=>s.add(f))));return s}
+function renderSearch(q){q=q.trim().toLowerCase();const el=$('#sres');
+ if(!q){el.innerHTML=`<p class="h">${t('s_hint')}</p>`;return}
+ const hit=Object.values(PRODUCTS).filter(p=>{const blob=[p.name,BRANDS[p.brand].name,p.collection,...(p.notes?[...p.notes.top,...p.notes.heart,...p.notes.base]:[]),...[...famsOf(p)].map(f=>{const F=FAMILIES.find(x=>x.id===f);return F.name+' '+FAM_AR[f][0]})].join(' ').toLowerCase();return blob.includes(q)}).slice(0,8);
+ el.innerHTML=hit.length?hit.map(p=>`<a href="#p-${p.id}"><img src="${p.img}" alt=""><div><b>${p.name}</b><small>${BRANDS[p.brand].name}${p.notes?' · '+[...p.notes.top.slice(0,1),...p.notes.heart.slice(0,1),...p.notes.base.slice(0,1)].join(' · '):''}</small></div><span>${p.price} JOD</span></a>`).join(''):`<p class="h">${t('s_none')}</p>`;
+ el.querySelectorAll('a').forEach(a=>a.onclick=()=>setOpen($('#search'),false))}
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('#search').classList.contains('on'))closeSearch(true);else if($('#mnav').classList.contains('on'))closeMenu();else if($('#drawer').classList.contains('on'))closeDrawer()});
+/* finder: on small screens the results sit below the notes, so offer a one-tap jump */
+function updateFab(){const f=$('#fab'),fin=$('#finder').getBoundingClientRect(),r=$('#results').getBoundingClientRect();const show=picked.length>0&&innerWidth<=980&&fin.top<innerHeight*.6&&fin.bottom>innerHeight*.3&&r.top>innerHeight*.85;f.classList.toggle('on',show);document.body.classList.toggle('fabon',show);$('#fabbtn').textContent=t('fab')+' ↓'}
+{const _rr=renderResults;renderResults=function(){_rr();updateFab()}}
+$('#fabbtn').onclick=()=>{$('#results').scrollIntoView({behavior:'smooth',block:'start'})};addEventListener('scroll',updateFab,{passive:true});addEventListener('resize',updateFab);
+/* product page */
+let pdpQty=1;
+function renderPDP(id){const p=PRODUCTS[id],el=$('#pdp');if(!p){location.hash='';return}
+ const fd=RULES.find(r=>r.active&&r.type==='free_delivery'&&!r.code);const fams=[...famsOf(p)].map(f=>famName(FAMILIES.find(x=>x.id===f)));
+ const disc=p.was?`-${Math.round((1-p.price/p.was)*100)}%`:'';
+ const lay=['top','heart','base'].map(l=>`<div class="lay"><span class="lb">${t('pd_'+l)}</span><div class="ns">${p.notes[l].map(n=>`<em>${n}</em>`).join('')}</div></div>`).join('');
+ const mine=famsOf(p),sim=Object.values(PRODUCTS).filter(o=>o.id!==id&&o.notes&&!soldOut(o)).map(o=>({o,n:[...famsOf(o)].filter(f=>mine.has(f)).length})).filter(x=>x.n>0).sort((a,b)=>b.n-a.n).slice(0,4);
+ el.innerHTML=`<div class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="#">${t('home')}</a> / <a href="#shop">${t('crumb_shop')}</a> / ${p.name}</nav>
+ <div class="pdp"><div class="gal"><div class="main"><img src="${p.img}" alt="${p.name} — ${BRANDS[p.brand].name}"></div></div>
+ <div><div class="eyebrow">${BRANDS[p.brand].name}</div><h1>${p.name}</h1><p class="meta">${t(p.collection==='niche'?'extrait':p.collection==='selective'?'edp':'extrait')} · ${p.ml} ml · ${t('for_'+p.for)}</p><hr class="rule">
+ <div class="pr"><b>${p.price}</b><small>JOD</small>${p.was?`<s>${p.was} JOD</s><span class="badge">${disc}</span>`:''}</div>
+ ${lowStock(p)?`<p class="lowq" style="margin-top:10px">${t('low').replace('{n}',p.stock)}</p>`:''}${soldOut(p)?`<div class="buy" style="display:flex"><a class="btn o" style="flex:1" target="_blank" rel="noopener" href="${waLink(WA_NUMBER,`Hello SCENTRO 👋 Please tell me when ${p.name} is back in stock.`)}">${t('sold')} — ${t('notify')}</a></div>`:`<div class="buy"><div class="qty" aria-label="${t('pd_qty')}"><button id="qm" aria-label="−">−</button><span id="qn">${pdpQty}</span><button id="qp" aria-label="+">+</button></div><button class="btn k" id="padd">${t('pd_add')}</button></div>`}
+ <div class="info"><div><span class="i">💵</span><p><b>${t('pd_cod')}</b><br>${t('pd_cods')}</p></div><div><span class="i">🚚</span><p><b>${t('pd_del')}</b><br>${t('pd_dels')}${fd?` · ${t('pd_free').replace('{n}',num(fd.minSpend))}`:''}</p></div><div><span class="i">✓</span><p><b>${t('pd_orig')}</b><br>${t('pd_origs')}</p></div></div>
+ ${p.notes?`<div class="pyr"><h3>${t('pd_pyr')}</h3><p class="hn">${t('pd_hn')}</p>${lay}${fams.length?`<div class="fams" aria-label="${t('pd_fam')}">${fams.map(f=>`<span>${f}</span>`).join('')}</div>`:''}</div>`:`<p class="hn" style="margin-top:24px">${t('pd_nf')}</p>`}
+ <a class="askwa" target="_blank" rel="noopener" href="${waLink(WA_NUMBER,`Hello SCENTRO 👋 I have a question about ${p.name} (${BRANDS[p.brand].name}).`)}">💬 ${t('pd_ask')}</a></div></div>
+ ${sim.length?`<section class="sim"><div class="sec-h"><div><span class="eyebrow">${t('pd_sim_s')}</span><h2 style="margin-top:10px">${t('pd_sim')}</h2></div></div><div class="grid4">${sim.map(x=>{const o=x.o;return `<article class="card"><a class="ph" href="#p-${o.id}"><img src="${o.img}" alt="${o.name}" loading="lazy"></a><div class="bn">${BRANDS[o.brand].name}</div><h3><a href="#p-${o.id}">${o.name}</a></h3><div class="row"><div class="price"><b>${o.price}</b> <small>JOD</small></div><button class="add" data-add="${o.id}">${t('add')}</button></div></article>`}).join('')}</div></section>`:''}</div>`;
+ $('#stick').innerHTML=soldOut(p)?`<div class="pp">${p.name}<small>${t('sold')}</small></div><a class="btn o" target="_blank" rel="noopener" href="${waLink(WA_NUMBER,`Hello SCENTRO 👋 Please tell me when ${p.name} is back in stock.`)}">${t('notify')}</a>`:`<div class="pp">${p.name}<small>${p.price} JOD${fd?' · '+t('pd_free').replace('{n}',num(fd.minSpend)):''}</small></div><button class="btn k" id="sadd">${t('pd_add')}</button>`;
+ if(!soldOut(p)){$('#qm').onclick=()=>{pdpQty=Math.max(1,pdpQty-1);$('#qn').textContent=pdpQty};$('#qp').onclick=()=>{pdpQty=Math.min(Math.min(9,p.stock),pdpQty+1);$('#qn').textContent=pdpQty};
+ $('#padd').onclick=()=>{addCart(id,pdpQty);pdpQty=1;$('#qn').textContent=1};$('#sadd').onclick=()=>addCart(id,1)}bindAdd();document.title=`${p.name} — SCENTRO`}
 /* ---- routing / demo hashes ---- */
-function route(){const h=location.hash.replace('#','').split('-');document.body.classList.toggle('isadmin',h[0]==='admin');if(h[0]==='admin')renderAdmin(h[1]||adTab);}
+function route(){const h=location.hash.replace('#','').split('-');const pdp=h[0]==='p'&&h[1];document.body.classList.toggle('isadmin',h[0]==='admin');document.body.classList.toggle('ispdp',!!pdp&&h[0]!=='admin');
+ if(h[0]==='admin')renderAdmin(h[1]||adTab);else if(pdp){renderPDP(h[1]);scrollTo(0,0)}else{document.title='SCENTRO — Concept v3';const id=location.hash.replace('#','');if(id&&!/^(ar|demo|cart|co|promo)/.test(id)){const el=document.getElementById(id);if(el)setTimeout(()=>el.scrollIntoView(),0)}}
+ closeMenu()}
 window.addEventListener('hashchange',route);
-const hs=location.hash.replace('#','').split('-');if(hs.includes('ar'))lang='ar';
+const hs=location.hash.replace('#','').split('-');if(hs.includes('ar'))lang='ar';else if(hs.includes('en'))lang='en';
 if(hs.includes('demo'))picked=['sweet','woody','spicy'];
 if(hs.includes('cart')||hs.includes('co')||hs.includes('promo')){const ids=Object.keys(PRODUCTS).filter(i=>PRODUCTS[i].collection==='niche');cart=hs.includes('promo')?{[ids[0]]:1,[ids[1]]:1,[ids[2]]:1}:{[ids[0]]:1,[ids[4]]:2}}
 applyLang();route();
