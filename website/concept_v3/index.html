@@ -281,7 +281,7 @@ body.ispdp .toast{bottom:92px}@media(min-width:981px){body.ispdp .toast{bottom:2
   <div><img class="flogo" src="img/logo_light.png" alt="SCENTRO"><p data-i18n="fo_p"></p><span class="pay">💵 <span data-i18n="fo_cod"></span></span></div>
   <div><h5 data-i18n="fo_h1"></h5><ul><li data-i18n="n_shop"></li><li data-i18n="n_brands"></li><li data-i18n="n_pk"></li></ul></div>
   <div><h5 data-i18n="fo_h2"></h5><ul><li data-i18n="fo_a"></li><li data-i18n="fo_t"></li><li data-i18n="fo_pr"></li></ul></div>
-  <div><h5 data-i18n="fo_h3"></h5><ul><li>Amman · Jordan</li><li>+962 79 790 6211</li><li>@scentrojo</li></ul></div>
+  <div><h5 data-i18n="fo_h3"></h5><ul><li>Amman · Jordan</li><li>+962 79 790 6211 · WhatsApp</li><li>@scentrojo</li></ul></div>
 </div><div class="legal"><span>© 2026 SCENTRO</span><span><span data-i18n="fo_c"></span> · <a href="#admin" style="border-bottom:1px solid var(--gold)">Dashboard prototype</a></span></div></div></footer>
 <a class="wa" href="#" id="waFloat" target="_blank" rel="noopener">WhatsApp</a>
 <div class="fab" id="fab"><button id="fabbtn"></button></div>
@@ -432,9 +432,9 @@ n_finder:'Find by notes',n_shop:'Shop',n_brands:'Brands',n_pk:'Packages',
  cart:'Your cart',empty:'Your cart is empty.',sub:'Subtotal',deliv:'Delivery',free:'Free',total:'Total (pay on delivery)',checkout:'Checkout',cod1:'Cash on delivery — you pay when your order arrives. No account, no card.',
  coupon:'Promo code',apply:'Apply',c_ok:'Code applied',c_bad:'This code is not valid for your cart',gift:'Free gift',
  nd_free:'Add <b>{n} JOD</b> more for free delivery',nd_gift:'Add <b>{n} JOD</b> more for a free gift',nd_tier:'Add <b>{n} JOD</b> more to save {p}%',
- co:'Your details',name:'Full name',phone:'Mobile number',gov:'Governorate',addr:'Address (area, street, building)',note:'Notes for delivery (optional)',place:'Place order',back:'Back',
- e_name:'Please enter your name',e_phone:'Enter a Jordanian mobile, e.g. 079 123 4567',e_addr:'Please enter your address',
- ok:'Thank you!',ok1:'Your order is in. We will call you to confirm the details and delivery time.',ok2:'Order number',ok3:'Pay in cash on delivery',ok_wa:'Send order details on WhatsApp',ok_wa_s:'Optional — it helps us confirm faster.',cont:'Continue shopping',added:'Added to cart'},
+ co:'Your details',name:'Full name',phone:'Mobile number (WhatsApp)',phone_h:'We confirm your order with you on WhatsApp.',gov:'Governorate',addr:'Address (area, street, building)',note:'Notes for delivery (optional)',place:'Place order',back:'Back',
+ e_name:'Please enter your name',e_phone:'Enter a Jordanian mobile with WhatsApp, e.g. 079 123 4567',e_addr:'Please enter your address',
+ ok:'Thank you!',ok1:'Your order is in. We will message you on WhatsApp to confirm the details and delivery time.',ok2:'Order number',ok3:'Pay in cash on delivery',ok_wa:'Send order details on WhatsApp',ok_wa_s:'Optional — it helps us confirm faster.',cont:'Continue shopping',added:'Added to cart'},
 ar:{skip:'تخطَّ إلى المحتوى',mist:'بودي ميست',more:'عرض المزيد',f_cov:'المطابقة تشمل {n} عطراً بنوتات معلنة — ونضيف المزيد.',sold:'نفدت الكمية',low:'بقي {n} فقط',notify:'اسألنا متى يتوفر',maxq:'المتوفر {n} فقط',s_ph:'ابحث عن عطر أو نوتة أو ماركة…',s_none:'لا نتائج. جرّب نوتة مثل فانيلا أو ورد أو عود.',s_hint:'جرّب: فانيلا · عود · ورد · ماد',view_cart:'عرض السلة',in_cart:'في سلتك',fab:'شاهد اقتراحاتك',lang_other:'English',home:'الرئيسية',crumb_shop:'تسوّق',
  pd_top:'القمة',pd_heart:'القلب',pd_base:'القاعدة',pd_pyr:'النوتات',pd_hn:'نوتات القمة هي أول ما تشمّه. نوتات القلب تظهر بعد دقائق. نوتات القاعدة تبقى الأطول.',pd_fam:'ملف الرائحة',pd_cod:'الدفع عند الاستلام',pd_cods:'ادفع نقداً عند وصول طلبك. بدون حساب وبدون بطاقة.',pd_del:'التوصيل ٣ دنانير',pd_dels:'نفس اليوم في عمّان · وكل الأردن',pd_free:'توصيل مجاني فوق {n} دينار',pd_orig:'أصلي ومختوم',pd_origs:'ماد بارفيمر الأصلي يصلك مختوماً.',pd_ask:'اسألنا عن هذا العطر على واتساب',pd_sim:'قد يعجبك أيضاً',pd_sim_s:'يشترك معه في نفس عائلات النوتات',pd_add:'أضف للسلة',pd_qty:'الكمية',pd_for:'لـ',pd_nf:'نوتات هذا العطر ستُضاف قريباً.',
 n_finder:'اختر حسب النوتات',n_shop:'تسوّق',n_brands:'الماركات',n_pk:'الباقات',
@@ -453,9 +453,9 @@ n_finder:'اختر حسب النوتات',n_shop:'تسوّق',n_brands:'الما
  cart:'سلتك',empty:'سلتك فارغة.',sub:'المجموع الفرعي',deliv:'التوصيل',free:'مجاني',total:'الإجمالي (الدفع عند الاستلام)',checkout:'إتمام الطلب',cod1:'الدفع عند الاستلام — تدفع عندما يصلك طلبك. بدون حساب وبدون بطاقة.',
  coupon:'كود الخصم',apply:'تطبيق',c_ok:'تم تطبيق الكود',c_bad:'هذا الكود غير صالح لسلتك',gift:'هدية مجانية',
  nd_free:'أضف <b>{n} دينار</b> للحصول على توصيل مجاني',nd_gift:'أضف <b>{n} دينار</b> للحصول على هدية مجانية',nd_tier:'أضف <b>{n} دينار</b> لتوفّر {p}٪',
- co:'بياناتك',name:'الاسم الكامل',phone:'رقم الموبايل',gov:'المحافظة',addr:'العنوان (المنطقة، الشارع، البناية)',note:'ملاحظات للتوصيل (اختياري)',place:'تأكيد الطلب',back:'رجوع',
- e_name:'الرجاء إدخال الاسم',e_phone:'أدخل رقم موبايل أردني، مثال 079 123 4567',e_addr:'الرجاء إدخال العنوان',
- ok:'شكراً لك!',ok1:'وصلنا طلبك. سنتصل بك لتأكيد التفاصيل وموعد التوصيل.',ok2:'رقم الطلب',ok3:'الدفع نقداً عند الاستلام',ok_wa:'أرسل تفاصيل الطلب على واتساب',ok_wa_s:'اختياري — يساعدنا على التأكيد أسرع.',cont:'متابعة التسوق',added:'أُضيف إلى السلة'}};
+ co:'بياناتك',name:'الاسم الكامل',phone:'رقم الموبايل (واتساب)',phone_h:'نؤكد طلبك معك على واتساب.',gov:'المحافظة',addr:'العنوان (المنطقة، الشارع، البناية)',note:'ملاحظات للتوصيل (اختياري)',place:'تأكيد الطلب',back:'رجوع',
+ e_name:'الرجاء إدخال الاسم',e_phone:'أدخل رقم موبايل أردني عليه واتساب، مثال 079 123 4567',e_addr:'الرجاء إدخال العنوان',
+ ok:'شكراً لك!',ok1:'وصلنا طلبك. سنراسلك على واتساب لتأكيد التفاصيل وموعد التوصيل.',ok2:'رقم الطلب',ok3:'الدفع نقداً عند الاستلام',ok_wa:'أرسل تفاصيل الطلب على واتساب',ok_wa_s:'اختياري — يساعدنا على التأكيد أسرع.',cont:'متابعة التسوق',added:'أُضيف إلى السلة'}};
 const FAM_AR={citrus:['حمضيات','ليمون، برغموت، برتقال'],fruity:['فواكه','خوخ، كمثرى، تفاح، توت'],floral:['زهور','ورد، ياسمين، توبروز، زنبق'],sweet:['فانيلا وحلاوة','فانيلا، تونكا، عسل، كراميل'],woody:['خشب','صندل، أرز، باتشولي'],amber:['عنبر ومسك','عنبر، مسك'],spicy:['توابل','قرفة، فلفل، هيل، زعفران'],aromatic:['عشبي ومنعش','لافندر، أوكالبتوس، شاي، بحري'],oud:['عود ودخان','عود، تبغ، بخور']};
 const GOV={en:['Amman','Zarqa','Irbid','Aqaba','Balqa (Salt)','Madaba','Karak','Mafraq','Jerash','Ajloun','Tafilah',"Ma'an"],ar:['عمّان','الزرقاء','إربد','العقبة','البلقاء (السلط)','مادبا','الكرك','المفرق','جرش','عجلون','الطفيلة','معان']};
 let lang=(()=>{try{const s=localStorage.getItem('scentro_lang');if(s)return JSON.parse(s)}catch{}return (navigator.language||'en').toLowerCase().startsWith('ar')?'ar':'en'})(),forV='any',colV='all',picked=[],cart=store.get('cart',{}),step='cart',code='',couponMsg='';
@@ -518,7 +518,7 @@ function renderDrawer(){const ids=Object.keys(cart);$('#dtitle').textContent=ste
   document.querySelectorAll('[data-q]').forEach(x=>x.onclick=()=>{const id=x.dataset.q;cart[id]=Math.min(PRODUCTS[id].stock,cart[id]+ +x.dataset.d);if(cart[id]<=0)delete cart[id];saveCart();updateCount();renderDrawer()});
   $('#cap').onclick=()=>{code=$('#cin').value.trim();couponMsg=code?'x':'';renderDrawer()};$('#go').onclick=()=>{step='details';renderDrawer()}}
  else{b.innerHTML=`<form id="frm" novalidate style="padding-top:18px"><div class="field" id="f1"><label>${t('name')}</label><input name="n" autocomplete="name"><div class="em">${t('e_name')}</div></div>
-  <div class="field" id="f2"><label>${t('phone')}</label><input name="p" inputmode="tel" autocomplete="tel" placeholder="07X XXX XXXX" dir="ltr"><div class="em">${t('e_phone')}</div></div>
+  <div class="field" id="f2"><label>${t('phone')}</label><input name="p" inputmode="tel" autocomplete="tel" placeholder="07X XXX XXXX" dir="ltr"><small style="display:block;color:var(--mute);font-size:12.5px;margin-top:5px">${t('phone_h')}</small><div class="em">${t('e_phone')}</div></div>
   <div class="field"><label>${t('gov')}</label><select name="g">${GOV[lang].map(g=>`<option>${g}</option>`).join('')}</select></div>
   <div class="field" id="f3"><label>${t('addr')}</label><textarea name="a" rows="2"></textarea><div class="em">${t('e_addr')}</div></div>
   <div class="field"><label>${t('note')}</label><input name="x"></div><div class="codnote">💵 ${t('cod1')}</div></form>`;
