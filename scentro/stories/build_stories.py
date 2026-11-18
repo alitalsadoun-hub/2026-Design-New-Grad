@@ -565,7 +565,7 @@ def story_offer3():
     return img
 
 
-def banner_offer(out_w=1000, out_h=483):
+def banner_offer(out_w=1000, out_h=483, text=True, full=False):
     """Landscape 1000x483 version of the limited-offer Story: text left, pedestal trio right. Built at 2x and downsampled."""
     global W, H
     sw, sh = W, H; W, H = out_w * 2, out_h * 2; B.W, B.H = W, H
@@ -585,6 +585,8 @@ def banner_offer(out_w=1000, out_h=483):
         for cx, w, top, _, _ in P: pedestal_shadows(img, cx, w, top, BASE, DEP)
         for cx, w, top, _, _ in sorted(P, key=lambda p: p[2]): pedestal(img, cx, w, top, BASE, DEP)
         for cx, w, top, path, h in P: stage_ped(img, B.load_clean(path, h), cx, top - int(DEP * 0.45))
+        if not text:
+            return img.convert('RGB') if full else img.convert('RGB').resize((out_w, out_h), Image.LANCZOS)
         d = ImageDraw.Draw(img); brown, gold = (74, 52, 40), (176, 141, 87); burg = (112, 28, 44)
         cx = 480
         tracked_in(d, cx, 252, 'SCENTRO', B.font(CORM, 50, 'Medium'), brown, 24)
