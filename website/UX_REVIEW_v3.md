@@ -47,3 +47,5 @@ Arabic/RTL checked on home and product page (mirrored layout, Amiri/IBM Plex San
 6. Instagram page could not be viewed (login wall); brand colours/fonts were taken from the website wordmark only.
 
 7. Brand alignment after seeing the Instagram page: feed is ivory/white with black serif and a champagne-gold (#D3B66D) accent. Store updated accordingly (light hero, gold sampled from the page); black kept only for the notes finder and footer.
+
+8. Data update: Selective now uses the MAD Selective catalogue (26 collection): inspired-by house + original, the original's key notes and main accords for 48 of 52 products; sold-out items (stock 0) are no longer listed. Original names read from bottle photos are shown only where legible; 11 show the house only until confirmed (see QUESTIONS_for_owner.xlsx).

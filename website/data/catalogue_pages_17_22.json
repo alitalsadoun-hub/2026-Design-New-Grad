@@ -1,0 +1,14 @@
+[
+{"code":"Z101","house":"Zadig & Voltaire","original":"This Is Her!","accords":["vanilla","sweet","woody","balsamic","powdery"],"key":["Chestnut","Vanilla","Sandalwood"],"page":17},
+{"code":"Q110","house":"Tom Ford","original":"Ombré Leather","accords":["leather","animalic","warm spicy","white floral","amber"],"key":["Saffron","Black leather","Cardamom"],"page":17},
+{"code":"Q105","house":"Tom Ford","original":"Black Orchid","accords":["warm spicy","earthy","woody","sweet","amber","patchouli"],"key":["Black truffle","Black orchid","Patchouli"],"page":18},
+{"code":"Q106","house":"Tom Ford","original":"Vanille Fatale","accords":["white floral","tuberose","citrus","animalic","vanilla"],"key":["Coffee absolute","Wood","Vanilla resinoid"],"page":18},
+{"code":"B103","house":"Burberry","original":"Hero","accords":["woody","fresh spicy","aromatic","citrus","powdery"],"key":["Black pepper","Bergamot","Atlas cedar"],"page":19,"gender":"him"},
+{"code":"W183","house":"Creed","original":"Aventus","accords":["fruity","sweet","woody","leather","citrus"],"key":["Pineapple","Lemon","Cedarwood"],"page":19,"gender":"him"},
+{"code":"W192","house":"Dior","original":"Sauvage (Eau de Parfum)","accords":["fresh spicy","citrus","amber","lavender","musky"],"key":["Lavender","Bergamot","Sichuan pepper"],"page":20,"gender":"him"},
+{"code":"W158","house":"Dior","original":"Homme Intense","accords":["iris","woody","powdery","earthy","aromatic","violet"],"key":["Virginia cedar","Iris absolute","Ambrette seed"],"page":20,"gender":"him"},
+{"code":"P102","house":"Paco Rabanne","original":"1 Million Lucky","accords":["woody","sweet","nutty","honey","fruity"],"key":["Honey","Hazelnut","Plum"],"page":21,"gender":"him"},
+{"code":"W129","house":"Paco Rabanne","original":"1 Million (gold bottle — Elixir/Royal? confirm)","accords":["vanilla","fruity","rose","sweet","woody"],"key":["Apple","Vanilla","Patchouli"],"page":21,"gender":"him"},
+{"code":"W179","house":"Paco Rabanne","original":"Invictus (blue trophy bottle — Parfum? confirm)","accords":["aromatic","musky","marine","soapy","powdery","woody"],"key":["Black soap","Lavender","Musk"],"page":22,"gender":"him"},
+{"code":"P101","house":"Parfums de Marly","original":"Pegasus (silver bottle — confirm)","accords":["almond","vanilla","powdery","nutty","sweet"],"key":["Bitter almond","Bergamot","Amber"],"page":22,"gender":"him"}
+]

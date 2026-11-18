@@ -10,10 +10,10 @@ const {chromium}=require('playwright');
  await p.evaluate(()=>window.scrollBy(0,-20));
  await p.screenshot({path:'ux3_shop.png'});
  await p.evaluate(()=>{document.querySelector('#finder').scrollIntoView();});
- await p.evaluate(()=>{['sweet','floral','woody'].forEach(id=>document.querySelector('.nt[data-f='+id+']').click())});
+ await p.evaluate(()=>{['sweet','spicy','oud'].forEach(id=>document.querySelector('.nt[data-f='+id+']').click())});
  await p.waitForTimeout(500);await p.screenshot({path:'ux3_finder.png'});
  // a selective product page with notes
- const id=await p.evaluate(()=>Object.values(PRODUCTS).find(x=>x.collection==='selective'&&x.notes&&x.stock>3).id);
+ const id='73';
  await p.goto(url+'#p-'+id,{waitUntil:'load'});await p.waitForTimeout(500);
  await p.screenshot({path:'ux3_pdp.png'});
  await b.close();
