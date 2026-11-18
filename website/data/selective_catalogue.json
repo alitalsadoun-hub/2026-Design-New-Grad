@@ -942,5 +942,35 @@
    "Plum"
   ],
   "page": 21
+ },
+ "42": {
+  "code": "W174",
+  "gender": "him",
+  "house": "Versace",
+  "original": "Eros",
+  "accords": [],
+  "key": [],
+  "page": 0,
+  "source": "owner"
+ },
+ "55": {
+  "code": "C126",
+  "gender": "her",
+  "house": "Carolina Herrera",
+  "original": "212 Sexy",
+  "accords": [],
+  "key": [],
+  "page": 0,
+  "source": "owner"
+ },
+ "69": {
+  "code": "V109",
+  "gender": "her",
+  "house": "Victoria's Secret",
+  "original": "Crème Cloud",
+  "accords": [],
+  "key": [],
+  "page": 0,
+  "source": "owner"
  }
 }

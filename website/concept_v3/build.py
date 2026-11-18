@@ -31,7 +31,8 @@ for r in order:
         if pid in catsel:
             c = catsel[pid]; ok = 'confirm' not in c['original']; orig = re.sub(r'\s*\(.*?\)', '', c['original']).strip() if ok else ''
             base['insp'] = {'house': c['house'], 'original': orig, 'confirmed': ok}
-            base['key'] = c['key']; base['acc'] = c['accords']
+            if c['key']: base['key'] = c['key']; base['acc'] = c['accords']
+            elif pid in sel: base['notes'] = sel[pid]['notes']
         elif pid in sel: base['notes'] = sel[pid]['notes']
     else:
         base.update(name=re.sub(r'^MAD | Body Mist 250 ml$', '', r['name']).strip() + ' Body Mist', ml=250)

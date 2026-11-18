@@ -1,0 +1,41 @@
+[
+ {
+  "code": "Q105",
+  "gender": "unisex",
+  "house": "Tom Ford",
+  "original": "Black Orchid",
+  "accords": [
+   "warm spicy",
+   "earthy",
+   "woody",
+   "sweet",
+   "amber",
+   "patchouli"
+  ],
+  "key": [
+   "Black truffle",
+   "Black orchid",
+   "Patchouli"
+  ],
+  "status": "draft - needs price, stock, MAD bottle photo"
+ },
+ {
+  "code": "Q110",
+  "gender": "unisex",
+  "house": "Tom Ford",
+  "original": "Ombré Leather",
+  "accords": [
+   "leather",
+   "animalic",
+   "warm spicy",
+   "white floral",
+   "amber"
+  ],
+  "key": [
+   "Saffron",
+   "Black leather",
+   "Cardamom"
+  ],
+  "status": "draft - needs price, stock, MAD bottle photo"
+ }
+]

@@ -1,0 +1,80 @@
+{
+ "mobile": {
+  "small": [],
+  "tiny": {},
+  "lowContrast": [
+   {
+    "k": "chip on|rgb(14, 12, 10) on rgb(14,12,10)",
+    "ratio": 1,
+    "need": 4.5,
+    "n": 1,
+    "sample": "Anyone"
+   }
+  ],
+  "imgNoAlt": 0,
+  "imgEmptyAlt": 8,
+  "imgs": 26,
+  "lazy": 20,
+  "h1": 1,
+  "headings": 52,
+  "iconBtnNoLabel": 0,
+  "hrefHash": 1,
+  "overflowX": false,
+  "docW": 390,
+  "lang": "en/ltr",
+  "focusRing": true,
+  "reducedMotion": true,
+  "deadControls": [
+   ".tools svg.ic",
+   ".menu"
+  ],
+  "escClosesDrawer": false,
+  "dialogRole": true,
+  "addOpensCartOrCTA": true,
+  "loadMs": 400,
+  "errors": []
+ },
+ "desktop": {
+  "small": [
+   {
+    "t": "SHOP",
+    "w": 43,
+    "h": 44
+   }
+  ],
+  "tiny": {},
+  "lowContrast": [
+   {
+    "k": "chip on|rgb(14, 12, 10) on rgb(14,12,10)",
+    "ratio": 1,
+    "need": 4.5,
+    "n": 1,
+    "sample": "Anyone"
+   }
+  ],
+  "imgNoAlt": 0,
+  "imgEmptyAlt": 8,
+  "imgs": 26,
+  "lazy": 20,
+  "h1": 1,
+  "headings": 52,
+  "iconBtnNoLabel": 0,
+  "hrefHash": 1,
+  "overflowX": false,
+  "docW": 1440,
+  "lang": "en/ltr",
+  "focusRing": true,
+  "reducedMotion": true,
+  "deadControls": [
+   ".tools svg.ic"
+  ],
+  "escClosesDrawer": false,
+  "dialogRole": true,
+  "addOpensCartOrCTA": true,
+  "loadMs": 373,
+  "errors": []
+ },
+ "mobileFinderResultsInViewport": false,
+ "mobileFabShown": true,
+ "mobileFinderResultsDistancePx": 172
+}
