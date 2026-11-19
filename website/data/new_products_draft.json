@@ -17,13 +17,13 @@
    "Black orchid",
    "Patchouli"
   ],
-  "status": "listed with placeholder photo and stock",
+  "status": "listed at 25 JOD (was 33); stock is a placeholder",
   "price": 25,
   "was": 33,
   "stock": 5,
   "stock_note": "placeholder - owner inventory not accurate yet",
-  "image": "img/tf_placeholder.jpg",
-  "image_note": "MAD unisex Selective 100 ml bottle + box (from the Q106 product gallery); real Q105/Q110 photos still needed"
+  "image": "img/tf_q105.jpg",
+  "image_note": "composite: MAD unisex Selective 100 ml (Q106 gallery) + the original from the MAD Selective catalogue; tools/make_tomford_images.py. Replace with real MAD photos when available."
  },
  {
   "code": "Q110",
@@ -42,12 +42,12 @@
    "Black leather",
    "Cardamom"
   ],
-  "status": "listed with placeholder photo and stock",
+  "status": "listed at 25 JOD (was 33); stock is a placeholder",
   "price": 25,
   "was": 33,
   "stock": 5,
   "stock_note": "placeholder - owner inventory not accurate yet",
-  "image": "img/tf_placeholder.jpg",
-  "image_note": "MAD unisex Selective 100 ml bottle + box (from the Q106 product gallery); real Q105/Q110 photos still needed"
+  "image": "img/tf_q110.jpg",
+  "image_note": "composite: MAD unisex Selective 100 ml (Q106 gallery) + the original from the MAD Selective catalogue; tools/make_tomford_images.py. Replace with real MAD photos when available."
  }
 ]

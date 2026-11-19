@@ -1,5 +1,5 @@
 {
- "_about": "Niche notes. Verified against the official MAD Parfumeur Niche catalogue (FlipHTML5 book, Top/Heart/Base pages): Gumin p62, Rouge p166, Treasure p186, Bruno Exotic p22, Sateen Oud p230, Prevail p162 all matched. Devil's Trick p42, Dreamlight p58, Pera p158, Trono p190 added from the same book. Forza and Golden Soul are not in that book: notes pending.",
+ "_about": "Niche notes. Verified against the official MAD Parfumeur Niche catalogue (FlipHTML5 book, Top/Heart/Base pages): Gumin p62, Rouge p166, Treasure p186, Bruno Exotic p22, Sateen Oud p230, Prevail p162 all matched. Devil's Trick p42, Dreamlight p58, Pera p158, Trono p190 added from the same book. Forza and Golden Soul are not in that book: notes pending. Forza and Golden Soul added from Parfumo (MAD's own listings, parfumo.com/Perfumes/mad-parfumeur/forza and /golden-soul).",
  "Rouge": {
   "key": "rouge",
   "top": [
@@ -406,5 +406,44 @@
   ],
   "family": "Oriental / Lavender",
   "src": "MAD Niche catalogue p190"
+ },
+ "Forza": {
+  "key": "forza",
+  "top": [
+   "Cinnamon",
+   "Apple",
+   "Lavender"
+  ],
+  "heart": [
+   "Lily of the Valley",
+   "Rose",
+   "Cedar"
+  ],
+  "base": [
+   "Vanilla",
+   "Musk",
+   "Oud",
+   "Sandalwood",
+   "Amber"
+  ],
+  "family": "Oriental / Woody",
+  "src": "Parfumo MAD Parfumeur Forza (matches Xerjoff Alexandria II)"
+ },
+ "Golden Soul": {
+  "key": "goldensoul",
+  "top": [
+   "Orange Blossom",
+   "Ylang-Ylang"
+  ],
+  "heart": [
+   "Cedarwood",
+   "Jasmine"
+  ],
+  "base": [
+   "Amber",
+   "Orange Blossom"
+  ],
+  "family": "Floral / Amber",
+  "src": "Parfumo MAD Parfumeur Golden Soul"
  }
 }

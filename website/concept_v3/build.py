@@ -5,6 +5,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 rows = {r['id']: r for r in json.load(open('catalog_snapshot.json'))}
 niche = {k: v for k, v in json.load(open('../data/notes_niche.json')).items() if not k.startswith('_')}
 sel = {k: v for k, v in json.load(open('../data/notes_selective.json')).items() if not k.startswith('_')}
+nins = json.load(open('../data/niche_inspired.json'))
 catsel = json.load(open('../data/selective_catalogue.json'))
 norm = lambda s: re.sub(r'[^a-z]', '', s.lower())
 nkey = {norm({'Treasure': 'Tresure'}.get(k, k)): k for k in niche}          # catalogue spells it "Tresure"
@@ -26,12 +27,15 @@ for r in order:
         m = re.match(r'MAD (.+?) (\d+) ml', r['name']); nm = m.group(1); k = nkey.get(norm(nm))
         base.update(name=niche_name if False else (k or nm.title().replace("'S", "'s")), ml=int(m.group(2)))
         if k: base['notes'] = {x: niche[k][x] for x in ('top', 'heart', 'base')}
+        if k in nins:
+            base['insp'] = {'house': nins[k]['house'], 'original': nins[k]['original'], 'confirmed': True}
+            if 'key' in nins[k]: base['key'] = nins[k]['key']
     elif coll == 'selective':
         m = re.search(r'MAD (\w+) Selective', r['name']); base.update(name=m.group(1), ml=100)
         if pid in catsel:
             c = catsel[pid]; ok = 'confirm' not in c['original']; orig = re.sub(r'\s*\(.*?\)', '', c['original']).strip() if ok else ''
             base['insp'] = {'house': c['house'], 'original': orig, 'confirmed': ok}
-            if c.get('notes'): base['notes'] = c['notes']
+            if c.get('notes'): base['notes'] = c['notes']; base['origNotes'] = True
             elif c['key']: base['key'] = c['key']; base['acc'] = c['accords']
             elif pid in sel: base['notes'] = sel[pid]['notes']
         elif pid in sel: base['notes'] = sel[pid]['notes']
@@ -45,9 +49,6 @@ for x in json.load(open('../data/new_products_draft.json')):
 withn = sum(1 for p in prods.values() if 'notes' in p or 'key' in p)
 print(len(prods), 'products |', withn, 'with notes |', sum(1 for p in prods.values() if p['collection']=='niche'), 'niche,', sum(1 for p in prods.values() if p['collection']=='selective'), 'selective')
 fam = json.load(open('../data/families.json'))
-def pkg(pid, tag):
-    r = rows[pid]
-    return f'<article class="pkg"><img src="img/p{pid}.webp" alt="" loading="lazy"><div><span class="tag" data-i18n="{tag}"></span><h3>{re.sub(chr(92)+"s+", " ", r["name"])}</h3><div class="price"><b>{r["price"]}</b> <small>JOD</small> <s>{r["was"]}</s></div><button class="add" data-i18n="add"></button></div></article>'
 h = open('template.html', encoding='utf-8').read()
 h = h.replace('{{ENGINE}}', open('engine.js').read()).replace('{{ADMIN}}', open('admin.js').read())
 h = h.replace('{{PRODUCTS_JSON}}', json.dumps(prods, ensure_ascii=False)).replace('{{FAMILIES_JSON}}', json.dumps(fam, ensure_ascii=False))
