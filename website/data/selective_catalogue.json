@@ -59,7 +59,7 @@
   "code": "Y102",
   "gender": "her",
   "house": "Yves Saint Laurent",
-  "original": "Libre (amber bottle — confirm)",
+  "original": "Libre",
   "accords": [
    "woody",
    "tuberose",
@@ -80,7 +80,7 @@
   "code": "W223",
   "gender": "her",
   "house": "Paco Rabanne",
-  "original": "Olympéa (black bottle — Intense? confirm)",
+  "original": "Olympéa",
   "accords": [
    "white floral",
    "vanilla",
@@ -219,7 +219,7 @@
   "code": "L102",
   "gender": "her",
   "house": "Lancôme",
-  "original": "La Nuit Trésor (confirm)",
+  "original": "La Nuit Trésor",
   "accords": [
    "sweet",
    "fruity",
@@ -259,7 +259,7 @@
   "code": "K102",
   "gender": "her",
   "house": "Kayali",
-  "original": "Vanilla Candy Rock Sugar 42 (confirm)",
+  "original": "Vanilla Candy Rock Sugar 42",
   "accords": [
    "sweet",
    "vanilla",
@@ -339,7 +339,7 @@
   "code": "G112",
   "gender": "her",
   "house": "Gucci",
-  "original": "Flora Gorgeous (yellow bottle — confirm)",
+  "original": "Flora Gorgeous Orchid",
   "accords": [
    "floral",
    "vanilla",
@@ -713,7 +713,7 @@
   "code": "P101",
   "gender": "him",
   "house": "Parfums de Marly",
-  "original": "Pegasus (silver bottle — confirm)",
+  "original": "Pegasus",
   "accords": [
    "almond",
    "vanilla",
@@ -890,7 +890,7 @@
   "code": "W129",
   "gender": "him",
   "house": "Paco Rabanne",
-  "original": "1 Million (gold bottle — Elixir/Royal? confirm)",
+  "original": "1 Million Elixir",
   "accords": [
    "vanilla",
    "fruity",
@@ -951,7 +951,25 @@
   "accords": [],
   "key": [],
   "page": 0,
-  "source": "owner"
+  "source": "owner (inspired-by); notes: retailer listings of Versace Eros EDT",
+  "notes": {
+   "top": [
+    "Mint",
+    "Green Apple",
+    "Lemon"
+   ],
+   "heart": [
+    "Tonka Bean",
+    "Ambroxan",
+    "Geranium"
+   ],
+   "base": [
+    "Vanilla",
+    "Vetiver",
+    "Oakmoss",
+    "Cedarwood"
+   ]
+  }
  },
  "55": {
   "code": "C126",

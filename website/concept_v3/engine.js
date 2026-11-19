@@ -62,6 +62,12 @@
     const need = (min) => Math.max(0, r2(min - subtotal));
     if (rule.type === 'free_delivery' && st.delivery !== 0 && need(rule.minSpend) > 0) return { rule: rule.id, kind: 'free_delivery', need: need(rule.minSpend), target: rule.minSpend };
     if (rule.type === 'gift' && !st.gifts.includes(rule.giftId) && need(rule.minSpend) > 0) return { rule: rule.id, kind: 'gift', need: need(rule.minSpend), target: rule.minSpend, giftId: rule.giftId };
+    if (rule.type === 'bxgy') {
+      const L = st.units.filter(u => inScope(st.products[u.pid], rule.scope)), size = rule.buyQty + rule.getQty, r = L.length % size;
+      if (L.length === 0 || r === 0 || (rule.repeat === false && L.length >= size)) return null;
+      const unlocked = r >= rule.buyQty;
+      return { rule: rule.id, kind: 'bxgy', units: unlocked ? size - r : rule.buyQty - r, unlocked, pct: rule.pct, have: r, size };
+    }
     if (rule.type === 'tiered') { const next = [...rule.tiers].sort((a, b) => a.min - b.min).find(x => x.min > subtotal); if (next) return { rule: rule.id, kind: 'tier', need: need(next.min), target: next.min, pct: next.pct }; }
     return null;
   }

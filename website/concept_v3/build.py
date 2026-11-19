@@ -31,12 +31,17 @@ for r in order:
         if pid in catsel:
             c = catsel[pid]; ok = 'confirm' not in c['original']; orig = re.sub(r'\s*\(.*?\)', '', c['original']).strip() if ok else ''
             base['insp'] = {'house': c['house'], 'original': orig, 'confirmed': ok}
-            if c['key']: base['key'] = c['key']; base['acc'] = c['accords']
+            if c.get('notes'): base['notes'] = c['notes']
+            elif c['key']: base['key'] = c['key']; base['acc'] = c['accords']
             elif pid in sel: base['notes'] = sel[pid]['notes']
         elif pid in sel: base['notes'] = sel[pid]['notes']
     else:
         base.update(name=re.sub(r'^MAD | Body Mist 250 ml$', '', r['name']).strip() + ' Body Mist', ml=250)
     prods[pid] = base
+for x in json.load(open('../data/new_products_draft.json')):
+    pid = 'tf' + x['code'][1:]
+    prods[pid] = dict(id=pid, name=x['code'], brand='mad', collection='selective', img=x['image'], price=x['price'], was=x['was'], stock=x['stock'], ml=100, **{'for': x['gender']},
+                      insp={'house': x['house'], 'original': x['original'], 'confirmed': True}, key=x['key'], acc=x['accords'], placeholder=True)
 withn = sum(1 for p in prods.values() if 'notes' in p or 'key' in p)
 print(len(prods), 'products |', withn, 'with notes |', sum(1 for p in prods.values() if p['collection']=='niche'), 'niche,', sum(1 for p in prods.values() if p['collection']=='selective'), 'selective')
 fam = json.load(open('../data/families.json'))
@@ -46,5 +51,5 @@ def pkg(pid, tag):
 h = open('template.html', encoding='utf-8').read()
 h = h.replace('{{ENGINE}}', open('engine.js').read()).replace('{{ADMIN}}', open('admin.js').read())
 h = h.replace('{{PRODUCTS_JSON}}', json.dumps(prods, ensure_ascii=False)).replace('{{FAMILIES_JSON}}', json.dumps(fam, ensure_ascii=False))
-h = h.replace('{{PKGS}}', ''.join([pkg(98, 'pk_special'), pkg(93, 'pk_summer'), pkg(92, 'pk_sig')]))
+
 open('index.html', 'w', encoding='utf-8').write(h); print('ok', len(h))

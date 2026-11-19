@@ -17,7 +17,13 @@
    "Black orchid",
    "Patchouli"
   ],
-  "status": "draft - needs price, stock, MAD bottle photo"
+  "status": "listed with placeholder photo and stock",
+  "price": 25,
+  "was": 33,
+  "stock": 5,
+  "stock_note": "placeholder - owner inventory not accurate yet",
+  "image": "img/tf_placeholder.jpg",
+  "image_note": "generic MAD unisex bottle; real photo needed"
  },
  {
   "code": "Q110",
@@ -36,6 +42,12 @@
    "Black leather",
    "Cardamom"
   ],
-  "status": "draft - needs price, stock, MAD bottle photo"
+  "status": "listed with placeholder photo and stock",
+  "price": 25,
+  "was": 33,
+  "stock": 5,
+  "stock_note": "placeholder - owner inventory not accurate yet",
+  "image": "img/tf_placeholder.jpg",
+  "image_note": "generic MAD unisex bottle; real photo needed"
  }
 ]

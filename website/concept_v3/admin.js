@@ -37,6 +37,7 @@ function formHtml(){const r=editing,sc=r.scope||{type:'all'};
   ${noScope?'<div></div>':`<div><label>Applies to</label>${sel('scopeType',[['all','All products'],['brand','A brand'],['collection','A collection'],['product','One product']],sc.type)}</div>`}
   ${noScope||sc.type==='all'?'':`<div><label>Which</label>${sel('scopeValue',scopeVals(sc.type),sc.value)}</div>`}
   ${typeFields}
+  ${f('Headline shown to customers (EN, optional)','headline',r.headline)}${f('Headline (AR, optional)','headlineAr',r.headlineAr)}${f('Second line (EN, optional)','sub',r.sub)}${f('Second line (AR, optional)','subAr',r.subAr)}
   ${f('Coupon code (leave empty = automatic)','code',r.code,'text','e.g. RAMADAN15')}${f('Max total uses (optional)','maxUses',r.maxUses,'number')}
   ${f('Starts (optional)','start',r.start,'date')}${f('Ends (optional)','end',r.end,'date')}
   <div class="chk"><input type="checkbox" name="stackable" ${r.stackable?'checked':''}> Can combine with other promotions</div><div class="chk"><input type="checkbox" name="active" ${r.active?'checked':''}> Active</div>
@@ -50,7 +51,7 @@ function bindPromos(){
  document.querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>{editing=JSON.parse(JSON.stringify(RULES.find(x=>x.id===b.dataset.ed)));renderAdmin()});
  const fm=$('#pf');if(!fm)return;
  const reread=()=>{const d=new FormData(fm),n=k=>d.get(k)===''||d.get(k)==null?undefined:+d.get(k);
-  const r={...editing,name:d.get('name'),nameAr:d.get('nameAr'),type:d.get('type'),code:(d.get('code')||'').trim()||undefined,maxUses:n('maxUses'),start:d.get('start')||undefined,end:d.get('end')||undefined,stackable:fm.stackable.checked,active:fm.active.checked};
+  const r={...editing,name:d.get('name'),nameAr:d.get('nameAr'),headline:d.get('headline')||undefined,headlineAr:d.get('headlineAr')||undefined,sub:d.get('sub')||undefined,subAr:d.get('subAr')||undefined,type:d.get('type'),code:(d.get('code')||'').trim()||undefined,maxUses:n('maxUses'),start:d.get('start')||undefined,end:d.get('end')||undefined,stackable:fm.stackable.checked,active:fm.active.checked};
   const st=d.get('scopeType');r.scope=st&&st!=='all'?{type:st,value:d.get('scopeValue')||(scopeVals(st)[0]||[])[0]}:{type:'all'};
   ['pct','minSpend','amount','buyQty','getQty','qty','price'].forEach(k=>{if(d.has(k))r[k]=n(k)});if(fm.repeat)r.repeat=fm.repeat.checked;if(d.has('giftId'))r.giftId=d.get('giftId');
   if(d.has('tiers'))r.tiers=d.get('tiers').split(',').map(s=>s.trim().split(':').map(Number)).filter(a=>a[0]>0&&a[1]>0).map(a=>({min:a[0],pct:a[1]}));return r};

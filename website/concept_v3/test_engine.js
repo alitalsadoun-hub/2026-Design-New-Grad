@@ -36,4 +36,13 @@ r=run({n1:2},[mu],{used:{mu:5}});ok('maxUses reached ignored',r.discount===0,r);
 r=run({n1:2},[R({type:'percent',pct:10}),fd]);ok('discount + free delivery judged on discounted subtotal (54<60 => pays delivery)',r.delivery===3&&r.total===57,r);
 r=run({n1:2,n2:1},[R({type:'percent',pct:10,stackable:true}),fd]);ok('discounted 81 >=60 => free delivery',r.delivery===0&&r.total===81,r);
 r=run({n1:3},[R({type:'amount_cart',amount:200})]);ok('amount capped at subtotal',r.total===3&&r.discount===90,r);
+
+const OFFER=R({type:'bxgy',buyQty:2,getQty:1,pct:100,repeat:true,scope:{type:'collection',value:'selective'}});
+r=run({s1:3},[OFFER]);ok('OWNER OFFER: 3 Selective = 50 JOD (+3 delivery)',r.discount===25&&r.total===53&&r.subtotal===75,r);
+r=run({s1:1,s2:1},[OFFER]);ok('2 Selective: pays 50, nudge "add 1, it is free"',r.discount===0&&r.nudges[0]&&r.nudges[0].kind==='bxgy'&&r.nudges[0].unlocked&&r.nudges[0].units===1,r);
+r=run({s1:1},[OFFER]);ok('1 Selective: nudge to unlock (add 1 more)',r.nudges[0]&&!r.nudges[0].unlocked&&r.nudges[0].units===1,r);
+r=run({s1:6},[OFFER]);ok('6 Selective = 100 JOD',r.discount===50&&r.subtotal-r.discount===100,r);
+r=run({s1:4},[OFFER]);ok('4 Selective: one free, 100 total',r.discount===25&&r.subtotal-r.discount===75,r);
+r=run({s1:2,n1:1},[OFFER]);ok('niche does not count toward the Selective offer',r.discount===0,r);
+r=run({s1:3,n1:1},[OFFER]);ok('3 Selective + 1 niche: free Selective only',r.discount===25&&r.total===30+50+3,r);
 console.log(fails?`\n${fails} FAILED`:'\nall passed');process.exit(fails?1:0);
