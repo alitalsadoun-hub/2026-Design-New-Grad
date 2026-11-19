@@ -198,6 +198,7 @@ body.ispdp .toast{bottom:92px}@media(min-width:981px){body.ispdp .toast{bottom:2
 .sres img{width:64px;height:64px;border-radius:3px;object-fit:cover}.sres b{font-family:var(--serif);font-size:24px;font-weight:600;display:block;color:#F6EEDF}.sres small{color:#A99D8A;font-size:13px}.sres p.h{color:#A99D8A;font-size:14px}
 /* product page */
 #pdp{display:none}body.ispdp #pdp{display:block}body.ispdp #home{display:none}
+.backbtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 6px;margin-top:10px;font-size:14px;font-weight:500;color:var(--ink);border-radius:99px}.backbtn:hover{background:rgba(20,18,16,.06)}
 .crumbs{font-size:13px;color:var(--mute);padding-block:22px 6px}.crumbs a{border-bottom:1px solid var(--line)}
 .pdp{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,5vw,72px);padding-block:12px 70px;align-items:start}
 .pdp .gal{position:sticky;top:100px}.pdp .gal .main{aspect-ratio:1;border-radius:var(--r);overflow:hidden;background:var(--sand)}.pdp .gal img{width:100%;height:100%;object-fit:cover}
@@ -312,7 +313,7 @@ body.ispdp .toast{bottom:92px}@media(min-width:981px){body.ispdp .toast{bottom:2
 const PRODUCTS={{PRODUCTS_JSON}};
 const BRANDS={mad:{name:'MAD Parfumeur',logo:'img/brand_mad.webp'}};
 const FAMILIES={{FAMILIES_JSON}};
-const WA_NUMBER='962797906211', DELIVERY_FEE=3;
+const WA_NUMBER='962797906211', DELIVERY_FEE=3, SHOW_STOCK_HINTS=false; /* 'Only N left' stays off until the stock count is verified */
 const store={get(k,d){try{const v=localStorage.getItem('scentro_'+k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem('scentro_'+k,JSON.stringify(v))}catch{}}};
 const SEED_RULES=[
  {id:'sel3for2',name:'Any 3 Selective for 50 JOD — buy 2, get the 3rd free',nameAr:'٣ عطور Selective بـ٥٠ دينار — اشترِ ٢ والثالث مجاناً',headline:'Buy 2 Selective, get the 3rd free',headlineAr:'اشترِ عطرين من Selective والثالث مجاناً',sub:'Any 3 Selective perfumes for 50 JOD',subAr:'أي ٣ عطور Selective بـ٥٠ دينار',type:'bxgy',buyQty:2,getQty:1,pct:100,repeat:true,scope:{type:'collection',value:'selective'},active:true,stackable:false,priority:1},
@@ -428,12 +429,14 @@ document.querySelectorAll('.cat[data-col]').forEach(c=>c.onclick=()=>{colV=c.dat
 function bindAdd(){document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addCart(b.dataset.add))}
 /* ---- cart, promotions, guest checkout (cash on delivery) ---- */
 function saveCart(){store.set('cart',cart)}
-const soldOut=p=>p.stock<=0,lowStock=p=>p.stock>0&&p.stock<=3;
+const soldOut=p=>p.stock<=0,lowStock=p=>SHOW_STOCK_HINTS&&p.stock>0&&p.stock<=3;
 function addCart(id,q=1){const p0=PRODUCTS[id];if(soldOut(p0))return;if((cart[id]||0)+q>p0.stock){cart[id]=p0.stock;saveCart();renderDrawer();updateCount();toast(t('maxq').replace('{n}',p0.stock));return}cart[id]=(cart[id]||0)+q;saveCart();renderDrawer();updateCount();const n=Object.values(cart).reduce((a,b)=>a+b,0);toast(`${PRODUCTS[id].name} — ${t('added')}`,{label:t('view_cart')+' ('+n+')',fn:openDrawer});const b=$('#cartbtn');b.classList.remove('pulse');void b.offsetWidth;b.classList.add('pulse')}
 function updateCount(){$('#cc').textContent=Object.values(cart).reduce((a,b)=>a+b,0)}
 function toast(m,act){const e=$('#toast');e.innerHTML='<span></span>';e.firstChild.textContent=m;if(act){const b=document.createElement('button');b.textContent=act.label;b.onclick=()=>{e.classList.remove('on');act.fn()};e.appendChild(b)}e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),act?5000:1800)}
-let lastFocus=null;function openDrawer(){lastFocus=document.activeElement;$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>$('#dclose').focus(),50)}
-function closeDrawer(){$('#drawer').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on');if(lastFocus&&lastFocus.focus)lastFocus.focus();if(step==='done'){cart={};saveCart();step='cart';code='';couponMsg='';renderDrawer();updateCount()}}
+let lastFocus=null;const ovPush=k=>{try{history.pushState({ov:k},'')}catch{}},ovBack=k=>{if(history.state&&history.state.ov===k){history.back();return true}return false};
+function openDrawer(){ovPush('cart');lastFocus=document.activeElement;$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>$('#dclose').focus(),50)}
+function closeDrawer(){if(ovBack('cart'))return;hideDrawer()}
+function hideDrawer(){$('#drawer').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on');if(lastFocus&&lastFocus.focus)lastFocus.focus();if(step==='done'){cart={};saveCart();step='cart';code='';couponMsg='';renderDrawer();updateCount()}}
 function nudgeHtml(q){const ns=[...q.nudges];const bx=ns.filter(n=>n.kind==='bxgy').sort((a,b)=>(b.unlocked-a.unlocked)||(a.units-b.units))[0];
  if(bx){const x=bx.pct===100?t('x_free'):t('x_pct').replace('{p}',bx.pct);const msg=t(bx.unlocked?'nd_bx_u':'nd_bx_p').replace('{n}',num(bx.units)).replace('{x}',bx.unlocked?x:(bx.pct===100?t('x_free2'):t('x_pct').replace('{p}',bx.pct)));return `<div class="nudge">${msg}<div class="bar"><i style="width:${Math.max(8,100*bx.have/bx.size)}%"></i></div></div>`}
  const n=ns.filter(n=>n.need!=null).sort((a,b)=>a.need-b.need)[0];if(!n)return'';const key=n.kind==='free_delivery'?'nd_free':n.kind==='gift'?'nd_gift':'nd_tier';
@@ -480,12 +483,14 @@ $('#waFloat').href=waLink(WA_NUMBER,'Hello SCENTRO 👋');
 {{ADMIN}}
 /* ---- mobile menu, search, finder shortcut, product page ---- */
 function setOpen(el,on){el.classList.toggle('on',on)}
-function openMenu(){setOpen($('#mnav'),true);$('#menubtn').setAttribute('aria-expanded','true');setTimeout(()=>$('#mclose').focus(),50)}
-function closeMenu(){setOpen($('#mnav'),false);$('#menubtn').setAttribute('aria-expanded','false')}
-$('#menubtn').onclick=openMenu;$('#mclose').onclick=closeMenu;document.querySelectorAll('#mnav nav a').forEach(a=>a.onclick=closeMenu);
-$('#mwa').href=waLink(WA_NUMBER,'Hello SCENTRO 👋');$('#mlang').onclick=e=>{e.preventDefault();lang=lang==='en'?'ar':'en';closeMenu();applyLang()};
-function openSearch(){setOpen($('#search'),true);$('#sin').value='';renderSearch('');setTimeout(()=>$('#sin').focus(),50)}
-function closeSearch(restore){setOpen($('#search'),false);if(restore===true)$('#searchbtn').focus()}
+function openMenu(){ovPush('menu');setOpen($('#mnav'),true);$('#menubtn').setAttribute('aria-expanded','true');setTimeout(()=>$('#mclose').focus(),50)}
+function closeMenu(){if(ovBack('menu'))return;hideMenu()}
+function hideMenu(){setOpen($('#mnav'),false);$('#menubtn').setAttribute('aria-expanded','false')}
+$('#menubtn').onclick=openMenu;$('#mclose').onclick=closeMenu;document.querySelectorAll('#mnav nav a').forEach(a=>a.onclick=hideMenu);
+$('#mwa').href=waLink(WA_NUMBER,'Hello SCENTRO 👋');$('#mlang').onclick=e=>{e.preventDefault();lang=lang==='en'?'ar':'en';hideMenu();applyLang()};
+function openSearch(){ovPush('search');setOpen($('#search'),true);$('#sin').value='';renderSearch('');setTimeout(()=>$('#sin').focus(),50)}
+function closeSearch(restore){if(ovBack('search'))return;hideSearch(restore)}
+function hideSearch(restore){setOpen($('#search'),false);if(restore===true)$('#searchbtn').focus()}
 $('#searchbtn').onclick=openSearch;$('#sclose').onclick=()=>closeSearch();$('#sin').oninput=e=>renderSearch(e.target.value);
 function famsOf(p){const s=new Set();noteItems(p).forEach(([n])=>famOf(n).forEach(f=>s.add(f)));return s}
 function renderSearch(q){q=q.trim().toLowerCase();const el=$('#sres');
@@ -506,7 +511,7 @@ function renderPDP(id){const p=PRODUCTS[id],el=$('#pdp');if(!p){location.hash=''
  const lay=!p.notes?'':['top','heart','base'].map(l=>`<div class="lay"><span class="lb">${t('pd_'+l)}</span><div class="ns">${p.notes[l].map(n=>`<em>${n}</em>`).join('')}</div></div>`).join('');
  const keyBlock=p.key?`<div class="pyr"><h3>${t('pd_key')}</h3><p class="hn">${p.insp?t('pd_keyhint'):''}</p><div class="lay" style="grid-template-columns:1fr"><div class="ns">${p.key.map(n=>`<em>${n}</em>`).join('')}</div></div>${p.acc&&p.acc.length?`<div class="lay" style="grid-template-columns:96px 1fr"><span class="lb">${t('pd_acc')}</span><div class="ns">${p.acc.map(n=>`<em>${n}</em>`).join('')}</div></div>`:''}${!p.notes&&fams.length?`<div class="fams" aria-label="${t('pd_fam')}">${fams.map(f=>`<span>${f}</span>`).join('')}</div>`:''}</div>${p.insp?`<p class="hn" style="margin-top:14px;font-size:12.5px">${t('disc')}</p>`:''}`:'';
  const mine=famsOf(p),sim=Object.values(PRODUCTS).filter(o=>o.id!==id&&hasNotes(o)&&!soldOut(o)).map(o=>({o,n:[...famsOf(o)].filter(f=>mine.has(f)).length})).filter(x=>x.n>0).sort((a,b)=>b.n-a.n).slice(0,4);
- el.innerHTML=`<div class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="#">${t('home')}</a> / <a href="#shop">${t('crumb_shop')}</a> / ${p.name}</nav>
+ el.innerHTML=`<div class="wrap"><button class="backbtn" id="pback">${lang==='ar'?'→':'←'} ${t('back')}</button><nav class="crumbs" aria-label="breadcrumb"><a href="#">${t('home')}</a> / <a href="#shop">${t('crumb_shop')}</a> / ${p.name}</nav>
  <div class="pdp"><div class="gal"><div class="main"><img src="${p.img}" alt="${p.name} — ${BRANDS[p.brand].name}"></div></div>
  <div><div class="eyebrow">${BRANDS[p.brand].name}</div><h1>${p.name}</h1><p class="meta">${t(p.collection==='niche'?'extrait':p.collection==='selective'?'edp':'mist')} · ${p.ml} ml · ${t('for_'+p.for)}</p>${p.insp?`<p class="insp"><span>${t('insp')}</span> <b>${inspTxt(p)}</b></p>`:''}<hr class="rule">
  <div class="pr"><b>${p.price}</b><small>JOD</small>${p.was?`<s>${p.was} JOD</s><span class="badge">${disc}</span>`:''}</div>${offerFor(p)?`<div class="pdpoffer"><b>${offerText(offerFor(p)).head}</b>${offerText(offerFor(p)).sub}</div>`:''}
@@ -516,13 +521,19 @@ function renderPDP(id){const p=PRODUCTS[id],el=$('#pdp');if(!p){location.hash=''
  <a class="askwa" target="_blank" rel="noopener" href="${waLink(WA_NUMBER,`Hello SCENTRO 👋 I have a question about ${p.name} (${BRANDS[p.brand].name}).`)}">💬 ${t('pd_ask')}</a></div></div>
  ${sim.length?`<section class="sim"><div class="sec-h"><div><span class="eyebrow">${t('pd_sim_s')}</span><h2 style="margin-top:10px">${t('pd_sim')}</h2></div></div><div class="grid4">${sim.map(x=>{const o=x.o;return `<article class="card"><a class="ph" href="#p-${o.id}"><img src="${o.img}" alt="${o.name}" loading="lazy"></a><div class="bn">${BRANDS[o.brand].name}</div><h3><a href="#p-${o.id}">${o.name}</a></h3><div class="row"><div class="price"><b>${o.price}</b> <small>JOD</small></div><button class="add" data-add="${o.id}">${t('add')}</button></div></article>`}).join('')}</div></section>`:''}</div>`;
  $('#stick').innerHTML=soldOut(p)?`<div class="pp">${p.name}<small>${t('sold')}</small></div><a class="btn o" target="_blank" rel="noopener" href="${waLink(WA_NUMBER,`Hello SCENTRO 👋 Please tell me when ${p.name} is back in stock.`)}">${t('notify')}</a>`:`<div class="pp">${p.name}<small>${p.price} JOD${fd?' · '+t('pd_free').replace('{n}',num(fd.minSpend)):''}</small></div><button class="btn k" id="sadd">${t('pd_add')}</button>`;
+ $('#pback').onclick=()=>{if(navCount>0)history.back();else location.hash='#shop'};
  if(!soldOut(p)){$('#qm').onclick=()=>{pdpQty=Math.max(1,pdpQty-1);$('#qn').textContent=pdpQty};$('#qp').onclick=()=>{pdpQty=Math.min(Math.min(9,p.stock),pdpQty+1);$('#qn').textContent=pdpQty};
  $('#padd').onclick=()=>{addCart(id,pdpQty);pdpQty=1;$('#qn').textContent=1};$('#sadd').onclick=()=>addCart(id,1)}bindAdd();document.title=`${p.name} — SCENTRO`}
 /* ---- routing / demo hashes ---- */
-function route(){const h=location.hash.replace('#','').split('-');const pdp=h[0]==='p'&&h[1];document.body.classList.toggle('isadmin',h[0]==='admin');document.body.classList.toggle('ispdp',!!pdp&&h[0]!=='admin');
+function route(){const h=location.hash.replace('#','').split('-');const pdp=h[0]==='p'&&h[1];if(pdp&&!document.body.classList.contains('ispdp')&&!document.body.classList.contains('isadmin'))savedY=homeY;document.body.classList.toggle('isadmin',h[0]==='admin');document.body.classList.toggle('ispdp',!!pdp&&h[0]!=='admin');
  if(h[0]==='admin')renderAdmin(h[1]||adTab);else if(pdp){renderPDP(h[1]);scrollTo(0,0)}else{document.title='SCENTRO — Concept v3';const id=location.hash.replace('#','');if(id&&!/^(ar|demo|cart|co|promo)/.test(id)){const el=document.getElementById(id);if(el)setTimeout(()=>el.scrollIntoView(),0)}}
- closeMenu()}
-window.addEventListener('hashchange',route);
+
+ if(!pdp&&h[0]!=='admin'&&wasPop&&savedY!=null)requestAnimationFrame(()=>scrollTo(0,savedY));
+ wasPop=false;hideMenu()}
+let homeY=0,savedY=null,wasPop=false,navCount=0;
+addEventListener('scroll',()=>{if(!document.body.classList.contains('ispdp')&&!document.body.classList.contains('isadmin'))homeY=scrollY},{passive:true});
+addEventListener('popstate',()=>{wasPop=true;if($('#drawer').classList.contains('on'))hideDrawer();if($('#mnav').classList.contains('on'))hideMenu();if($('#search').classList.contains('on'))hideSearch()});
+window.addEventListener('hashchange',()=>{navCount++;route()});
 const hs=location.hash.replace('#','').split('-');if(hs.includes('ar'))lang='ar';else if(hs.includes('en'))lang='en';
 if(hs.includes('demo'))picked=['sweet','woody','spicy'];
 if(hs.includes('cart')||hs.includes('co')||hs.includes('promo')){const ids=Object.keys(PRODUCTS).filter(i=>PRODUCTS[i].collection==='niche');cart=hs.includes('promo')?{[ids[0]]:1,[ids[1]]:1,[ids[2]]:1}:{[ids[0]]:1,[ids[4]]:2}}
