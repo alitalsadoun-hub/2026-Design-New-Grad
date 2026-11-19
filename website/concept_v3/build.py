@@ -5,6 +5,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 rows = {r['id']: r for r in json.load(open('catalog_snapshot.json'))}
 niche = {k: v for k, v in json.load(open('../data/notes_niche.json')).items() if not k.startswith('_')}
 sel = {k: v for k, v in json.load(open('../data/notes_selective.json')).items() if not k.startswith('_')}
+mistn = {k: v for k, v in json.load(open('../data/notes_mist.json')).items() if not k.startswith('_')}
 nins = json.load(open('../data/niche_inspired.json'))
 catsel = json.load(open('../data/selective_catalogue.json'))
 norm = lambda s: re.sub(r'[^a-z]', '', s.lower())
@@ -40,7 +41,8 @@ for r in order:
             elif pid in sel: base['notes'] = sel[pid]['notes']
         elif pid in sel: base['notes'] = sel[pid]['notes']
     else:
-        base.update(name=re.sub(r'^MAD | Body Mist 250 ml$', '', r['name']).strip() + ' Body Mist', ml=250)
+        mn = re.sub(r'^MAD | Body Mist 250 ml$', '', r['name']).strip().title(); base.update(name=mn + ' Body Mist', ml=250)
+        if mn in mistn: base['notes'] = {x: mistn[mn][x] for x in ('top', 'heart', 'base')}
     prods[pid] = base
 for x in json.load(open('../data/new_products_draft.json')):
     pid = 'tf' + x['code'][1:]

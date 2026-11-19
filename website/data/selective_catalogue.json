@@ -180,7 +180,7 @@
   "code": "P108",
   "gender": "her",
   "house": "Paco Rabanne",
-  "original": "Million Gold for Her (confirm)",
+  "original": "Million Gold for Her",
   "accords": [
    "sweet",
    "vanilla",
@@ -193,7 +193,8 @@
    "Ylang",
    "Vanilla absolute"
   ],
-  "page": 15
+  "page": 15,
+  "source": "owner confirmed"
  },
  "67": {
   "code": "P107",
@@ -478,7 +479,7 @@
   "code": "B105",
   "gender": "her",
   "house": "Burberry",
-  "original": "Burberry Her (pale-pink variant — confirm)",
+  "original": "Burberry Her Elixir",
   "accords": [
    "fruity",
    "sweet",
@@ -493,7 +494,8 @@
    "Jasmine",
    "Sandalwood"
   ],
-  "page": 14
+  "page": 14,
+  "source": "owner confirmed"
  },
  "51": {
   "code": "B103",
@@ -653,7 +655,7 @@
   "code": "W179",
   "gender": "him",
   "house": "Paco Rabanne",
-  "original": "Invictus (blue trophy bottle — Parfum? confirm)",
+  "original": "Invictus Parfum",
   "accords": [
    "aromatic",
    "musky",
@@ -667,7 +669,8 @@
    "Lavender",
    "Musk"
   ],
-  "page": 22
+  "page": 22,
+  "source": "owner confirmed"
  },
  "41": {
   "code": "W171",
@@ -732,7 +735,7 @@
   "code": "J110",
   "gender": "him",
   "house": "Jean Paul Gaultier",
-  "original": "Scandal Pour Homme Absolu (gold bottle — confirm)",
+  "original": "Scandal Absolu pour Homme",
   "accords": [
    "woody",
    "fruity",
@@ -746,7 +749,8 @@
    "Caramel",
    "Mirabelle plum"
   ],
-  "page": 24
+  "page": 24,
+  "source": "owner confirmed"
  },
  "36": {
   "code": "A105",

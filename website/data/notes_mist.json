@@ -1,0 +1,93 @@
+{
+ "_about": "Body mist notes from the official MAD Parfumeur site (madparfumeur.sg product descriptions).",
+ "Daydream": {
+  "top": [
+   "Lemon",
+   "Pineapple",
+   "Peach"
+  ],
+  "heart": [
+   "Coconut",
+   "Milk",
+   "Lily of the Valley"
+  ],
+  "base": [
+   "Musk",
+   "Sandalwood",
+   "Vanilla"
+  ],
+  "src": "madparfumeur.sg/products/250ml-body-mist-daydream"
+ },
+ "Mystic Summer": {
+  "top": [
+   "Mandarin",
+   "Grapefruit"
+  ],
+  "heart": [
+   "Passion Fruit",
+   "Rose",
+   "Lily of the Valley"
+  ],
+  "base": [
+   "Musk",
+   "Vanilla",
+   "Honey"
+  ],
+  "src": "madparfumeur.sg/products/250ml-body-mist-mystic-summer"
+ },
+ "Charm": {
+  "top": [
+   "Honeysuckle",
+   "Green Notes",
+   "Herbal Accents"
+  ],
+  "heart": [
+   "Jasmine",
+   "Fruity Notes",
+   "Rose"
+  ],
+  "base": [
+   "Musk",
+   "Woody Notes",
+   "Amber"
+  ],
+  "src": "madparfumeur.sg/products/250ml-body-mist-charm"
+ },
+ "Sun Kiss": {
+  "top": [
+   "Fruity Notes",
+   "Citrus",
+   "Peach",
+   "Melon"
+  ],
+  "heart": [
+   "Floral Notes",
+   "Jasmine",
+   "Green Apple",
+   "Green Notes",
+   "Marine Notes"
+  ],
+  "base": [
+   "Woody Notes",
+   "Musk",
+   "Cedarwood",
+   "Amber"
+  ],
+  "src": "madparfumeur.sg/products/250ml-body-mist-sun-kiss"
+ },
+ "Sweet Beach": {
+  "top": [
+   "Coconut",
+   "Peach",
+   "Pineapple"
+  ],
+  "heart": [
+   "Jasmine"
+  ],
+  "base": [
+   "Vanilla",
+   "Caramelized Sugar"
+  ],
+  "src": "madparfumeur.sg/products/250ml-body-mist-sweet-beach"
+ }
+}
