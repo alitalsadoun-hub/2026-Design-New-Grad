@@ -6,6 +6,7 @@ rows = {r['id']: r for r in json.load(open('catalog_snapshot.json'))}
 niche = {k: v for k, v in json.load(open('../data/notes_niche.json')).items() if not k.startswith('_')}
 sel = {k: v for k, v in json.load(open('../data/notes_selective.json')).items() if not k.startswith('_')}
 mistn = {k: v for k, v in json.load(open('../data/notes_mist.json')).items() if not k.startswith('_')}
+perc = {k: v for k, v in json.load(open('../data/perceived_niche.json')).items() if not k.startswith('_')}
 nins = json.load(open('../data/niche_inspired.json'))
 catsel = json.load(open('../data/selective_catalogue.json'))
 norm = lambda s: re.sub(r'[^a-z]', '', s.lower())
@@ -28,6 +29,7 @@ for r in order:
         m = re.match(r'MAD (.+?) (\d+) ml', r['name']); nm = m.group(1); k = nkey.get(norm(nm))
         base.update(name=niche_name if False else (k or nm.title().replace("'S", "'s")), ml=int(m.group(2)))
         if k: base['notes'] = {x: niche[k][x] for x in ('top', 'heart', 'base')}
+        if k in perc and perc[k]['acc']: base['acc'] = perc[k]['acc']
         if k in nins:
             base['insp'] = {'house': nins[k]['house'], 'original': nins[k]['original'], 'confirmed': True}
             if 'key' in nins[k]: base['key'] = nins[k]['key']
@@ -51,8 +53,17 @@ for x in json.load(open('../data/new_products_draft.json')):
 withn = sum(1 for p in prods.values() if 'notes' in p or 'key' in p)
 print(len(prods), 'products |', withn, 'with notes |', sum(1 for p in prods.values() if p['collection']=='niche'), 'niche,', sum(1 for p in prods.values() if p['collection']=='selective'), 'selective')
 fam = json.load(open('../data/families.json'))
+NF = json.load(open('../data/note_families.json'))
+def _notes(p):
+    s = set()
+    for k in ('top', 'heart', 'base'):
+        s.update((p.get('notes') or {}).get(k, []))
+    s.update(p.get('key') or []); s.update(p.get('acc') or []); return s
+missing = sorted({n for p in prods.values() for n in _notes(p) if n.lower().strip() not in NF})
+assert not missing, 'notes without a scent family in data/note_families.json: %s' % missing
 h = open('template.html', encoding='utf-8').read()
 h = h.replace('{{ENGINE}}', open('engine.js').read()).replace('{{ADMIN}}', open('admin.js').read())
+h = h.replace('{{FINDER}}', open('finder.js').read()).replace('{{NOTE_FAM_JSON}}', json.dumps(NF, ensure_ascii=False))
 h = h.replace('{{PRODUCTS_JSON}}', json.dumps(prods, ensure_ascii=False)).replace('{{FAMILIES_JSON}}', json.dumps(fam, ensure_ascii=False))
 
 open('index.html', 'w', encoding='utf-8').write(h); print('ok', len(h))

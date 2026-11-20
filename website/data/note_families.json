@@ -1,0 +1,502 @@
+{
+ "almond": [
+  "sweet"
+ ],
+ "amber": [
+  "amber"
+ ],
+ "ambergris": [
+  "amber"
+ ],
+ "ambrette seed": [
+  "amber"
+ ],
+ "ambroxan": [
+  "amber"
+ ],
+ "animalic": [
+  "oud"
+ ],
+ "anis": [
+  "spicy"
+ ],
+ "anise": [
+  "spicy"
+ ],
+ "apple": [
+  "fruity"
+ ],
+ "aquatic": [
+  "aromatic"
+ ],
+ "aquatic notes": [
+  "aromatic"
+ ],
+ "aromatic": [
+  "aromatic"
+ ],
+ "atlas cedar": [
+  "woody"
+ ],
+ "balsamic": [
+  "amber"
+ ],
+ "balsamic accord": [
+  "amber"
+ ],
+ "benzoin": [
+  "amber"
+ ],
+ "bergamot": [
+  "citrus"
+ ],
+ "bitter almond": [
+  "sweet"
+ ],
+ "black fig": [
+  "fruity"
+ ],
+ "black leather": [
+  "oud"
+ ],
+ "black orchid": [
+  "floral"
+ ],
+ "black pepper": [
+  "spicy"
+ ],
+ "black soap": [
+  "aromatic"
+ ],
+ "black truffle": [
+  "oud"
+ ],
+ "blackcurrant": [
+  "fruity"
+ ],
+ "blood orange": [
+  "citrus"
+ ],
+ "cacao": [
+  "sweet"
+ ],
+ "candied lemon": [
+  "citrus",
+  "sweet"
+ ],
+ "caramel": [
+  "sweet"
+ ],
+ "caramelized sugar": [
+  "sweet"
+ ],
+ "cardamom": [
+  "spicy"
+ ],
+ "cedar": [
+  "woody"
+ ],
+ "cedarwood": [
+  "woody"
+ ],
+ "cherry": [
+  "fruity"
+ ],
+ "chestnut": [
+  "sweet"
+ ],
+ "chewing gum": [
+  "fruity",
+  "sweet"
+ ],
+ "chili": [
+  "spicy"
+ ],
+ "chypre": [
+  "woody"
+ ],
+ "cinnamon": [
+  "spicy"
+ ],
+ "citrus": [
+  "citrus"
+ ],
+ "clary sage": [
+  "aromatic"
+ ],
+ "cocoa": [
+  "sweet"
+ ],
+ "coconut": [
+  "fruity",
+  "sweet"
+ ],
+ "coffee": [
+  "sweet"
+ ],
+ "coffee absolute": [
+  "sweet"
+ ],
+ "creamy": [
+  "sweet"
+ ],
+ "damask rose": [
+  "floral"
+ ],
+ "dry woods": [
+  "woody"
+ ],
+ "earthy": [
+  "oud"
+ ],
+ "elemi": [
+  "woody"
+ ],
+ "eucalyptus": [
+  "aromatic"
+ ],
+ "fir balsam": [
+  "woody"
+ ],
+ "floral": [
+  "floral"
+ ],
+ "floral notes": [
+  "floral"
+ ],
+ "fresh": [
+  "aromatic"
+ ],
+ "fresh spicy": [
+  "spicy"
+ ],
+ "fruity": [
+  "fruity"
+ ],
+ "fruity notes": [
+  "fruity"
+ ],
+ "gardenia": [
+  "floral"
+ ],
+ "geranium": [
+  "floral"
+ ],
+ "ginger": [
+  "spicy"
+ ],
+ "gourmand": [
+  "sweet"
+ ],
+ "grapefruit": [
+  "citrus"
+ ],
+ "grasse rose": [
+  "floral"
+ ],
+ "green": [
+  "aromatic"
+ ],
+ "green apple": [
+  "fruity"
+ ],
+ "green notes": [
+  "aromatic"
+ ],
+ "guaiac wood": [
+  "woody"
+ ],
+ "hazelnut": [
+  "sweet"
+ ],
+ "heliotrope": [
+  "floral"
+ ],
+ "herbal accents": [
+  "aromatic"
+ ],
+ "honey": [
+  "sweet"
+ ],
+ "honeysuckle": [
+  "floral"
+ ],
+ "iris": [
+  "floral"
+ ],
+ "iris absolute": [
+  "floral"
+ ],
+ "jasmine": [
+  "floral"
+ ],
+ "jasmine sambac": [
+  "floral"
+ ],
+ "juniper": [
+  "aromatic"
+ ],
+ "lactonic": [
+  "sweet"
+ ],
+ "lavender": [
+  "aromatic"
+ ],
+ "leather": [
+  "oud"
+ ],
+ "lemon": [
+  "citrus"
+ ],
+ "lily of the valley": [
+  "floral"
+ ],
+ "litchi": [
+  "fruity"
+ ],
+ "magnolia": [
+  "floral"
+ ],
+ "mandarin": [
+  "citrus"
+ ],
+ "mandarin orange": [
+  "citrus"
+ ],
+ "marigold": [
+  "floral"
+ ],
+ "marine": [
+  "aromatic"
+ ],
+ "marine notes": [
+  "aromatic"
+ ],
+ "marron glacé": [
+  "sweet"
+ ],
+ "melon": [
+  "fruity"
+ ],
+ "milk": [
+  "sweet"
+ ],
+ "milky accords": [
+  "sweet"
+ ],
+ "mint": [
+  "aromatic"
+ ],
+ "mirabelle plum": [
+  "fruity"
+ ],
+ "moss": [
+  "woody"
+ ],
+ "musk": [
+  "amber"
+ ],
+ "musky": [
+  "amber"
+ ],
+ "nutmeg": [
+  "spicy"
+ ],
+ "nutty": [
+  "sweet"
+ ],
+ "oakmoss": [
+  "woody"
+ ],
+ "olive accord": [
+  "aromatic"
+ ],
+ "orange": [
+  "citrus"
+ ],
+ "orange blossom": [
+  "floral"
+ ],
+ "orange flower": [
+  "floral"
+ ],
+ "orchid": [
+  "floral"
+ ],
+ "oriental": [
+  "amber"
+ ],
+ "orris root": [
+  "floral"
+ ],
+ "osmanthus": [
+  "floral"
+ ],
+ "oud": [
+  "oud"
+ ],
+ "ozonic": [
+  "aromatic"
+ ],
+ "passion fruit": [
+  "fruity"
+ ],
+ "patchouli": [
+  "woody"
+ ],
+ "peach": [
+  "fruity"
+ ],
+ "pear": [
+  "fruity"
+ ],
+ "peony": [
+  "floral"
+ ],
+ "pepper": [
+  "spicy"
+ ],
+ "persimmon": [
+  "fruity"
+ ],
+ "pineapple": [
+  "fruity"
+ ],
+ "pink pepper": [
+  "spicy"
+ ],
+ "plum": [
+  "fruity"
+ ],
+ "powdery": [
+  "amber"
+ ],
+ "powdery notes": [
+  "amber"
+ ],
+ "raspberry": [
+  "fruity"
+ ],
+ "rose": [
+  "floral"
+ ],
+ "rum": [
+  "sweet"
+ ],
+ "saffron": [
+  "spicy"
+ ],
+ "sage": [
+  "aromatic"
+ ],
+ "sandalwood": [
+  "woody"
+ ],
+ "sichuan pepper": [
+  "spicy"
+ ],
+ "soapy": [
+  "aromatic"
+ ],
+ "soft spicy": [
+  "spicy"
+ ],
+ "spicy": [
+  "spicy"
+ ],
+ "star anise": [
+  "spicy"
+ ],
+ "strawberry": [
+  "fruity"
+ ],
+ "suede": [
+  "oud"
+ ],
+ "sugar accord": [
+  "sweet"
+ ],
+ "sweet": [
+  "sweet"
+ ],
+ "sweet accords": [
+  "sweet"
+ ],
+ "sweet orange": [
+  "citrus"
+ ],
+ "synthetic": [],
+ "tangerine": [
+  "citrus"
+ ],
+ "tea": [
+  "aromatic"
+ ],
+ "tobacco": [
+  "oud"
+ ],
+ "tonka bean": [
+  "sweet"
+ ],
+ "tuberose": [
+  "floral"
+ ],
+ "turkish rose": [
+  "floral"
+ ],
+ "vanilla": [
+  "sweet"
+ ],
+ "vanilla absolute": [
+  "sweet"
+ ],
+ "vanilla cream": [
+  "sweet"
+ ],
+ "vanilla orchid": [
+  "floral",
+  "sweet"
+ ],
+ "vanilla resinoid": [
+  "sweet"
+ ],
+ "vetiver": [
+  "woody"
+ ],
+ "violet": [
+  "floral"
+ ],
+ "virginia cedar": [
+  "woody"
+ ],
+ "warm spicy": [
+  "spicy"
+ ],
+ "white floral": [
+  "floral"
+ ],
+ "white florals": [
+  "floral"
+ ],
+ "white musk": [
+  "amber"
+ ],
+ "wood": [
+  "woody"
+ ],
+ "woody": [
+  "woody"
+ ],
+ "woody notes": [
+  "woody"
+ ],
+ "yellow floral": [
+  "floral"
+ ],
+ "ylang": [
+  "floral"
+ ],
+ "ylang-ylang": [
+  "floral"
+ ]
+}

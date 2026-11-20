@@ -18,6 +18,14 @@
   ],
   "ex": [
    "blossom"
+  ],
+  "core": [
+   "lemon",
+   "bergamot",
+   "orange",
+   "grapefruit",
+   "mandarin",
+   "tangerine"
   ]
  },
  {
@@ -44,7 +52,17 @@
    "berry",
    "chewing gum"
   ],
-  "ex": []
+  "ex": [],
+  "core": [
+   "peach",
+   "pear",
+   "apple",
+   "raspberry",
+   "strawberry",
+   "cherry",
+   "plum",
+   "pineapple"
+  ]
  },
  {
   "id": "floral",
@@ -71,7 +89,16 @@
    "damask",
    "grasse"
   ],
-  "ex": []
+  "ex": [],
+  "core": [
+   "rose",
+   "jasmine",
+   "tuberose",
+   "lily of the valley",
+   "peony",
+   "orange blossom",
+   "ylang-ylang"
+  ]
  },
  {
   "id": "sweet",
@@ -102,6 +129,12 @@
   ],
   "ex": [
    "orange"
+  ],
+  "core": [
+   "vanilla",
+   "tonka bean",
+   "honey",
+   "caramel"
   ]
  },
  {
@@ -121,7 +154,14 @@
    "elemi",
    "woody"
   ],
-  "ex": []
+  "ex": [],
+  "core": [
+   "sandalwood",
+   "cedar",
+   "cedarwood",
+   "patchouli",
+   "vetiver"
+  ]
  },
  {
   "id": "amber",
@@ -135,7 +175,13 @@
    "labdanum",
    "powdery"
   ],
-  "ex": []
+  "ex": [],
+  "core": [
+   "amber",
+   "musk",
+   "ambergris",
+   "benzoin"
+  ]
  },
  {
   "id": "spicy",
@@ -155,7 +201,13 @@
    "anis",
    "ginger"
   ],
-  "ex": []
+  "ex": [],
+  "core": [
+   "cinnamon",
+   "pepper",
+   "cardamom",
+   "saffron"
+  ]
  },
  {
   "id": "aromatic",
@@ -175,7 +227,15 @@
    "sage",
    "soapy"
   ],
-  "ex": []
+  "ex": [],
+  "core": [
+   "lavender",
+   "eucalyptus",
+   "tea",
+   "marine",
+   "mint",
+   "sage"
+  ]
  },
  {
   "id": "oud",
@@ -190,6 +250,11 @@
    "truffle",
    "earthy"
   ],
-  "ex": []
+  "ex": [],
+  "core": [
+   "oud",
+   "tobacco",
+   "incense"
+  ]
  }
 ]

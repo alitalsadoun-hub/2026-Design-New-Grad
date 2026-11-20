@@ -1,0 +1,331 @@
+{
+ "_about": "Character of each niche perfume ('accords'). family = MAD Parfumeur's own Fragrance Family (official site / catalogue). parfumo = community accords from Parfumo, used ONLY where Parfumo's note list matches MAD's official list by >=80% (otherwise Parfumo's entry is for a different formulation or wrong). 'Synthetic' is ignored.",
+ "Rouge": {
+  "acc": [
+   "floral",
+   "woody"
+  ],
+  "family": [
+   "floral",
+   "woody"
+  ],
+  "parfumo": []
+ },
+ "Treasure": {
+  "acc": [
+   "aromatic",
+   "gourmand",
+   "sweet",
+   "citrus",
+   "oriental",
+   "creamy",
+   "woody"
+  ],
+  "family": [
+   "aromatic",
+   "gourmand"
+  ],
+  "parfumo": [
+   "sweet",
+   "citrus",
+   "oriental",
+   "creamy",
+   "woody"
+  ]
+ },
+ "Exotic": {
+  "acc": [
+   "citrus",
+   "woody"
+  ],
+  "family": [
+   "citrus",
+   "woody"
+  ],
+  "parfumo": []
+ },
+ "Detox": {
+  "acc": [
+   "floral",
+   "fruity"
+  ],
+  "family": [
+   "floral",
+   "fruity"
+  ],
+  "parfumo": []
+ },
+ "Gumin": {
+  "acc": [
+   "citrus",
+   "woody",
+   "fresh",
+   "aquatic",
+   "fruity"
+  ],
+  "family": [
+   "citrus",
+   "woody"
+  ],
+  "parfumo": [
+   "fresh",
+   "citrus",
+   "aquatic",
+   "fruity",
+   "woody"
+  ]
+ },
+ "Adria": {
+  "acc": [
+   "aromatic",
+   "woody",
+   "fresh",
+   "fruity",
+   "earthy",
+   "spicy"
+  ],
+  "family": [
+   "aromatic",
+   "woody"
+  ],
+  "parfumo": [
+   "fresh",
+   "fruity",
+   "synthetic",
+   "earthy",
+   "spicy"
+  ]
+ },
+ "Draco": {
+  "acc": [
+   "oriental",
+   "woody",
+   "fruity",
+   "powdery",
+   "sweet"
+  ],
+  "family": [
+   "oriental",
+   "woody"
+  ],
+  "parfumo": [
+   "fruity",
+   "synthetic",
+   "powdery",
+   "sweet"
+  ]
+ },
+ "New York Night": {
+  "acc": [
+   "fruity",
+   "amber",
+   "sweet",
+   "oriental",
+   "gourmand",
+   "floral"
+  ],
+  "family": [
+   "fruity",
+   "amber"
+  ],
+  "parfumo": [
+   "fruity",
+   "sweet",
+   "oriental",
+   "gourmand",
+   "floral"
+  ]
+ },
+ "Inviting": {
+  "acc": [
+   "floral",
+   "amber",
+   "spicy",
+   "sweet"
+  ],
+  "family": [
+   "floral",
+   "amber"
+  ],
+  "parfumo": [
+   "floral",
+   "spicy",
+   "sweet"
+  ]
+ },
+ "Prevail": {
+  "acc": [
+   "floral",
+   "woody"
+  ],
+  "family": [
+   "floral",
+   "woody"
+  ],
+  "parfumo": []
+ },
+ "Divine Tough": {
+  "acc": [
+   "woody",
+   "amber"
+  ],
+  "family": [
+   "woody",
+   "amber"
+  ],
+  "parfumo": []
+ },
+ "Effect": {
+  "acc": [
+   "oriental",
+   "woody",
+   "sweet",
+   "spicy",
+   "fruity",
+   "gourmand"
+  ],
+  "family": [
+   "oriental",
+   "woody"
+  ],
+  "parfumo": [
+   "sweet",
+   "spicy",
+   "fruity",
+   "gourmand",
+   "woody"
+  ]
+ },
+ "Narcotic": {
+  "acc": [
+   "floral",
+   "woody"
+  ],
+  "family": [
+   "floral",
+   "woody"
+  ],
+  "parfumo": []
+ },
+ "Bruno Gold": {
+  "acc": [
+   "chypre",
+   "fruity"
+  ],
+  "family": [
+   "chypre",
+   "fruity"
+  ],
+  "parfumo": []
+ },
+ "Oud Sateen": {
+  "acc": [
+   "oud",
+   "woody",
+   "sweet",
+   "floral",
+   "creamy",
+   "gourmand",
+   "oriental"
+  ],
+  "family": [
+   "oud",
+   "woody"
+  ],
+  "parfumo": [
+   "sweet",
+   "floral",
+   "creamy",
+   "gourmand",
+   "oriental"
+  ]
+ },
+ "Marjorie": {
+  "acc": [
+   "floral",
+   "woody"
+  ],
+  "family": [
+   "floral",
+   "woody"
+  ],
+  "parfumo": []
+ },
+ "Devil's Trick": {
+  "acc": [
+   "floral",
+   "woody"
+  ],
+  "family": [
+   "floral",
+   "woody"
+  ],
+  "parfumo": []
+ },
+ "Dreamlight": {
+  "acc": [
+   "oriental",
+   "floral",
+   "sweet"
+  ],
+  "family": [
+   "oriental",
+   "floral",
+   "sweet"
+  ],
+  "parfumo": []
+ },
+ "Pera": {
+  "acc": [
+   "spicy",
+   "vanilla"
+  ],
+  "family": [
+   "spicy",
+   "vanilla"
+  ],
+  "parfumo": []
+ },
+ "Trono": {
+  "acc": [
+   "oriental",
+   "lavender"
+  ],
+  "family": [
+   "oriental",
+   "lavender"
+  ],
+  "parfumo": []
+ },
+ "Forza": {
+  "acc": [
+   "oriental",
+   "woody",
+   "spicy",
+   "sweet",
+   "fruity"
+  ],
+  "family": [
+   "oriental",
+   "woody"
+  ],
+  "parfumo": [
+   "oriental",
+   "woody",
+   "spicy",
+   "sweet",
+   "fruity"
+  ]
+ },
+ "Golden Soul": {
+  "acc": [
+   "floral",
+   "amber"
+  ],
+  "family": [
+   "floral",
+   "amber"
+  ],
+  "parfumo": []
+ }
+}
