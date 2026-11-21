@@ -113,13 +113,21 @@ async function order(req, env, ctx) {
   return json({ ok: true, no, at, status: 'new', ...data, gifts: q.gifts });
 }
 
-// optional e-mail to the shop (hidden from customers). Works when RESEND_API_KEY is configured; the order is saved either way.
+// e-mail to the shop on every new order (hidden from customers). The Resend key is pasted in the dashboard (Settings) and kept in D1 - or set as RESEND_API_KEY.
+// The order is saved either way; a mail problem never blocks an order.
+async function sendMail(env, subject, text) {
+  const key = (await getSetting(env, 'resend_key')) || env.RESEND_API_KEY, to = (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL;
+  if (!key) return { ok: false, error: 'No e-mail key saved yet' };
+  if (!to) return { ok: false, error: 'No e-mail address saved yet' };
+  const from = (await getSetting(env, 'mail_from')) || env.MAIL_FROM || 'SCENTRO Orders <onboarding@resend.dev>';
+  const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' }, body: JSON.stringify({ from, to: [to], subject, text }) });
+  let d = {}; try { d = await r.json(); } catch {}
+  return r.ok ? { ok: true } : { ok: false, error: d.message || ('Mail service said ' + r.status) };
+}
 async function notify(env, no, at, d) {
   try {
-    const to = (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL; if (!to || !env.RESEND_API_KEY) return;
     const lines = d.lines.map(l => `• ${l.name} × ${l.qty}`).concat(d.gifts.map(g => `• ${g.name} (gift)`)).join('\n');
-    const text = `New SCENTRO order ${no}\n\n${lines}\n\nTotal: ${d.total} JOD (cash on delivery, delivery ${d.delivery} JOD)${d.discount ? `\nDiscount: ${d.discount} JOD` : ''}\n\n${d.customer.name}\n+${d.customer.phone}\n${d.customer.gov} — ${d.customer.address}${d.customer.note ? '\nNote: ' + d.customer.note : ''}`;
-    await fetch('https://api.resend.com/emails', { method: 'POST', headers: { authorization: 'Bearer ' + env.RESEND_API_KEY, 'content-type': 'application/json' }, body: JSON.stringify({ from: env.MAIL_FROM || 'SCENTRO Orders <orders@scentrojo.com>', to: [to], subject: `New order ${no} — ${d.total} JOD`, text }) });
+    await sendMail(env, `New order ${no} — ${d.total} JOD`, `New SCENTRO order ${no}\n\n${lines}\n\nTotal: ${d.total} JOD (cash on delivery, delivery ${d.delivery} JOD)${d.discount ? `\nDiscount: ${d.discount} JOD` : ''}\n\n${d.customer.name}\n+${d.customer.phone}\n${d.customer.gov} — ${d.customer.address}${d.customer.note ? '\nNote: ' + d.customer.note : ''}`);
   } catch (e) { /* never block an order because of mail */ }
 }
 
@@ -139,7 +147,8 @@ async function login(req, env) {
 async function admin(req, env, path) {
   if (!(await isAdmin(req, env))) return bad('Not signed in', 401);
   const m = req.method, body = async () => { try { return await req.json(); } catch { return {}; } };
-  if (path === 'me') return json({ ok: true, notifyEmail: (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL || '', mailReady: !!env.RESEND_API_KEY });
+  if (path === 'me') return json({ ok: true, notifyEmail: (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL || '', mailReady: !!((await getSetting(env, 'resend_key')) || env.RESEND_API_KEY) });
+  if (path === 'test-mail' && m === 'POST') return json(await sendMail(env, 'SCENTRO test e-mail', 'If you can read this, new orders will reach you by e-mail.'));
   if (path === 'logout') return json({ ok: true }, 200, { 'set-cookie': 'sc_admin=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Strict' });
   if (path === 'products' && m === 'GET') return json({ ok: true, products: await loadProducts(env, { all: true }) });
   if (path.startsWith('products/') && m === 'PUT') {
@@ -170,7 +179,7 @@ async function admin(req, env, path) {
     if (o.status === 'cancelled' && b.status !== 'cancelled') { const d = JSON.parse(o.data); [...d.lines.map(l => [l.pid, l.qty]), ...d.gifts.map(g => [g.pid, 1])].forEach(([pid, n]) => stmts.push(env.DB.prepare('UPDATE products SET stock=MAX(0,stock-?) WHERE id=?').bind(n, pid))); }
     await env.DB.batch(stmts); return json({ ok: true });
   }
-  if (path === 'settings' && m === 'PUT') { const b = await body(); if (b.notifyEmail != null) { const e = clean(b.notifyEmail, 120); if (e && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return bad('invalid email'); await setSetting(env, 'notify_email', e); } return json({ ok: true }); }
+  if (path === 'settings' && m === 'PUT') { const b = await body(); if (b.resendKey) { const k = clean(b.resendKey, 200); if (!/^re_[A-Za-z0-9_\-]{10,}$/.test(k)) return bad('That does not look like a Resend key (it starts with re_)'); await setSetting(env, 'resend_key', k); } if (b.notifyEmail != null) { const e = clean(b.notifyEmail, 120); if (e && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return bad('invalid email'); await setSetting(env, 'notify_email', e); } return json({ ok: true }); }
   if (path === 'password' && m === 'PUT') {
     const b = await body(), creds = await adminCreds(env);
     if (!creds.hash || !tse(await pbkdf2(String(b.current || ''), creds.salt), creds.hash)) return bad('Current password is wrong', 401);
