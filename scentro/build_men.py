@@ -40,13 +40,6 @@ def build(code):
     B.tracked(d, 540, 340, 'SELECTIVE  ·  ' + w['label'], B.font(B.INTER_M, 16), (143, 105, 52), 7)
     nf, _ = B.fit_width(d, w['notes'], B.CORM, 'SemiBold', 38, 800, track_px=1.5)
     B.tracked(d, 540, 388, w['notes'], nf, brown, 1.5)
-    # inspired-by line under the notes, one clear row (name only)
-    lab = B.font(B.INTER_M, 17); nm, _ = B.fit_width(d, w['name'], B.CORM, 'SemiBold', 46, 560, track_px=1)
-    wl = sum(d.textlength(c, font=lab) for c in 'INSPIRED BY') + 6 * 10
-    wn = d.textlength(w['name'], font=nm)
-    tot = wl + 26 + wn; x0 = 540 - tot / 2
-    B.tracked(d, x0 + wl / 2, 452, 'INSPIRED BY', lab, (143, 105, 52), 6)
-    d.text((x0 + wl + 26, 452), w['name'], font=nm, fill=w['title_rgb'], anchor='lm')
     b = B.load_clean(w['cut'], 585); o = B.load_clean(w['orig'], int(w['orig_h'] * 1.12))
     left = B.ARCH_CX - (b.width + B.GAP + o.width) / 2
     B.stage_bottle(img, b, left + b.width / 2, B.BASE_Y); B.stage_bottle(img, o, left + b.width + B.GAP + o.width / 2, B.BASE_Y)
