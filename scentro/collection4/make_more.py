@@ -3,11 +3,14 @@ reusing the consensus silhouette already applied to the first ten bottles (same 
 import sys, numpy as np, cv2
 from PIL import Image
 from scipy import ndimage as ndi
-PDFX = sys.argv[1]            # folder with pdfimages -png output (pg-NNN.png)
+PDFX = sys.argv[1]            # folder with pdfimages -png output of pages 19-27 (pg-NNN.png); PDFX18 = same for page 18 only
+PDFX18 = sys.argv[2]
 ORIG = {'orig_bhero': 24, 'orig_aventus': 28, 'orig_sauvage_edp': 51, 'orig_dior_homme_intense': 55, 'orig_invictus_parfum': 106,
-        'orig_scandal_absolu': 160, 'orig_azzaro_wanted': 164, 'orig_armani_swy_edt': 222, 'orig_armani_adg': 249}
+        'orig_scandal_absolu': 160, 'orig_azzaro_wanted': 164, 'orig_armani_swy_edt': 222, 'orig_armani_adg': 249, 'orig_tf_black_orchid': -18}
 for name, n in ORIG.items():
-    im = Image.open(f'{PDFX}/pg-{n:03d}.png').convert('RGB'); a = Image.open(f'{PDFX}/pg-{n+1:03d}.png').convert('L')
+    PD = PDFX
+    if n < 0: PD, n = PDFX18, -n
+    im = Image.open(f'{PD}/pg-{n:03d}.png').convert('RGB'); a = Image.open(f'{PD}/pg-{n+1:03d}.png').convert('L')
     rgba = im.copy(); rgba.putalpha(a); bb = a.point(lambda v: 255 if v > 10 else 0).getbbox(); rgba.crop(bb).save(f'collection4/assets/cutouts/{name}.png'); print(name, bb)
 A = np.array(Image.open('collection4/assets/cutouts/y102.png').getchannel('A'))
 for code in 'a102 a105 a114 b103 j110 w158 w179 w183'.split():

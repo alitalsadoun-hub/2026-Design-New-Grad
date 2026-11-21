@@ -36,6 +36,7 @@ M_MORE = {
  'W183': M('w183', 'orig_aventus', 'FOR MEN', 'Aventus', 'Creed', 'Pineapple  ·  Lemon  ·  Cedar', (70, 100, 86), (244, 246, 238), (230, 235, 220), (220, 228, 210), (-1, 2, -2), 640, 450, 1),
  'W158': M('w158', 'orig_dior_homme_intense', 'FOR MEN', 'Dior Homme Intense', 'Dior', 'Cedar  ·  Iris  ·  Ambrette', (92, 74, 60), (246, 241, 235), (233, 224, 214), (224, 213, 201), (1, 0, -1), 640, 420, 2),
  'A105': M('a105', 'orig_azzaro_wanted', 'FOR MEN', 'Azzaro Wanted', 'Azzaro', 'Cardamom  ·  Ginger  ·  Tonka Bean', (110, 86, 64), (247, 241, 233), (236, 224, 208), (228, 214, 196), (2, 1, -2), 640, 430, 3),
+ 'Q105': M('q106', 'orig_tf_black_orchid', 'UNISEX', 'Black Orchid', 'Tom Ford', 'Truffle  ·  Orchid  ·  Patchouli', (66, 40, 72), (246, 241, 246), (232, 222, 234), (222, 210, 226), (1, -1, 2), 640, 400, 2),
  'J110': M('j110', 'orig_scandal_absolu', 'FOR MEN', 'Scandal Absolu', 'Jean Paul Gaultier', 'Chestnut  ·  Caramel  ·  Plum', (150, 98, 40), (249, 240, 224), (238, 219, 188), (230, 208, 172), (3, 1, -5), 640, 450, 1),
 }
 
