@@ -1,0 +1,1 @@
+{"name":"scentro-cf","private":true,"scripts":{"dev":"wrangler pages dev public --d1=DB --port 8788","deploy":"wrangler pages deploy public --project-name scentro --branch main"},"devDependencies":{"blake3-wasm":"^2.1.5","wrangler":"^4"}}

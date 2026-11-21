@@ -1,0 +1,8 @@
+name = "scentro"
+compatibility_date = "2026-11-01"
+pages_build_output_dir = "public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "scentro-db"
+database_id = "656f4268-c6d4-488b-80c6-91330adba758"

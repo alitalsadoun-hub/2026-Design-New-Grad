@@ -67,3 +67,4 @@ h = h.replace('{{FINDER}}', open('finder.js').read()).replace('{{NOTE_FAM_JSON}}
 h = h.replace('{{PRODUCTS_JSON}}', json.dumps(prods, ensure_ascii=False)).replace('{{FAMILIES_JSON}}', json.dumps(fam, ensure_ascii=False))
 
 open('index.html', 'w', encoding='utf-8').write(h); print('ok', len(h))
+json.dump(prods, open('products_seed.json', 'w', encoding='utf-8'), ensure_ascii=False)

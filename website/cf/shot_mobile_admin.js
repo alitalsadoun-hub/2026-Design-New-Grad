@@ -1,0 +1,3 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const c=await b.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const p=await c.newPage();
+await p.goto('http://localhost:8788/#admin-orders',{waitUntil:'networkidle'});await p.waitForTimeout(600);await p.screenshot({path:'shots/m_login.png'});
+await p.fill('#lgp','test-password-123');await p.click('#lg button');await p.waitForTimeout(1000);await p.click('.ad-top .tabs button[data-tab=products]');await p.waitForTimeout(600);await p.screenshot({path:'shots/m_products.png'});await b.close()})()
