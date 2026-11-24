@@ -4,6 +4,32 @@ const j=async(p,o={})=>{const r=await fetch(B+p,o);let d={};try{d=await r.json()
 const post=(p,b,ck)=>j(p,{method:'POST',headers:{'content-type':'application/json',...(ck?{cookie:ck}:{})},body:JSON.stringify(b)});
 const put=(p,b,ck)=>j(p,{method:'PUT',headers:{'content-type':'application/json',cookie:ck},body:JSON.stringify(b)});
 const cust={name:'Test Customer',phone:'0791234567',gov:'Amman',address:'Abdoun, street 5',note:'call first'};
+async function extra(ck){
+ const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+ const up=await post('/api/admin/upload',{data:png},ck);A('photo upload works',up.d.ok&&/^img\/u\/.+\.png$/.test(up.d.path),JSON.stringify(up.d));
+ A('upload refuses non-images',(await post('/api/admin/upload',{data:'data:text/html;base64,PGI+'},ck)).d.ok===false);
+ const mk=await post('/api/admin/products',{name:'Black Orchid',collection:'selective',for:'unisex',ml:100,price:25,was:33,stock:4,img:up.d.path,original:'Black Orchid',house:'Tom Ford',key:'Orchid, Chocolate, Patchouli',top:'Truffle, Ylang',heart:'Orchid',base:'Patchouli'},ck);
+ A('new product created',mk.d.ok&&mk.d.id,JSON.stringify(mk.d));
+ let st=(await j('/api/store')).d;A('new product is in the public store with its notes',st.products[mk.d.id]&&st.products[mk.d.id].notes.top.length===2&&st.products[mk.d.id].insp.original==='Black Orchid'&&st.products[mk.d.id].key.length===3);
+ A('product without a photo refused',(await post('/api/admin/products',{name:'x',collection:'niche',for:'her',ml:50,price:10,stock:1},ck)).d.ok===false);
+ A('bad collection refused',(await post('/api/admin/products',{name:'x',collection:'zzz',for:'her',ml:50,price:10,stock:1,img:up.d.path},ck)).d.ok===false);
+ A('external image url refused',(await post('/api/admin/products',{name:'x',collection:'niche',for:'her',ml:50,price:10,stock:1,img:'https://evil.example/x.png'},ck)).d.ok===false);
+ const ed=await put('/api/admin/products/'+mk.d.id,{name:'Black Orchid 2',collection:'selective',for:'unisex',ml:100,price:27,was:'',stock:3,img:up.d.path,original:'Black Orchid',top:'',heart:'',base:'',key:''},ck);A('product edited',ed.d.ok);
+ st=(await j('/api/store')).d;A('edit visible (name, price, notes removed)',st.products[mk.d.id].name==='Black Orchid 2'&&st.products[mk.d.id].price===27&&!st.products[mk.d.id].notes);
+ A('html in name is neutralised',(await post('/api/admin/products',{name:'<script>alert(1)</script>Z',collection:'niche',for:'her',ml:50,price:10,stock:1,img:up.d.path},ck)).d.ok&&Object.values((await j('/api/store')).d.products).every(p=>!/[<>]/.test(p.name)));
+ // settings
+
+ A('fee below 1 refused',(await put('/api/admin/settings',{deliveryFee:0},ck)).d.ok===false);
+ A('bad whatsapp number refused',(await put('/api/admin/settings',{wa:'12345'},ck)).d.ok===false);
+ A('settings saved',(await put('/api/admin/settings',{deliveryFee:4,wa:'962781234567',annEn:'Eid hours <b>x</b>',annAr:'ساعات العيد'},ck)).d.ok);
+ st=(await j('/api/store')).d;A('store reflects fee 4, whatsapp, announcement (tags stripped)',st.deliveryFee===4&&st.wa==='962781234567'&&st.annEn==='Eid hours b x /b'&&st.annAr==='ساعات العيد',JSON.stringify([st.deliveryFee,st.wa,st.annEn]));
+ const sel=Object.values(st.products).find(p=>p.collection==='niche'&&p.stock>3);
+ const o4=await post('/api/order',{cart:{[sel.id]:1},customer:{name:'Fee Test',phone:'0798888888',gov:'Amman',address:'Test street 12'}});A('order uses the new delivery fee (price + 4)',o4.d.ok&&o4.d.delivery===4&&o4.d.total===sel.price+4,JSON.stringify([o4.d.delivery,o4.d.total]));
+ await put('/api/admin/settings',{paused:true},ck);A('paused: order refused',(await post('/api/order',{cart:{[sel.id]:1},customer:{name:'Paused Test',phone:'0798888889',gov:'Amman',address:'Test street 12'}})).d.error==='paused');
+ A('paused flag visible to the store',(await j('/api/store')).d.paused===true);
+ await put('/api/admin/settings',{paused:false,deliveryFee:3,wa:'962797906211',annEn:'',annAr:''},ck);
+ A('delete product',(await fetch(B+'/api/admin/products/'+mk.d.id,{method:'DELETE',headers:{'content-type':'application/json',cookie:ck},body:'{}'}).then(r=>r.json())).ok&&!(await j('/api/store')).d.products[mk.d.id]);
+}
 (async()=>{
  let s=(await j('/api/store')).d;A('store lists products',Object.keys(s.products).length>50);
  A('public rules carry no coupon codes',s.rules.every(r=>!r.code));
@@ -67,4 +93,6 @@ const cust={name:'Test Customer',phone:'0791234567',gov:'Amman',address:'Abdoun,
  A('short new password refused',(await put('/api/admin/password',{current:PW,next:'short'},ck)).d.ok===false);
  // login lockout
  let st=[];for(let k=0;k<10;k++)st.push((await post('/api/admin/login',{password:'x'+k})).s);A('brute force locked out (429)',st.includes(429),st.join());
+ // ---- products add/edit/delete, upload, settings (fee, whatsapp, announcement, pause)
+ await extra(ck);
  console.log(fail?fail+' FAILED':'all passed');process.exit(fail?1:0)})();

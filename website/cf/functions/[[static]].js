@@ -12,9 +12,11 @@ export async function onRequest({ request, env, waitUntil }) {
   const cache = caches.default, ck = new Request(url.origin + '/' + key);
   const hit = await cache.match(ck); if (hit) return hit;
   const { value, metadata } = await env.ASSETS_KV.getWithMetadata(key, 'arrayBuffer');
+  if (!value && env.LOCAL_DEV) return env.ASSETS.fetch(request); // local dev only: files not in KV come straight from public/
   if (!value) return new Response('Not found', { status: 404, headers: HEADERS });
   const html = key === 'index.html', img = key.startsWith('img/');
-  const res = new Response(value, { headers: { ...HEADERS, 'content-type': (metadata && metadata.type) || 'application/octet-stream', 'cache-control': html ? 'public, max-age=0, must-revalidate' : img ? 'public, max-age=604800' : 'public, max-age=3600' } });
+  const body = html ? new TextDecoder().decode(value).replaceAll('{{ORIGIN}}', url.origin) : value; // social previews need absolute URLs
+  const res = new Response(body, { headers: { ...HEADERS, 'content-type': (metadata && metadata.type) || 'application/octet-stream', 'cache-control': html ? 'public, max-age=0, must-revalidate' : img ? 'public, max-age=604800' : 'public, max-age=3600' } });
   const cached = res.clone(); cached.headers.set('cache-control', html ? 'public, max-age=60' : img ? 'public, max-age=604800' : 'public, max-age=3600');
   waitUntil(cache.put(ck, cached));
   return res;

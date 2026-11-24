@@ -39,6 +39,32 @@ const {chromium}=require('playwright');const BASE=process.env.BASE||'http://loca
  await p.screenshot({path:'shots/dash_products.png'});
  const row=p.locator(`tr[data-pid="${normP.id}"]`);await row.locator('[name=stock]').fill('1');await row.locator('[data-save]').click();await p.waitForTimeout(700);
  A('stock edit saved from the UI',(await ad('products','GET')).products[normP.id].stock===1);
+ // ---- add a product with a photo, edit it, see it in the public store
+ require('fs').writeFileSync('/tmp/claude-0/t.png',Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==','base64'));
+ await p.click('#np');await p.waitForTimeout(300);
+ await p.fill('#pff [name=name]','UI Orchid');await p.selectOption('#pff [name=collection]','selective');await p.selectOption('#pff [name=for]','unisex');await p.fill('#pff [name=price]','25');await p.fill('#pff [name=was]','33');await p.fill('#pff [name=stock]','5');
+ await p.fill('#pff [name=original]','Black Orchid');await p.fill('#pff [name=key]','Orchid, Chocolate, Patchouli');
+ await p.setInputFiles('#pfile','/tmp/claude-0/t.png');await p.waitForFunction(()=>/Photo ready/.test(document.querySelector('#pst').textContent),null,{timeout:8000}).catch(()=>{});
+ A('photo uploaded from the form',/Photo ready/.test(await p.innerText('#pst')));
+ await p.screenshot({path:'shots/dash_product_form.png',fullPage:true});
+ await p.click('#pff button[type=submit]');await p.waitForTimeout(900);
+ A('new product appears in the products list',/UI Orchid/.test(await p.innerText('#adbody')));
+ const pub=(await (await fetch(BASE+'/api/store')).json()).products;const np=Object.values(pub).find(x=>x.name==='UI Orchid');A('new product is live in the public store',!!np&&np.key.length===3&&np.insp.original==='Black Orchid');
+ await p.locator('tr[data-pid="'+np.id+'"] [data-edit]').click();await p.waitForTimeout(300);await p.fill('#pff [name=price]','27');await p.click('#pff button[type=submit]');await p.waitForTimeout(800);
+ A('edit saved',(await (await fetch(BASE+'/api/store')).json()).products[np.id].price===27);
+ await ad('products/'+np.id,'DELETE',{});
+ // ---- settings: delivery fee + announcement reach the storefront
+ await p.click('.ad-top .tabs button[data-tab=settings]');await p.waitForTimeout(400);await p.fill('#sf4 [name=fee]','4');await p.fill('#sf4 [name=ae]','Eid hours test');await p.click('#sf4 button[type=submit]');await p.waitForTimeout(800);
+ const sp=await c.newPage();await sp.goto(BASE+'/#en',{waitUntil:'networkidle'});await sp.waitForTimeout(600);
+ A('storefront shows the custom top-bar message and the new fee',/Eid hours test/.test(await sp.innerText('#ann'))&&/Delivery 4 JOD/.test(await sp.innerText('#ann')),(await sp.innerText('#ann')));
+ await sp.evaluate(id=>{addCart(id)},normP.id);await sp.evaluate(()=>document.querySelector('#cartbtn').click());await sp.waitForTimeout(300);A('cart total uses fee 4',/Delivery\s*\n?\s*4 JOD/.test(await sp.innerText('#dfoot')),(await sp.innerText('#dfoot')).replace(/\n/g,' | '));await sp.close();
+ await ad('settings','PUT',{deliveryFee:3,annEn:'',annAr:''});
+ // ---- orders tab: search, CSV, print
+ await p.click('.ad-top .tabs button[data-tab=orders]');await p.waitForTimeout(600);
+ A('orders stats strip shown',/last 7 days/i.test(await p.innerText("#adbody")));
+ await p.fill('#oq','nomatchxyz');await p.waitForTimeout(300);A('order search filters (no match)',/No orders match/.test(await p.innerText('#adbody')));await p.fill('#oq','UI Tester');await p.waitForTimeout(300);A('order search finds the order',/UI Tester/.test(await p.innerText('#adbody')));
+ const [dl]=await Promise.all([p.waitForEvent('download'),p.click('#csv')]);const csv=require('fs').readFileSync(await dl.path(),'utf8');A('Excel export has header + the order',/"Order","Date","Status"/.test(csv)&&/UI Tester/.test(csv));
+ const [pop]=await Promise.all([c.waitForEvent('page'),p.locator('[data-pr]').first().click()]);await pop.waitForLoadState();A('print slip opens with total to collect',/Total to collect/.test(await pop.innerText('body')));await pop.close();
  await p.click('.ad-top .tabs button[data-tab=promos]');await p.waitForTimeout(600);A('promotions tab shows offers',/3rd free|buy 2/i.test(await p.innerText('#adbody')));
  await p.screenshot({path:'shots/dash_promos.png'});
  await p.click('.ad-top .tabs button[data-tab=settings]');await p.waitForTimeout(500);A('settings tab: e-mail + password forms',!!(await p.$('#sf1'))&&!!(await p.$('#sf2')));

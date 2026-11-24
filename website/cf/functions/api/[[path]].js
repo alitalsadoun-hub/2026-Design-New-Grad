@@ -3,7 +3,7 @@
 // The server re-prices every order with the SAME promotions engine as the storefront; browser totals are never trusted.
 import PromoEngine from '../_lib/engine.js';
 
-const DELIVERY_FEE = 3;
+const DEFAULT_FEE = 3;
 const GOVS = ['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Balqa', 'Madaba', 'Karak', 'Jerash', 'Ajloun', 'Mafraq', "Ma'an", 'Tafilah'];
 const STATUSES = ['new', 'confirmed', 'out for delivery', 'delivered', 'cancelled'];
 const json = (o, status = 200, h = {}) => new Response(JSON.stringify(o), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...h } });
@@ -23,6 +23,7 @@ async function hmac(secret, msg) {
 }
 async function getSetting(env, k) { const r = await env.DB.prepare('SELECT v FROM settings WHERE k=?').bind(k).first(); return r ? r.v : null; }
 async function setSetting(env, k, v) { await env.DB.prepare('INSERT INTO settings(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v').bind(k, v).run(); }
+async function fee(env) { const v = parseFloat(await getSetting(env, 'delivery_fee')); return isFinite(v) && v >= 1 && v <= 50 ? Math.round(v * 100) / 100 : DEFAULT_FEE; }
 async function adminCreds(env) { // a password changed from the dashboard (stored in D1) wins over the deployment secret
   const salt = await getSetting(env, 'admin_salt'), hash = await getSetting(env, 'admin_hash');
   return salt && hash ? { salt, hash } : { salt: env.ADMIN_SALT, hash: env.ADMIN_HASH };
@@ -53,7 +54,7 @@ async function store(env) {
   const [products, rules] = await Promise.all([loadProducts(env, { mask: true }), loadRules(env)]); // exact stock above 3 is never sent to browsers
   // coupon codes are secrets: only automatic (code-less) active offers are public; a code is checked on the server (GET /api/coupon)
   const pub = rules.filter(r => r.active && !r.code);
-  return json({ ok: true, products, rules: pub.map(publicRule), uses: usesMap(pub), deliveryFee: DELIVERY_FEE, lowStock: (await getSetting(env, 'show_low_stock')) === '1' });
+  return json({ ok: true, products, rules: pub.map(publicRule), uses: usesMap(pub), deliveryFee: await fee(env), lowStock: (await getSetting(env, 'show_low_stock')) === '1', paused: (await getSetting(env, 'orders_paused')) === '1', wa: (await getSetting(env, 'wa_number')) || '', annEn: (await getSetting(env, 'ann_en')) || '', annAr: (await getSetting(env, 'ann_ar')) || '' });
 }
 
 async function coupon(req, env, url) {
@@ -73,6 +74,7 @@ const clean = (s, n) => String(s == null ? '' : s).replace(/[\u0000-\u001f\u007f
 async function order(req, env, ctx) {
   let b; try { b = await req.json(); } catch { return bad('Invalid request'); }
   if (b.website) return json({ ok: true, no: 'SC-00000' }); // honeypot: bots fill hidden fields
+  if ((await getSetting(env, 'orders_paused')) === '1') return bad('paused', 503);
   const c = b.customer || {}, name = clean(c.name, 80), address = clean(c.address, 240), note = clean(c.note, 240), gov = GOVS.includes(c.gov) ? c.gov : null;
   const ph = normPhone(c.phone);
   if (name.length < 2) return bad('name');
@@ -92,7 +94,7 @@ async function order(req, env, ctx) {
   for (const [pid, q] of Object.entries(cart)) { const p = products[pid]; if (!p) problems.push({ pid, reason: 'gone' }); else if (p.stock < q) problems.push({ pid, reason: 'stock', stock: p.stock }); }
   if (problems.length) return bad('stock', 409, { problems });
   const code = clean(b.code, 40);
-  const q = PromoEngine.price(cart, { products, rules, code, deliveryFee: DELIVERY_FEE, used: usesMap(rules) });
+  const q = PromoEngine.price(cart, { products, rules, code, deliveryFee: await fee(env), used: usesMap(rules) });
   // gifts must also be in stock
   for (const g of q.gifts) if (!products[g]) return bad('gift', 409, { problems: [{ pid: g, reason: 'gone' }] });
   const no = 'SC-' + (10000 + Math.floor(Math.random() * 89999));
@@ -147,10 +149,28 @@ async function login(req, env) {
 async function admin(req, env, path) {
   if (!(await isAdmin(req, env))) return bad('Not signed in', 401);
   const m = req.method, body = async () => { try { return await req.json(); } catch { return {}; } };
-  if (path === 'me') return json({ ok: true, notifyEmail: (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL || '', mailReady: !!((await getSetting(env, 'resend_key')) || env.RESEND_API_KEY), showLowStock: (await getSetting(env, 'show_low_stock')) === '1' });
+  if (path === 'me') return json({ ok: true, notifyEmail: (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL || '', mailReady: !!((await getSetting(env, 'resend_key')) || env.RESEND_API_KEY), showLowStock: (await getSetting(env, 'show_low_stock')) === '1', deliveryFee: await fee(env), paused: (await getSetting(env, 'orders_paused')) === '1', wa: (await getSetting(env, 'wa_number')) || '', annEn: (await getSetting(env, 'ann_en')) || '', annAr: (await getSetting(env, 'ann_ar')) || '' });
   if (path === 'test-mail' && m === 'POST') return json(await sendMail(env, 'SCENTRO test e-mail', 'If you can read this, new orders will reach you by e-mail.'));
   if (path === 'logout') return json({ ok: true }, 200, { 'set-cookie': 'sc_admin=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Strict' });
   if (path === 'products' && m === 'GET') return json({ ok: true, products: await loadProducts(env, { all: true }) });
+  if (path === 'upload' && m === 'POST') { // product photo: the browser resizes it first; stored in KV, served from /img/u/...
+    const b = await body(), mm = /^data:(image\/(webp|jpeg|png));base64,([A-Za-z0-9+/=]+)$/.exec(String(b.data || '')); if (!mm) return bad('Please choose a JPG, PNG or WebP image');
+    const bytes = Uint8Array.from(atob(mm[3]), c => c.charCodeAt(0)); if (bytes.length > 1.5e6) return bad('Image is too large (max 1.5 MB after resizing)');
+    const ext = mm[2] === 'jpeg' ? 'jpg' : mm[2], key = `img/u/${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}.${ext}`;
+    await env.ASSETS_KV.put(key, bytes, { metadata: { type: mm[1] } }); return json({ ok: true, path: key });
+  }
+  if (path === 'products' && m === 'POST') {
+    const b = await body(), r = cleanProduct(b); if (r.error) return bad(r.error);
+    const id = 'n' + Date.now().toString(36), pos = (await env.DB.prepare('SELECT COALESCE(MIN(pos),0)-1 p FROM products').first()).p; // new items first
+    await env.DB.prepare('INSERT INTO products(id,data,price,was,stock,hidden,pos) VALUES(?,?,?,?,?,?,?)').bind(id, JSON.stringify(r.data), r.price, r.was, r.stock, b.hidden ? 1 : 0, pos).run();
+    return json({ ok: true, id });
+  }
+  if (path.startsWith('products/') && m === 'DELETE') { await env.DB.prepare('DELETE FROM products WHERE id=?').bind(path.slice(9)).run(); return json({ ok: true }); }
+  if (path.startsWith('products/') && m === 'PUT' && (await peekFull(req))) {
+    const id = path.slice(9), cur = await env.DB.prepare('SELECT data FROM products WHERE id=?').bind(id).first(); if (!cur) return bad('not found', 404);
+    const b = await body(), r = cleanProduct(b, JSON.parse(cur.data)); if (r.error) return bad(r.error);
+    await env.DB.prepare('UPDATE products SET data=?,price=?,was=?,stock=?,hidden=? WHERE id=?').bind(JSON.stringify(r.data), r.price, r.was, r.stock, b.hidden ? 1 : 0, id).run(); return json({ ok: true });
+  }
   if (path.startsWith('products/') && m === 'PUT') {
     const id = path.slice(9), b = await body(), p = await env.DB.prepare('SELECT id FROM products WHERE id=?').bind(id).first(); if (!p) return bad('not found', 404);
     const stock = Math.max(0, Math.floor(+b.stock)), price = +b.price, was = b.was === '' || b.was == null ? null : +b.was;
@@ -179,7 +199,12 @@ async function admin(req, env, path) {
     if (o.status === 'cancelled' && b.status !== 'cancelled') { const d = JSON.parse(o.data); [...d.lines.map(l => [l.pid, l.qty]), ...d.gifts.map(g => [g.pid, 1])].forEach(([pid, n]) => stmts.push(env.DB.prepare('UPDATE products SET stock=MAX(0,stock-?) WHERE id=?').bind(n, pid))); }
     await env.DB.batch(stmts); return json({ ok: true });
   }
-  if (path === 'settings' && m === 'PUT') { const b = await body(); if (b.resendKey) { const k = clean(b.resendKey, 200); if (!/^re_[A-Za-z0-9_\-]{10,}$/.test(k)) return bad('That does not look like a Resend key (it starts with re_)'); await setSetting(env, 'resend_key', k); } if (b.showLowStock != null) await setSetting(env, 'show_low_stock', b.showLowStock ? '1' : '0'); if (b.notifyEmail != null) { const e = clean(b.notifyEmail, 120); if (e && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return bad('invalid email'); await setSetting(env, 'notify_email', e); } return json({ ok: true }); }
+  if (path === 'settings' && m === 'PUT') { const b = await body(); if (b.resendKey) { const k = clean(b.resendKey, 200); if (!/^re_[A-Za-z0-9_\-]{10,}$/.test(k)) return bad('That does not look like a Resend key (it starts with re_)'); await setSetting(env, 'resend_key', k); } if (b.showLowStock != null) await setSetting(env, 'show_low_stock', b.showLowStock ? '1' : '0');
+    if (b.paused != null) await setSetting(env, 'orders_paused', b.paused ? '1' : '0');
+    if (b.deliveryFee != null) { const v = parseFloat(b.deliveryFee); if (!isFinite(v) || v < 1 || v > 50) return bad('Delivery fee must be between 1 and 50 JOD (use a free-delivery offer to waive it)'); await setSetting(env, 'delivery_fee', String(v)); }
+    if (b.wa != null) { const d = String(b.wa).replace(/\D/g, ''); if (d && !/^962 ?7[789]\d{7}$/.test(d)) return bad('WhatsApp number must be a Jordanian mobile, e.g. 962797906211'); await setSetting(env, 'wa_number', d); }
+    if (b.annEn != null) await setSetting(env, 'ann_en', clean(b.annEn, 90));
+    if (b.annAr != null) await setSetting(env, 'ann_ar', clean(b.annAr, 90)); if (b.notifyEmail != null) { const e = clean(b.notifyEmail, 120); if (e && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return bad('invalid email'); await setSetting(env, 'notify_email', e); } return json({ ok: true }); }
   if (path === 'password' && m === 'PUT') {
     const b = await body(), creds = await adminCreds(env);
     if (!creds.hash || !tse(await pbkdf2(String(b.current || ''), creds.salt), creds.hash)) return bad('Current password is wrong', 401);
@@ -190,6 +215,24 @@ async function admin(req, env, path) {
   }
   return bad('not found', 404);
 }
+
+// ---------- product validation (add / edit from the dashboard) ----------
+const list = (v, n = 12) => (Array.isArray(v) ? v : String(v || '').split(/[,،\n]/)).map(x => clean(x, 40)).filter(Boolean).slice(0, n);
+function cleanProduct(b, old = {}) {
+  const name = clean(b.name, 60), coll = ['niche', 'selective', 'mist'].includes(b.collection) ? b.collection : null, who = ['her', 'him', 'unisex'].includes(b.for) ? b.for : null;
+  const ml = Math.floor(+b.ml), price = +b.price, was = b.was === '' || b.was == null ? null : +b.was, stock = Math.max(0, Math.floor(+b.stock || 0));
+  if (name.length < 1) return { error: 'Name is required' }; if (!coll) return { error: 'Choose a collection' }; if (!who) return { error: 'Choose who it is for' };
+  if (!(ml > 0 && ml < 2000)) return { error: 'Size in ml is required' }; if (!(price > 0 && price < 10000)) return { error: 'Price is required' }; if (was != null && !(was > 0)) return { error: 'Price before discount is not valid' };
+  const img = String(b.img || old.img || ''); if (!/^img\/[A-Za-z0-9_\-\/]+\.(webp|jpg|png)$/.test(img)) return { error: 'Please add a product photo' };
+  const d = { ...old, brand: old.brand || 'mad', collection: coll, img, for: who, name, ml };
+  const top = list(b.top), heart = list(b.heart), base = list(b.base);
+  if (top.length || heart.length || base.length) d.notes = { top, heart, base }; else delete d.notes;
+  const key = list(b.key, 6); if (key.length) d.key = key; else delete d.key;
+  const house = clean(b.house, 60), orig = clean(b.original, 60); if (orig) d.insp = { house, original: orig, confirmed: true }; else delete d.insp;
+  delete d.placeholder; return { data: d, price, was, stock };
+}
+// a PUT that edits the whole product (has a name) vs the quick price/stock row save
+async function peekFull(req) { try { const b = await req.clone().json(); return typeof b.name === 'string'; } catch { return false; } }
 
 export async function onRequest({ request, env, params, waitUntil }) {
   const path = (Array.isArray(params.path) ? params.path : [params.path]).join('/'), m = request.method;
