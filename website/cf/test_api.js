@@ -8,6 +8,7 @@ const cust={name:'Test Customer',phone:'0791234567',gov:'Amman',address:'Abdoun,
  let s=(await j('/api/store')).d;A('store lists products',Object.keys(s.products).length>50);
  A('public rules carry no coupon codes',s.rules.every(r=>!r.code));
  const ids=Object.keys(s.products),sel=ids.filter(i=>s.products[i].collection==='selective'),pid=sel[0],p0=s.products[pid];
+ A('public store never reveals exact stock above 3',Object.values(s.products).every(p=>p.stock<=3||p.stock===10));
  // validation
  A('rejects bad phone',(await post('/api/order',{cart:{[pid]:1},customer:{...cust,phone:'12345'}})).d.error==='phone');
  A('rejects short name',(await post('/api/order',{cart:{[pid]:1},customer:{...cust,name:'x'}})).d.error==='name');
@@ -19,7 +20,8 @@ const cust={name:'Test Customer',phone:'0791234567',gov:'Amman',address:'Abdoun,
  const o=await post('/api/order',{cart:{[pid]:1},customer:cust,total:0.01});
  A('order accepted',o.d.ok&&/^SC-\d{5}$/.test(o.d.no),JSON.stringify(o.d));
  A('total = price + 3 delivery (server priced)',o.d.total===p0.price+3,o.d.total+' vs '+(p0.price+3));
- let s2=(await j('/api/store')).d;A('stock decreased by 1',!s2.products[pid]||s2.products[pid].stock===p0.stock-1);
+ let s2=(await j('/api/store')).d;
+ const lg0=await post('/api/admin/login',{password:PW});const ck0=(lg0.h.get('set-cookie')||'').split(';')[0];const real=(await j('/api/admin/products',{headers:{cookie:ck0}})).d.products[pid].stock;A('real stock decreased by 1 (6 -> 5)',real===5,String(real));
  // buy 3 selective -> 3rd free offer
  const three=sel.slice(0,3),o3=await post('/api/order',{cart:Object.fromEntries(three.map(i=>[i,1])),customer:{...cust,phone:'0792222222'}});
  A('buy-2-get-3rd-free applied on server',o3.d.ok&&o3.d.discount>0&&o3.d.applied.length>0,JSON.stringify(o3.d.applied));

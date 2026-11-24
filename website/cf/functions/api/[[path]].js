@@ -36,10 +36,10 @@ async function isAdmin(req, env) {
 }
 
 // ---------- data ----------
-async function loadProducts(env, { all = false } = {}) {
+async function loadProducts(env, { all = false, mask = false } = {}) {
   const rows = (await env.DB.prepare('SELECT id,data,price,was,stock,hidden,pos FROM products ORDER BY pos,id').all()).results;
   const out = {};
-  for (const r of rows) { if (!all && (r.hidden || r.stock <= 0)) continue; out[r.id] = { ...JSON.parse(r.data), id: r.id, price: r.price, was: r.was, stock: r.stock, hidden: !!r.hidden }; }
+  for (const r of rows) { if (!all && (r.hidden || r.stock <= 0)) continue; out[r.id] = { ...JSON.parse(r.data), id: r.id, price: r.price, was: r.was, stock: mask && r.stock > 3 ? 10 : r.stock, hidden: !!r.hidden }; }
   return out;
 }
 async function loadRules(env) {
@@ -50,7 +50,7 @@ const publicRule = r => { const { _uses, ...x } = r; return x; };
 
 // ---------- public: store ----------
 async function store(env) {
-  const [products, rules] = await Promise.all([loadProducts(env), loadRules(env)]);
+  const [products, rules] = await Promise.all([loadProducts(env, { mask: true }), loadRules(env)]); // exact stock above 3 is never sent to browsers
   // coupon codes are secrets: only automatic (code-less) active offers are public; a code is checked on the server (GET /api/coupon)
   const pub = rules.filter(r => r.active && !r.code);
   return json({ ok: true, products, rules: pub.map(publicRule), uses: usesMap(pub), deliveryFee: DELIVERY_FEE });
