@@ -316,7 +316,7 @@ const NOTE_FAM={{NOTE_FAM_JSON}};
 const PRODUCTS={{PRODUCTS_JSON}};
 const BRANDS={mad:{name:'MAD Parfumeur',logo:'img/brand_mad.webp'}};
 const FAMILIES={{FAMILIES_JSON}};
-const WA_NUMBER='962797906211', DELIVERY_FEE=3, SHOW_STOCK_HINTS=true; /* only the last few: 'Only N left' at 3 or fewer; sold-out items are hidden */
+const WA_NUMBER='962797906211', DELIVERY_FEE=3;let SHOW_STOCK_HINTS=false; /* 'Only N left' (3 or fewer) - switched on from the dashboard (Settings) once the stock counts are right; sold-out items are always hidden */
 const store={get(k,d){try{const v=localStorage.getItem('scentro_'+k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem('scentro_'+k,JSON.stringify(v))}catch{}}};
 const SEED_RULES=[
  {id:'sel3for2',name:'Any 3 Selective for 50 JOD — buy 2, get the 3rd free',nameAr:'٣ عطور Selective بـ٥٠ دينار — اشترِ ٢ والثالث مجاناً',headline:'Buy 2 Selective, get the 3rd free',headlineAr:'اشترِ عطرين من Selective والثالث مجاناً',sub:'Any 3 Selective perfumes for 50 JOD',subAr:'أي ٣ عطور Selective بـ٥٠ دينار',type:'bxgy',buyQty:2,getQty:1,pct:100,repeat:true,scope:{type:'collection',value:'selective'},active:true,stackable:false,priority:1},
@@ -491,7 +491,7 @@ async function placeOrderServer(customer){const btn=$('#pl');if(btn){btn.disable
   if(d.error==='stock'){(d.problems||[]).forEach(x=>{if(x.reason==='stock'&&x.stock>0)cart[x.pid]=Math.min(cart[x.pid],x.stock);else delete cart[x.pid]});saveCart();updateCount();await refreshStore();step='cart';renderDrawer();toast(t('e_stock'));return}
   if(d.error==='too_many'){toast(t('e_many'))}else toast(t('e_net'))}catch{toast(t('e_net'))}
  if(btn){btn.disabled=false;btn.textContent=t('place')}}
-async function refreshStore(){try{const r=await fetch('/api/store',{cache:'no-store'});const d=await r.json();if(!d.ok)return false;Object.keys(PRODUCTS).forEach(k=>{NAMEC[k]=PRODUCTS[k].name;delete PRODUCTS[k]});Object.assign(PRODUCTS,d.products);RULES=d.rules;SERVER_USES=d.uses;SERVER=true;
+async function refreshStore(){try{const r=await fetch('/api/store',{cache:'no-store'});const d=await r.json();if(!d.ok)return false;Object.keys(PRODUCTS).forEach(k=>{NAMEC[k]=PRODUCTS[k].name;delete PRODUCTS[k]});Object.assign(PRODUCTS,d.products);RULES=d.rules;SERVER_USES=d.uses;SERVER=true;SHOW_STOCK_HINTS=!!d.lowStock;
   if(step!=='done'){Object.keys(cart).forEach(id=>{if(!PRODUCTS[id])delete cart[id];else cart[id]=Math.min(cart[id],PRODUCTS[id].stock)});saveCart()}return true}catch{return false}}
 /* ---- misc ---- */
 $('#cartbtn').onclick=openDrawer;$('#dclose').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;

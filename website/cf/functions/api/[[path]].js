@@ -53,7 +53,7 @@ async function store(env) {
   const [products, rules] = await Promise.all([loadProducts(env, { mask: true }), loadRules(env)]); // exact stock above 3 is never sent to browsers
   // coupon codes are secrets: only automatic (code-less) active offers are public; a code is checked on the server (GET /api/coupon)
   const pub = rules.filter(r => r.active && !r.code);
-  return json({ ok: true, products, rules: pub.map(publicRule), uses: usesMap(pub), deliveryFee: DELIVERY_FEE });
+  return json({ ok: true, products, rules: pub.map(publicRule), uses: usesMap(pub), deliveryFee: DELIVERY_FEE, lowStock: (await getSetting(env, 'show_low_stock')) === '1' });
 }
 
 async function coupon(req, env, url) {
@@ -147,7 +147,7 @@ async function login(req, env) {
 async function admin(req, env, path) {
   if (!(await isAdmin(req, env))) return bad('Not signed in', 401);
   const m = req.method, body = async () => { try { return await req.json(); } catch { return {}; } };
-  if (path === 'me') return json({ ok: true, notifyEmail: (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL || '', mailReady: !!((await getSetting(env, 'resend_key')) || env.RESEND_API_KEY) });
+  if (path === 'me') return json({ ok: true, notifyEmail: (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL || '', mailReady: !!((await getSetting(env, 'resend_key')) || env.RESEND_API_KEY), showLowStock: (await getSetting(env, 'show_low_stock')) === '1' });
   if (path === 'test-mail' && m === 'POST') return json(await sendMail(env, 'SCENTRO test e-mail', 'If you can read this, new orders will reach you by e-mail.'));
   if (path === 'logout') return json({ ok: true }, 200, { 'set-cookie': 'sc_admin=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Strict' });
   if (path === 'products' && m === 'GET') return json({ ok: true, products: await loadProducts(env, { all: true }) });
@@ -179,7 +179,7 @@ async function admin(req, env, path) {
     if (o.status === 'cancelled' && b.status !== 'cancelled') { const d = JSON.parse(o.data); [...d.lines.map(l => [l.pid, l.qty]), ...d.gifts.map(g => [g.pid, 1])].forEach(([pid, n]) => stmts.push(env.DB.prepare('UPDATE products SET stock=MAX(0,stock-?) WHERE id=?').bind(n, pid))); }
     await env.DB.batch(stmts); return json({ ok: true });
   }
-  if (path === 'settings' && m === 'PUT') { const b = await body(); if (b.resendKey) { const k = clean(b.resendKey, 200); if (!/^re_[A-Za-z0-9_\-]{10,}$/.test(k)) return bad('That does not look like a Resend key (it starts with re_)'); await setSetting(env, 'resend_key', k); } if (b.notifyEmail != null) { const e = clean(b.notifyEmail, 120); if (e && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return bad('invalid email'); await setSetting(env, 'notify_email', e); } return json({ ok: true }); }
+  if (path === 'settings' && m === 'PUT') { const b = await body(); if (b.resendKey) { const k = clean(b.resendKey, 200); if (!/^re_[A-Za-z0-9_\-]{10,}$/.test(k)) return bad('That does not look like a Resend key (it starts with re_)'); await setSetting(env, 'resend_key', k); } if (b.showLowStock != null) await setSetting(env, 'show_low_stock', b.showLowStock ? '1' : '0'); if (b.notifyEmail != null) { const e = clean(b.notifyEmail, 120); if (e && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return bad('invalid email'); await setSetting(env, 'notify_email', e); } return json({ ok: true }); }
   if (path === 'password' && m === 'PUT') {
     const b = await body(), creds = await adminCreds(env);
     if (!creds.hash || !tse(await pbkdf2(String(b.current || ''), creds.salt), creds.hash)) return bad('Current password is wrong', 401);

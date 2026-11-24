@@ -9,6 +9,7 @@ const cust={name:'Test Customer',phone:'0791234567',gov:'Amman',address:'Abdoun,
  A('public rules carry no coupon codes',s.rules.every(r=>!r.code));
  const ids=Object.keys(s.products),sel=ids.filter(i=>s.products[i].collection==='selective'),pid=sel[0],p0=s.products[pid];
  A('public store never reveals exact stock above 3',Object.values(s.products).every(p=>p.stock<=3||p.stock===10));
+ A('low-stock hint is off by default',s.lowStock===false);
  // validation
  A('rejects bad phone',(await post('/api/order',{cart:{[pid]:1},customer:{...cust,phone:'12345'}})).d.error==='phone');
  A('rejects short name',(await post('/api/order',{cart:{[pid]:1},customer:{...cust,name:'x'}})).d.error==='name');
