@@ -1,3 +1,4 @@
+import { storePayload } from './_lib/store.js';
 // Serves the storefront files (public/) from Workers KV, cached at the edge.
 // Why KV and not Pages static assets: the sandbox that builds this site can only call the plain Cloudflare REST API, and Pages' asset-upload step needs a second credential path.
 // deploy.js uploads public/ -> KV (only changed files). Product photos are served with a long browser cache.
@@ -15,7 +16,11 @@ export async function onRequest({ request, env, waitUntil }) {
   if (!value && env.LOCAL_DEV) return env.ASSETS.fetch(request); // local dev only: files not in KV come straight from public/
   if (!value) return new Response('Not found', { status: 404, headers: HEADERS });
   const html = key === 'index.html', img = key.startsWith('img/');
-  const body = html ? new TextDecoder().decode(value).replaceAll('{{ORIGIN}}', url.origin) : value; // social previews need absolute URLs
+  let body = value;
+  if (html) { // absolute URLs for social previews + the live catalogue baked in (cached for a minute)
+    let boot = 'null'; try { boot = JSON.stringify(await storePayload(env)).replace(/</g, '\\u003c'); } catch (e) { /* the page fetches /api/store itself */ }
+    body = new TextDecoder().decode(value).replaceAll('{{ORIGIN}}', url.origin).replace('null/*BOOT*/', () => boot);
+  }
   const res = new Response(body, { headers: { ...HEADERS, 'content-type': (metadata && metadata.type) || 'application/octet-stream', 'cache-control': html ? 'public, max-age=0, must-revalidate' : img ? 'public, max-age=604800' : 'public, max-age=3600' } });
   const cached = res.clone(); cached.headers.set('cache-control', html ? 'public, max-age=60' : img ? 'public, max-age=604800' : 'public, max-age=3600');
   waitUntil(cache.put(ck, cached));

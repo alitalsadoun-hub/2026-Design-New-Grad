@@ -64,8 +64,8 @@ assert not missing, 'notes without a scent family in data/note_families.json: %s
 h = open('template.html', encoding='utf-8').read()
 h = h.replace('{{ENGINE}}', open('engine.js').read()).replace('{{ADMIN}}', open('admin.js').read())
 h = h.replace('{{FINDER}}', open('finder.js').read()).replace('{{NOTE_FAM_JSON}}', json.dumps(NF, ensure_ascii=False))
-# exact stock is private: the page only learns about 'last few' (<=3); anything higher is sent as 10 ('plenty')
-pub = {k: {**v, 'stock': v['stock'] if v['stock'] <= 3 else 10} for k, v in prods.items()}
+# quantities are private: the static page carries no real stock (9 = per-item cart cap); the live catalogue comes from the server
+pub = {k: {**v, 'stock': 9} for k, v in prods.items()}
 h = h.replace('{{PRODUCTS_JSON}}', json.dumps(pub, ensure_ascii=False)).replace('{{FAMILIES_JSON}}', json.dumps(fam, ensure_ascii=False))
 
 open('index.html', 'w', encoding='utf-8').write(h); print('ok', len(h))

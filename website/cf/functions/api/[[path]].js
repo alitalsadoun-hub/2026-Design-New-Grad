@@ -2,8 +2,8 @@
 // Public:  GET /api/store · POST /api/order        Admin (cookie session): /api/admin/*
 // The server re-prices every order with the SAME promotions engine as the storefront; browser totals are never trusted.
 import PromoEngine from '../_lib/engine.js';
+import { getSetting, fee, loadRules, usesMap, publicRule, storePayload, loadProductsReal } from '../_lib/store.js';
 
-const DEFAULT_FEE = 3;
 const GOVS = ['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Balqa', 'Madaba', 'Karak', 'Jerash', 'Ajloun', 'Mafraq', "Ma'an", 'Tafilah'];
 const STATUSES = ['new', 'confirmed', 'out for delivery', 'delivered', 'cancelled'];
 const json = (o, status = 200, h = {}) => new Response(JSON.stringify(o), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...h } });
@@ -21,9 +21,7 @@ async function hmac(secret, msg) {
   const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   return b64(await crypto.subtle.sign('HMAC', key, enc.encode(msg)));
 }
-async function getSetting(env, k) { const r = await env.DB.prepare('SELECT v FROM settings WHERE k=?').bind(k).first(); return r ? r.v : null; }
 async function setSetting(env, k, v) { await env.DB.prepare('INSERT INTO settings(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v').bind(k, v).run(); }
-async function fee(env) { const v = parseFloat(await getSetting(env, 'delivery_fee')); return isFinite(v) && v >= 1 && v <= 50 ? Math.round(v * 100) / 100 : DEFAULT_FEE; }
 async function adminCreds(env) { // a password changed from the dashboard (stored in D1) wins over the deployment secret
   const salt = await getSetting(env, 'admin_salt'), hash = await getSetting(env, 'admin_hash');
   return salt && hash ? { salt, hash } : { salt: env.ADMIN_SALT, hash: env.ADMIN_HASH };
@@ -36,26 +34,8 @@ async function isAdmin(req, env) {
   return tse(sig, await hmac(env.SESSION_SECRET + (creds.hash || ''), 'admin.' + exp)); // changing the password logs out old sessions
 }
 
-// ---------- data ----------
-async function loadProducts(env, { all = false, mask = false } = {}) {
-  const rows = (await env.DB.prepare('SELECT id,data,price,was,stock,hidden,pos FROM products ORDER BY pos,id').all()).results;
-  const out = {};
-  for (const r of rows) { if (!all && (r.hidden || r.stock <= 0)) continue; out[r.id] = { ...JSON.parse(r.data), id: r.id, price: r.price, was: r.was, stock: mask && r.stock > 3 ? 10 : r.stock, hidden: !!r.hidden }; }
-  return out;
-}
-async function loadRules(env) {
-  return (await env.DB.prepare('SELECT id,data,uses FROM rules ORDER BY pos,id').all()).results.map(r => ({ ...JSON.parse(r.data), id: r.id, _uses: r.uses }));
-}
-const usesMap = rules => Object.fromEntries(rules.map(r => [r.id, r._uses || 0]));
-const publicRule = r => { const { _uses, ...x } = r; return x; };
-
-// ---------- public: store ----------
-async function store(env) {
-  const [products, rules] = await Promise.all([loadProducts(env, { mask: true }), loadRules(env)]); // exact stock above 3 is never sent to browsers
-  // coupon codes are secrets: only automatic (code-less) active offers are public; a code is checked on the server (GET /api/coupon)
-  const pub = rules.filter(r => r.active && !r.code);
-  return json({ ok: true, products, rules: pub.map(publicRule), uses: usesMap(pub), deliveryFee: await fee(env), lowStock: (await getSetting(env, 'show_low_stock')) === '1', paused: (await getSetting(env, 'orders_paused')) === '1', wa: (await getSetting(env, 'wa_number')) || '', annEn: (await getSetting(env, 'ann_en')) || '', annAr: (await getSetting(env, 'ann_ar')) || '' });
-}
+// ---------- public: store (never contains stock numbers; see _lib/store.js) ----------
+async function store(env) { return json(await storePayload(env)); }
 
 async function coupon(req, env, url) {
   const ip = req.headers.get('cf-connecting-ip') || 'x', now = Date.now(), code = clean(url.searchParams.get('code'), 40).toUpperCase();
@@ -89,10 +69,17 @@ async function order(req, env, ctx) {
   const recent = await env.DB.prepare('SELECT COUNT(*) n FROM orders WHERE phone=? AND at>?').bind(ph, since).first();
   if (recent.n >= 5) return bad('too_many', 429);
 
-  const [products, rules] = await Promise.all([loadProducts(env), loadRules(env)]);
+  const [products, rules] = await Promise.all([loadProductsReal(env), loadRules(env)]);
   const problems = [];
-  for (const [pid, q] of Object.entries(cart)) { const p = products[pid]; if (!p) problems.push({ pid, reason: 'gone' }); else if (p.stock < q) problems.push({ pid, reason: 'stock', stock: p.stock }); }
-  if (problems.length) return bad('stock', 409, { problems });
+  for (const [pid, q] of Object.entries(cart)) { const p = products[pid]; if (!p) problems.push({ pid, reason: 'gone' }); else if (p.stock < q) problems.push({ pid, reason: 'stock' }); } // never say how many are left
+  if (problems.length) { // over-ordering is the only way to probe quantities: count it and slow it down
+    const ip = req.headers.get('cf-connecting-ip') || 'x', now = Date.now();
+    await env.DB.prepare('DELETE FROM attempts WHERE at<?').bind(now - 15 * 60e3).run();
+    const n = await env.DB.prepare('SELECT COUNT(*) n FROM attempts WHERE ip=?').bind('o:' + ip).first();
+    if (n.n >= 12) return bad('too_many', 429);
+    await env.DB.prepare('INSERT INTO attempts(ip,at) VALUES(?,?)').bind('o:' + ip, now).run();
+    return bad('stock', 409, { problems });
+  }
   const code = clean(b.code, 40);
   const q = PromoEngine.price(cart, { products, rules, code, deliveryFee: await fee(env), used: usesMap(rules) });
   // gifts must also be in stock
@@ -152,7 +139,7 @@ async function admin(req, env, path) {
   if (path === 'me') return json({ ok: true, notifyEmail: (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL || '', mailReady: !!((await getSetting(env, 'resend_key')) || env.RESEND_API_KEY), showLowStock: (await getSetting(env, 'show_low_stock')) === '1', deliveryFee: await fee(env), paused: (await getSetting(env, 'orders_paused')) === '1', wa: (await getSetting(env, 'wa_number')) || '', annEn: (await getSetting(env, 'ann_en')) || '', annAr: (await getSetting(env, 'ann_ar')) || '' });
   if (path === 'test-mail' && m === 'POST') return json(await sendMail(env, 'SCENTRO test e-mail', 'If you can read this, new orders will reach you by e-mail.'));
   if (path === 'logout') return json({ ok: true }, 200, { 'set-cookie': 'sc_admin=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Strict' });
-  if (path === 'products' && m === 'GET') return json({ ok: true, products: await loadProducts(env, { all: true }) });
+  if (path === 'products' && m === 'GET') return json({ ok: true, products: await loadProductsReal(env, { all: true }) });
   if (path === 'upload' && m === 'POST') { // product photo: the browser resizes it first; stored in KV, served from /img/u/...
     const b = await body(), mm = /^data:(image\/(webp|jpeg|png));base64,([A-Za-z0-9+/=]+)$/.exec(String(b.data || '')); if (!mm) return bad('Please choose a JPG, PNG or WebP image');
     const bytes = Uint8Array.from(atob(mm[3]), c => c.charCodeAt(0)); if (bytes.length > 1.5e6) return bad('Image is too large (max 1.5 MB after resizing)');

@@ -5,7 +5,7 @@ const {chromium}=require('playwright');const cp=require('child_process');const B
  const b=await chromium.launch();
  const login=await fetch(BASE+'/api/admin/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({password:PW})});A('live: dashboard login',login.ok);const ck=login.headers.get('set-cookie').split(';')[0];
  const ad=(p,m='GET',body)=>fetch(BASE+'/api/admin/'+p,{method:m,headers:{'content-type':'application/json',cookie:ck},body:body&&JSON.stringify(body)}).then(r=>r.json());
- const store=(await (await fetch(BASE+'/api/store')).json());const sel=Object.values(store.products).filter(p=>p.collection==='selective'&&p.stock>3)[0];const stock0=(await ad('products')).products[sel.id].stock;
+ const store=(await (await fetch(BASE+'/api/store')).json());const sel=Object.values(store.products).filter(p=>p.collection==='selective')[0];const stock0=(await ad('products')).products[sel.id].stock;
  for(const [label,vp,mobile,hash] of [['desktop EN',{width:1440,height:900},false,'#en'],['mobile AR',{width:390,height:844},true,'#ar']]){
   const c=await b.newContext({viewport:vp,isMobile:mobile,hasTouch:mobile});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
   await p.goto(BASE+'/'+hash,{waitUntil:'networkidle'});await p.waitForTimeout(800);

@@ -17,13 +17,20 @@ async function extra(ck){
  const ed=await put('/api/admin/products/'+mk.d.id,{name:'Black Orchid 2',collection:'selective',for:'unisex',ml:100,price:27,was:'',stock:3,img:up.d.path,original:'Black Orchid',top:'',heart:'',base:'',key:''},ck);A('product edited',ed.d.ok);
  st=(await j('/api/store')).d;A('edit visible (name, price, notes removed)',st.products[mk.d.id].name==='Black Orchid 2'&&st.products[mk.d.id].price===27&&!st.products[mk.d.id].notes);
  A('html in name is neutralised',(await post('/api/admin/products',{name:'<script>alert(1)</script>Z',collection:'niche',for:'her',ml:50,price:10,stock:1,img:up.d.path},ck)).d.ok&&Object.values((await j('/api/store')).d.products).every(p=>!/[<>]/.test(p.name)));
+ // display order: more pieces first, the last few at the end
+ const ids3=Object.keys((await j('/api/store')).d.products).slice(0,3),pr=(await j('/api/admin/products',{headers:{cookie:ck}})).d.products;
+ await put('/api/admin/products/'+ids3[0],{price:pr[ids3[0]].price,was:pr[ids3[0]].was,stock:2,hidden:false},ck);await put('/api/admin/products/'+ids3[1],{price:pr[ids3[1]].price,was:pr[ids3[1]].was,stock:30,hidden:false},ck);await put('/api/admin/products/'+ids3[2],{price:pr[ids3[2]].price,was:pr[ids3[2]].was,stock:9,hidden:false},ck);
+ const ps=(await j('/api/store')).d.products;A('ranking: 30 pieces before 9 pieces before 2 pieces',ps[ids3[1]].r<ps[ids3[2]].r&&ps[ids3[2]].r<ps[ids3[0]].r,JSON.stringify([ps[ids3[1]].r,ps[ids3[2]].r,ps[ids3[0]].r]));
+ const real2=(await j('/api/admin/products',{headers:{cookie:ck}})).d.products;A('every item with 5+ pieces is listed before the 2-piece item',Object.keys(ps).filter(i=>real2[i].stock>=5).every(i=>ps[i].r<ps[ids3[0]].r)&&Object.keys(ps).filter(i=>real2[i].stock<=4&&i!==ids3[0]).every(i=>ps[i].r>Math.max(...Object.keys(ps).filter(k=>real2[k].stock>=5).map(k=>ps[k].r))));
+ const ov=await post('/api/order',{cart:{[ids3[0]]:6},customer:{...cust,phone:'0797000001'}});A('over-ordering is refused WITHOUT saying how many are left',ov.s===409&&!JSON.stringify(ov.d).match(/"(stock|max|left)":\s*\d/),JSON.stringify(ov.d));
+ let blocked=false;for(let k=0;k<14;k++){const r=await post('/api/order',{cart:{[ids3[0]]:7},customer:{...cust,phone:'0797000002'}});if(r.s===429)blocked=true}A('probing quantities with repeated over-orders gets rate-limited',blocked);
  // settings
 
  A('fee below 1 refused',(await put('/api/admin/settings',{deliveryFee:0},ck)).d.ok===false);
  A('bad whatsapp number refused',(await put('/api/admin/settings',{wa:'12345'},ck)).d.ok===false);
  A('settings saved',(await put('/api/admin/settings',{deliveryFee:4,wa:'962781234567',annEn:'Eid hours <b>x</b>',annAr:'ساعات العيد'},ck)).d.ok);
  st=(await j('/api/store')).d;A('store reflects fee 4, whatsapp, announcement (tags stripped)',st.deliveryFee===4&&st.wa==='962781234567'&&st.annEn==='Eid hours b x /b'&&st.annAr==='ساعات العيد',JSON.stringify([st.deliveryFee,st.wa,st.annEn]));
- const sel=Object.values(st.products).find(p=>p.collection==='niche'&&p.stock>3);
+ const sel=Object.values(st.products).find(p=>p.collection==='niche');
  const o4=await post('/api/order',{cart:{[sel.id]:1},customer:{name:'Fee Test',phone:'0798888888',gov:'Amman',address:'Test street 12'}});A('order uses the new delivery fee (price + 4)',o4.d.ok&&o4.d.delivery===4&&o4.d.total===sel.price+4,JSON.stringify([o4.d.delivery,o4.d.total]));
  await put('/api/admin/settings',{paused:true},ck);A('paused: order refused',(await post('/api/order',{cart:{[sel.id]:1},customer:{name:'Paused Test',phone:'0798888889',gov:'Amman',address:'Test street 12'}})).d.error==='paused');
  A('paused flag visible to the store',(await j('/api/store')).d.paused===true);
@@ -34,7 +41,7 @@ async function extra(ck){
  let s=(await j('/api/store')).d;A('store lists products',Object.keys(s.products).length>50);
  A('public rules carry no coupon codes',s.rules.every(r=>!r.code));
  const ids=Object.keys(s.products),sel=ids.filter(i=>s.products[i].collection==='selective'),pid=sel[0],p0=s.products[pid];
- A('public store never reveals exact stock above 3',Object.values(s.products).every(p=>p.stock<=3||p.stock===10));
+ A('public store carries NO stock numbers (hints are off by default)',!JSON.stringify(s).includes('"stock"')&&Object.values(s.products).every(p=>!('low' in p)&&typeof p.r==='number'));
  A('low-stock hint is off by default',s.lowStock===false);
  // validation
  A('rejects bad phone',(await post('/api/order',{cart:{[pid]:1},customer:{...cust,phone:'12345'}})).d.error==='phone');
@@ -71,7 +78,9 @@ async function extra(ck){
  await put('/api/admin/rules',{rules:rr},ck);
  // products edit + hidden
  const pe=await put('/api/admin/products/'+pid,{price:p0.price,was:p0.was,stock:2,hidden:false},ck);A('stock edited to 2',pe.d.ok);
- s2=(await j('/api/store')).d;A('low stock visible with 2',s2.products[pid]&&s2.products[pid].stock===2);
+ s2=(await j('/api/store')).d;A('hints off: a product with 2 left looks like any other (no number)',s2.products[pid]&&!('low' in s2.products[pid])&&!('stock' in s2.products[pid]));
+ await put('/api/admin/settings',{showLowStock:true},ck);s2=(await j('/api/store')).d;A('hints on: only the last 1-3 get a low flag',s2.products[pid].low===2&&Object.values(s2.products).filter(p=>p.low).every(p=>p.low>=1&&p.low<=3)&&!JSON.stringify(s2).includes('"stock"'));
+ await put('/api/admin/settings',{showLowStock:false},ck);
  await put('/api/admin/products/'+pid,{price:p0.price,was:p0.was,stock:0,hidden:false},ck);s2=(await j('/api/store')).d;A('stock 0 -> hidden from store',!s2.products[pid]);
  A('cannot order a hidden/sold-out item',(await post('/api/order',{cart:{[pid]:1},customer:cust})).d.error==='stock');
  await put('/api/admin/products/'+pid,{price:p0.price,was:p0.was,stock:5,hidden:false},ck);
