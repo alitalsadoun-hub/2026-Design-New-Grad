@@ -228,6 +228,7 @@ function cleanProduct(b, old = {}) {
   const top = list(b.top), heart = list(b.heart), base = list(b.base);
   if (top.length || heart.length || base.length) d.notes = { top, heart, base }; else delete d.notes;
   const key = list(b.key, 6); if (key.length) d.key = key; else delete d.key;
+  if (b.acc !== undefined) { const acc = list(b.acc, 10); if (acc.length) d.acc = acc; else delete d.acc; } // scent character words (optional)
   const house = clean(b.house, 60), orig = clean(b.original, 60); if (orig) d.insp = { house, original: orig, confirmed: true }; else delete d.insp;
   delete d.placeholder; return { data: d, price, was, stock };
 }
