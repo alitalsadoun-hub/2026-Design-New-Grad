@@ -2,7 +2,7 @@
 // Public:  GET /api/store · POST /api/order        Admin (cookie session): /api/admin/*
 // The server re-prices every order with the SAME promotions engine as the storefront; browser totals are never trusted.
 import PromoEngine from '../_lib/engine.js';
-import { getSetting, fee, loadRules, usesMap, publicRule, storePayload, loadProductsReal } from '../_lib/store.js';
+import { getSetting, fee, loadRules, usesMap, publicRule, storePayload, loadProductsReal, popupCfg } from '../_lib/store.js';
 
 const GOVS = ['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Balqa', 'Madaba', 'Karak', 'Jerash', 'Ajloun', 'Mafraq', "Ma'an", 'Tafilah'];
 const STATUSES = ['new', 'confirmed', 'out for delivery', 'delivered', 'cancelled'];
@@ -136,7 +136,7 @@ async function login(req, env) {
 async function admin(req, env, path) {
   if (!(await isAdmin(req, env))) return bad('Not signed in', 401);
   const m = req.method, body = async () => { try { return await req.json(); } catch { return {}; } };
-  if (path === 'me') return json({ ok: true, notifyEmail: (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL || '', mailReady: !!((await getSetting(env, 'resend_key')) || env.RESEND_API_KEY), showLowStock: (await getSetting(env, 'show_low_stock')) === '1', deliveryFee: await fee(env), paused: (await getSetting(env, 'orders_paused')) === '1', wa: (await getSetting(env, 'wa_number')) || '', annEn: (await getSetting(env, 'ann_en')) || '', annAr: (await getSetting(env, 'ann_ar')) || '' });
+  if (path === 'me') return json({ ok: true, notifyEmail: (await getSetting(env, 'notify_email')) || env.NOTIFY_EMAIL || '', mailReady: !!((await getSetting(env, 'resend_key')) || env.RESEND_API_KEY), showLowStock: (await getSetting(env, 'show_low_stock')) === '1', deliveryFee: await fee(env), paused: (await getSetting(env, 'orders_paused')) === '1', wa: (await getSetting(env, 'wa_number')) || '', annEn: (await getSetting(env, 'ann_en')) || '', annAr: (await getSetting(env, 'ann_ar')) || '', popup: await popupCfg(env) });
   if (path === 'test-mail' && m === 'POST') return json(await sendMail(env, 'SCENTRO test e-mail', 'If you can read this, new orders will reach you by e-mail.'));
   if (path === 'logout') return json({ ok: true }, 200, { 'set-cookie': 'sc_admin=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Strict' });
   if (path === 'products' && m === 'GET') return json({ ok: true, products: await loadProductsReal(env, { all: true }) });
@@ -190,6 +190,8 @@ async function admin(req, env, path) {
     if (b.paused != null) await setSetting(env, 'orders_paused', b.paused ? '1' : '0');
     if (b.deliveryFee != null) { const v = parseFloat(b.deliveryFee); if (!isFinite(v) || v < 1 || v > 50) return bad('Delivery fee must be between 1 and 50 JOD (use a free-delivery offer to waive it)'); await setSetting(env, 'delivery_fee', String(v)); }
     if (b.wa != null) { const d = String(b.wa).replace(/\D/g, ''); if (d && !/^962 ?7[789]\d{7}$/.test(d)) return bad('WhatsApp number must be a Jordanian mobile, e.g. 962797906211'); await setSetting(env, 'wa_number', d); }
+    if (b.popupOn != null) await setSetting(env, 'popup_on', b.popupOn ? '1' : '0');
+    if (b.popupEnd != null) { if (!/^\d{4}-\d{2}-\d{2}$/.test(String(b.popupEnd)) || isNaN(new Date(b.popupEnd))) return bad('Pop-up end date is not valid'); await setSetting(env, 'popup_end', String(b.popupEnd)); }
     if (b.annEn != null) await setSetting(env, 'ann_en', clean(b.annEn, 90));
     if (b.annAr != null) await setSetting(env, 'ann_ar', clean(b.annAr, 90)); if (b.notifyEmail != null) { const e = clean(b.notifyEmail, 120); if (e && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return bad('invalid email'); await setSetting(env, 'notify_email', e); } return json({ ok: true }); }
   if (path === 'password' && m === 'PUT') {

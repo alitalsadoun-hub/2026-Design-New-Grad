@@ -28,6 +28,9 @@ async function extra(ck){
 
  A('fee below 1 refused',(await put('/api/admin/settings',{deliveryFee:0},ck)).d.ok===false);
  A('bad whatsapp number refused',(await put('/api/admin/settings',{wa:'12345'},ck)).d.ok===false);
+ A('bad pop-up date refused',(await put('/api/admin/settings',{popupEnd:'tomorrow'},ck)).d.ok===false);
+ A('pop-up can be switched off and re-dated',(await put('/api/admin/settings',{popupOn:false,popupEnd:'2026-12-15'},ck)).d.ok&&(await j('/api/store')).d.popup.on===false&&(await j('/api/store')).d.popup.end==='2026-12-15');
+ await put('/api/admin/settings',{popupOn:true,popupEnd:'2026-11-30'},ck);
  A('settings saved',(await put('/api/admin/settings',{deliveryFee:4,wa:'962781234567',annEn:'Eid hours <b>x</b>',annAr:'ساعات العيد'},ck)).d.ok);
  st=(await j('/api/store')).d;A('store reflects fee 4, whatsapp, announcement (tags stripped)',st.deliveryFee===4&&st.wa==='962781234567'&&st.annEn==='Eid hours b x /b'&&st.annAr==='ساعات العيد',JSON.stringify([st.deliveryFee,st.wa,st.annEn]));
  const sel=Object.values(st.products).find(p=>p.collection==='niche');
@@ -49,6 +52,7 @@ async function extra(ck){
  const ids=Object.keys(s.products),sel=ids.filter(i=>s.products[i].collection==='selective'),pid=sel[0],p0=s.products[pid];
  A('public store carries NO stock numbers (hints are off by default)',!JSON.stringify(s).includes('"stock"')&&Object.values(s.products).every(p=>!('low' in p)&&typeof p.r==='number'));
  A('low-stock hint is off by default',s.lowStock===false);
+ A('welcome pop-up config is public and on by default (ends 2026-11-30)',s.popup&&s.popup.on===true&&s.popup.end==='2026-11-30');
  // validation
  A('rejects bad phone',(await post('/api/order',{cart:{[pid]:1},customer:{...cust,phone:'12345'}})).d.error==='phone');
  A('rejects short name',(await post('/api/order',{cart:{[pid]:1},customer:{...cust,name:'x'}})).d.error==='name');

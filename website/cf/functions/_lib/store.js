@@ -17,6 +17,7 @@ export async function loadProductsReal(env, { all = false } = {}) {
   for (const r of rows) { if (!all && (r.hidden || r.stock <= 0)) continue; out[r.id] = { ...JSON.parse(r.data), id: r.id, price: r.price, was: r.was, stock: r.stock, hidden: !!r.hidden }; }
   return out;
 }
+export async function popupCfg(env) { const on = await getSetting(env, 'popup_on'), end = await getSetting(env, 'popup_end'); return { on: on !== '0', end: /^\d{4}-\d{2}-\d{2}$/.test(end || '') ? end : '2026-11-30' }; }
 export async function storePayload(env) {
   const rows = (await env.DB.prepare('SELECT id,data,price,was,stock,hidden,pos FROM products ORDER BY pos,id').all()).results;
   const hints = (await getSetting(env, 'show_low_stock')) === '1';
@@ -28,5 +29,5 @@ export async function storePayload(env) {
   ordered.forEach((r, i) => { const p = { ...JSON.parse(r.data), id: r.id, price: r.price, was: r.was, r: i }; if (hints && r.stock <= 3) p.low = r.stock; products[r.id] = p; });
   // coupon codes are secrets: only automatic (code-less) active offers are public; a code is checked on the server (GET /api/coupon)
   const pub = (await loadRules(env)).filter(r => r.active && !r.code);
-  return { ok: true, products, rules: pub.map(publicRule), uses: usesMap(pub), deliveryFee: await fee(env), lowStock: hints, paused: (await getSetting(env, 'orders_paused')) === '1', wa: (await getSetting(env, 'wa_number')) || '', annEn: (await getSetting(env, 'ann_en')) || '', annAr: (await getSetting(env, 'ann_ar')) || '' };
+  return { ok: true, products, rules: pub.map(publicRule), uses: usesMap(pub), deliveryFee: await fee(env), lowStock: hints, paused: (await getSetting(env, 'orders_paused')) === '1', wa: (await getSetting(env, 'wa_number')) || '', annEn: (await getSetting(env, 'ann_en')) || '', annAr: (await getSetting(env, 'ann_ar')) || '', popup: await popupCfg(env) };
 }

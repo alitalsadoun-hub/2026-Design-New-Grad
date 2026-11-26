@@ -7,7 +7,7 @@ const {chromium}=require('playwright');const BASE=process.env.BASE||'http://loca
  const st=(await (await fetch(BASE+'/api/store')).json()).products;const sel=Object.values(st).filter(p=>p.collection==='selective');const lowP=sel[0],normP=sel[1];
  await ad('products/'+lowP.id,'PUT',{price:lowP.price,was:lowP.was,stock:2,hidden:false});await ad('settings','PUT',{showLowStock:true});
  for(const [label,vp,mobile,hash] of [['desktop EN',{width:1440,height:900},false,'#en'],['mobile AR',{width:390,height:844},true,'#ar']]){
-  const c=await b.newContext({viewport:vp,isMobile:mobile,hasTouch:mobile});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+  const c=await b.newContext({viewport:vp,isMobile:mobile,hasTouch:mobile});await c.addInitScript(()=>{const d=new Date();localStorage.setItem('scentro_welcome',JSON.stringify(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')))});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
   await p.goto(BASE+'/'+hash,{waitUntil:'networkidle'});await p.waitForFunction(()=>typeof SERVER!=='undefined'&&SERVER===true,null,{timeout:8000}).catch(()=>{});
   A(label+': page runs in server mode',await p.evaluate(()=>SERVER===true));
   A(label+': low-stock item shows "only N left"',await p.evaluate(id=>!!PRODUCTS[id]&&PRODUCTS[id].stock<=3&&lowStock(PRODUCTS[id]),lowP.id));
@@ -24,7 +24,7 @@ const {chromium}=require('playwright');const BASE=process.env.BASE||'http://loca
   const o=(await ad('orders','GET')).orders.find(x=>x.no===no);A(label+': order is saved on the server',!!o&&o.customer.name==='UI Tester'&&o.lines.length===2);
   A(label+': no JS errors',errs.length===0,errs.join('|'));await c.close()}
  // --- dashboard in the browser
- const c=await b.newContext({viewport:{width:1280,height:900}});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+ const c=await b.newContext({viewport:{width:1280,height:900}});await c.addInitScript(()=>{const d=new Date();localStorage.setItem('scentro_welcome',JSON.stringify(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')))});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
  await p.goto(BASE+AP,{waitUntil:'networkidle'});await p.waitForTimeout(800);
  A('dashboard asks for a password (nothing visible before login)',await p.evaluate(()=>!!document.querySelector('#lgp')&&!/UI Tester/.test(document.body.innerText)));
  await p.fill('#lgp','wrong');await p.click('#lg button');await p.waitForTimeout(600);A('wrong password shows an error',/Wrong password/.test(await p.innerText('#lgm')));
