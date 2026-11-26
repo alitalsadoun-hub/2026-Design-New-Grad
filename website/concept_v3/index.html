@@ -42,6 +42,7 @@ h2{font-size:clamp(32px,3.6vw,48px)}:root[dir=rtl] h1,:root[dir=rtl] h2,:root[di
 .dark .btn.o:hover{background:var(--ivory);color:var(--black);border-color:var(--ivory)}
 
 .ann{background:var(--black);color:var(--gold-l);font-size:12.5px;letter-spacing:.07em;text-align:center;padding:9px 12px}
+@media(max-width:700px){.ann span:nth-child(n+3){display:none}}
 .ann span+span::before{content:"·";margin-inline:14px;opacity:.6}
 header{position:sticky;top:0;z-index:20;background:rgba(250,246,238,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:82px;gap:24px}
@@ -560,8 +561,9 @@ function hideWelcome(back){const w=$('#welcome');if(!w.classList.contains('on'))
 function goShop(col){colV=col;shown=12;renderFilters();renderBest();hideWelcome();setTimeout(()=>{location.hash='#shop';const e=$('#shop');if(e)e.scrollIntoView({behavior:'smooth'})},80)}
 document.addEventListener('click',e=>{const t=e.target;if(t.id==='wclose'||t.id==='wcont'||t.id==='welcome')hideWelcome();const g=t.closest&&t.closest('[data-wgo]');if(g)goShop(g.dataset.wgo)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hideWelcome()});
-function renderAnn(){const fd=RULES.find(r=>r.active&&r.type==='free_delivery'&&!r.code),of=autoRules().find(r=>r.type!=='free_delivery');
- $('#ann').innerHTML=`${ANN[lang]?`<span>${ANN[lang].replace(/[<>&]/g,'')}</span>`:''}<span>${lang==='ar'?'توصيل لكل مناطق الأردن':'Delivery across Jordan'}</span><span>${lang==='ar'?'الدفع عند الاستلام':'Cash on delivery'}</span>`+(popupLive()&&nicheInfo()?`<span>${lang==='ar'?'عطور النيش '+num(nicheInfo().price)+' دينار · حتى '+endTxt():'Niche perfumes '+num(nicheInfo().price)+' JOD · until '+endTxt()}</span>`:'')+(of?`<span>${offerText(of).head}</span>`:'')+(fd?`<span>${lang==='ar'?'توصيل مجاني فوق '+num(fd.minSpend)+' دينار':'Free delivery over '+num(fd.minSpend)+' JOD'}</span>`:`<span>${fee$(lang==='ar'?'التوصيل {feeAr}':'Delivery {fee} JOD')}</span>`)}
+function renderAnn(){const fd=RULES.find(r=>r.active&&r.type==='free_delivery'&&!r.code),of=autoRules().find(r=>r.type!=='free_delivery'),ar=lang==='ar';
+ /* offers first (on a phone only the first two lines show), then the standing promises */
+ $('#ann').innerHTML=(ANN[lang]?`<span>${ANN[lang].replace(/[<>&]/g,'')}</span>`:'')+(popupLive()&&nicheInfo()?`<span>${ar?'عطور النيش '+num(nicheInfo().price)+' دينار · حتى '+endTxt():'Niche perfumes '+num(nicheInfo().price)+' JOD · until '+endTxt()}</span>`:'')+(of?`<span>${offerText(of).head}</span>`:'')+`<span>${ar?'توصيل لكل مناطق الأردن':'Delivery across Jordan'}</span><span>${ar?'الدفع عند الاستلام':'Cash on delivery'}</span>`+(fd?`<span>${ar?'توصيل مجاني فوق '+num(fd.minSpend)+' دينار':'Free delivery over '+num(fd.minSpend)+' JOD'}</span>`:`<span>${fee$(ar?'التوصيل {feeAr}':'Delivery {fee} JOD')}</span>`)}
 function renderAll(){renderAnn();renderOffers();renderNotes();renderResults();renderFilters();renderBest();renderDrawer();updateCount()}
 
 /* ---- offers: text comes from the dashboard rule (headline/sub) or is generated ---- */
