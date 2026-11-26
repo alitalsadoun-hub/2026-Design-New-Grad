@@ -4,7 +4,7 @@ const allP=()=>(typeof SERVER!=='undefined'&&SERVER&&ADM.products)||PRODUCTS;
 const TYPES={percent:'Percentage off',amount_cart:'Fixed amount off the cart',free_delivery:'Free delivery',bxgy:'Buy X, get Y at a discount',bundle:'Bundle price (any N for a fixed price)',tiered:'Spend more, save more',gift:'Free gift with purchase'};
 const scopeLabel=s=>!s||s.type==='all'?'all products':s.type==='brand'?'brand: '+(BRANDS[s.value]||{}).name:s.type==='collection'?s.value+' collection':'product: '+((allP()[s.value]||{}).name||s.value);
 function describe(r){const sc=scopeLabel(r.scope);switch(r.type){
- case'percent':return `${r.pct}% off ${sc}${r.minSpend?` · min spend ${r.minSpend} JOD`:''}`;
+ case'percent':return `${r.pct}% off ${sc}${r.minSpend?` · min spend ${r.minSpend} JOD`:''}${r.requires&&r.requires.length?' · only when the cart has a perfume':''}${r.quiet?' · shown only in the cart':''}`;
  case'amount_cart':return `${r.amount} JOD off the cart${r.minSpend?` over ${r.minSpend} JOD`:''}`;
  case'free_delivery':return `Delivery free${r.minSpend?` over ${r.minSpend} JOD`:' on every order'}`;
  case'bxgy':return `Buy ${r.buyQty} get ${r.getQty} at ${r.pct===100?'100% (free)':r.pct+'% off'} · ${sc}${r.repeat?' · repeats':''}`;
@@ -58,6 +58,7 @@ function formHtml(){const r=editing,sc=r.scope||{type:'all'};
   ${f('Headline shown to customers (EN, optional)','headline',r.headline)}${f('Headline (AR, optional)','headlineAr',r.headlineAr)}${f('Second line (EN, optional)','sub',r.sub)}${f('Second line (AR, optional)','subAr',r.subAr)}
   ${f('Coupon code (leave empty = automatic)','code',r.code,'text','e.g. RAMADAN15')}${f('Max total uses (optional)','maxUses',r.maxUses,'number')}
   ${f('Starts (optional)','start',r.start,'date')}${f('Ends (optional)','end',r.end,'date')}
+  <div><label>Only when the cart contains</label>${sel('requires',[['','Nothing special'],['perfume','At least one perfume (Niche or Selective)']],(r.requires&&r.requires.length)?'perfume':'')}</div><div class="chk"><input type="checkbox" name="quiet" ${r.quiet?'checked':''}> Cart-only: do not advertise it on the home page — show it as an offer inside the cart</div>
   <div class="chk"><input type="checkbox" name="stackable" ${r.stackable?'checked':''}> Can combine with other promotions</div><div class="chk"><input type="checkbox" name="active" ${r.active?'checked':''}> Active</div>
   <div class="note">Rules that cannot combine compete: the customer automatically gets the single most generous one. Combinable rules stack in priority order.</div>
   <div class="full btnbar"><button class="btn k" type="submit">Save promotion</button><button class="btn o" type="button" id="cancelp" style="color:var(--ink)">Cancel</button></div></form>`}
@@ -69,7 +70,7 @@ function bindPromos(){
  document.querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>{editing=JSON.parse(JSON.stringify(RULES.find(x=>x.id===b.dataset.ed)));renderAdmin()});
  const fm=$('#pf');if(!fm)return;
  const reread=()=>{const d=new FormData(fm),n=k=>d.get(k)===''||d.get(k)==null?undefined:+d.get(k);
-  const r={...editing,name:d.get('name'),nameAr:d.get('nameAr'),headline:d.get('headline')||undefined,headlineAr:d.get('headlineAr')||undefined,sub:d.get('sub')||undefined,subAr:d.get('subAr')||undefined,type:d.get('type'),code:(d.get('code')||'').trim()||undefined,maxUses:n('maxUses'),start:d.get('start')||undefined,end:d.get('end')||undefined,stackable:fm.stackable.checked,active:fm.active.checked};
+  const r={...editing,name:d.get('name'),nameAr:d.get('nameAr'),headline:d.get('headline')||undefined,headlineAr:d.get('headlineAr')||undefined,sub:d.get('sub')||undefined,subAr:d.get('subAr')||undefined,type:d.get('type'),code:(d.get('code')||'').trim()||undefined,maxUses:n('maxUses'),start:d.get('start')||undefined,end:d.get('end')||undefined,stackable:fm.stackable.checked,active:fm.active.checked,quiet:fm.quiet.checked||undefined,requires:d.get('requires')==='perfume'?[{type:'collection',value:'niche'},{type:'collection',value:'selective'}]:undefined};
   const st=d.get('scopeType');r.scope=st&&st!=='all'?{type:st,value:d.get('scopeValue')||(scopeVals(st)[0]||[])[0]}:{type:'all'};
   ['pct','minSpend','amount','buyQty','getQty','qty','price'].forEach(k=>{if(d.has(k))r[k]=n(k)});if(fm.repeat)r.repeat=fm.repeat.checked;if(d.has('giftId'))r.giftId=d.get('giftId');
   if(d.has('tiers'))r.tiers=d.get('tiers').split(',').map(s=>s.trim().split(':').map(Number)).filter(a=>a[0]>0&&a[1]>0).map(a=>({min:a[0],pct:a[1]}));return r};

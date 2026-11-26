@@ -45,4 +45,13 @@ r=run({s1:6},[OFFER]);ok('6 Selective = 100 JOD',r.discount===50&&r.subtotal-r.d
 r=run({s1:4},[OFFER]);ok('4 Selective: one free, 100 total',r.discount===25&&r.subtotal-r.discount===75,r);
 r=run({s1:2,n1:1},[OFFER]);ok('niche does not count toward the Selective offer',r.discount===0,r);
 r=run({s1:3,n1:1},[OFFER]);ok('3 Selective + 1 niche: free Selective only',r.discount===25&&r.total===30+50+3,r);
+// --- body mist half price, only when the cart holds a perfume (cart-only offer)
+const m50=R({type:'percent',pct:50,scope:{type:'collection',value:'mist'},requires:[{type:'collection',value:'niche'},{type:'collection',value:'selective'}],quiet:true,stackable:true});
+r=run({g:3},[m50]);ok('mist only: no discount',r.discount===0&&r.subtotal===30,r);
+r=run({n1:1,g:1},[m50]);ok('perfume + 1 mist: mist 10 -> 5',r.discount===5&&r.total===30+5+3,r);
+r=run({n1:1,g:7},[m50]);ok('perfume + 7 mists: every mist half price (35 off)',r.discount===35,r);
+r=run({s1:1,g:1000},[m50]);ok('1000 mists with a perfume: all half price (5000 off)',r.discount===5000,r);
+r=run({n1:1,g:2},[m50,b1]);ok('stacks with another offer on perfumes (b1 needs 2 niche): mist still 50%',r.discount===10,r);
+r=run({n1:1,n2:1,g:2},[m50,b1]);ok('buy1get1 niche (15) + mists half (10) = 25',r.discount===25,r);
+r=run({n1:1,g:1},[{...m50,active:false}]);ok('rule off: no discount',r.discount===0,r);
 console.log(fails?`\n${fails} FAILED`:'\nall passed');process.exit(fails?1:0);

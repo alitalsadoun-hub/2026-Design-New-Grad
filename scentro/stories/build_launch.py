@@ -40,14 +40,13 @@ html,body{margin:0;background:transparent;width:1080px;height:1920px;overflow:hi
 .rule2{position:absolute;left:500px;top:528px;width:80px;height:2px;background:#B08D57}.dot{position:absolute;left:536px;top:524px;width:8px;height:8px;border-radius:50%;background:#B08D57}
 .sub{top:548px;font:600 24px 'Inter',sans-serif;letter-spacing:12px;color:#8F6934;padding-left:12px}
 .url{top:1452px;font:600 64px 'Cormorant Garamond',serif;letter-spacing:3px;color:#4A3428}
-.ofa{top:1536px;font:500 33px 'IBM Plex Sans Arabic',sans-serif;color:#4A3428}
-.ofe{top:1592px;font:600 18px 'Inter',sans-serif;letter-spacing:6px;color:#8F6934;padding-left:6px}
+.ofa{top:1478px;font:500 38px 'IBM Plex Sans Arabic',sans-serif;color:#4A3428}
+.ofe{top:1540px;font:600 18px 'Inter',sans-serif;letter-spacing:6px;color:#8F6934;padding-left:6px}
 </style></head><body>
 <div class="t logo">SCENTRO</div><div class="rule"></div>
 <div class="t h">موقعنا بحلّته الجديدة</div>
 <div class="rule2"></div><div class="dot"></div>
 <div class="t sub">OUR NEW WEBSITE IS LIVE</div>
-<div class="t url">scentrojo.com</div>
 <div class="t ofa">أي عطر نيش بـ ٣٠ دينار · حتى نهاية شهر ١١</div>
 <div class="t ofe">ANY NICHE PERFUME 30 JOD · UNTIL 30 NOV</div>
 </body></html>"""

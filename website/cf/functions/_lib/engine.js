@@ -9,6 +9,7 @@
  *   bundle         qty, price, repeat     any `qty` items in scope for a fixed price
  *   tiered         tiers:[{min,pct}]      spend more, save more
  *   gift           minSpend, giftId       free gift product above a spend
+ *   any rule: requires:[scope,...] only when the cart holds a matching item;  quiet:true = not advertised, shown only as an offer inside the cart
  */
 (function (root) {
   const r2 = n => Math.round(n * 100) / 100;
@@ -25,6 +26,8 @@
   const rem = u => u.price - u.disc;
   function applyRule(rule, st) {
     const units = st.units, sc = u => inScope(st.products[u.pid], rule.scope);
+    // optional condition: the cart must contain at least one item matching one of the `requires` scopes (e.g. 50% off body mist only when the cart has a perfume)
+    if (rule.requires && rule.requires.length && !units.some(u => rule.requires.some(s => inScope(st.products[u.pid], s)))) return { amount: 0, delivery: null, gift: null };
     let amount = 0, delivery = null, gift = null;
     const spend = list => list.reduce((a, u) => a + rem(u), 0);
     const take = (u, d) => { d = Math.min(d, rem(u)); u.disc += d; amount += d; };
