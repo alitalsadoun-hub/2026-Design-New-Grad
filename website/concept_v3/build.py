@@ -62,11 +62,17 @@ def _notes(p):
 missing = sorted({n for p in prods.values() for n in _notes(p) if n.lower().strip() not in NF})
 assert not missing, 'notes without a scent family in data/note_families.json: %s' % missing
 h = open('template.html', encoding='utf-8').read()
-h = h.replace('{{ENGINE}}', open('engine.js').read()).replace('{{ADMIN}}', open('admin.js').read())
+h = h.replace('{{ENGINE}}', open('engine.js').read())
 h = h.replace('{{FINDER}}', open('finder.js').read()).replace('{{NOTE_FAM_JSON}}', json.dumps(NF, ensure_ascii=False))
 # quantities are private: the static page carries no real stock (9 = per-item cart cap); the live catalogue comes from the server
 pub = {k: {**v, 'stock': 9} for k, v in prods.items()}
 h = h.replace('{{PRODUCTS_JSON}}', json.dumps(pub, ensure_ascii=False)).replace('{{FAMILIES_JSON}}', json.dumps(fam, ensure_ascii=False))
 
-open('index.html', 'w', encoding='utf-8').write(h); print('ok', len(h))
+# two builds: the PUBLIC page has no dashboard code at all; the PRIVATE one is served only at the owner's secret address (see cf/functions/[[static]].js)
+STUB = "let ADM={swapped:false},adTab='promos';function renderAdmin(){}function renderAnn0(){}"
+pub_h = h.replace('{{ADMIN}}', STUB); pub_h = re.sub(r'<!--ADMIN_BEGIN-->.*?<!--ADMIN_END-->', '', pub_h, flags=re.S)
+adm_h = h.replace('{{ADMIN}}', open('admin.js').read()).replace('/*ADMIN_MODE*/false', 'true')
+adm_h = adm_h.replace('<title>SCENTRO — Niche & Selective Perfumes · عطور سنترو</title>', '<title>SCENTRO Dashboard</title><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">')
+adm_h = re.sub(r'<meta property="og:[^>]*>|<meta name="twitter:[^>]*>|<meta name="description"[^>]*>', '', adm_h)
+open('index.html', 'w', encoding='utf-8').write(pub_h); open('admin-page.html', 'w', encoding='utf-8').write(adm_h); print('ok public', len(pub_h), '| admin', len(adm_h))
 json.dump(prods, open('products_seed.json', 'w', encoding='utf-8'), ensure_ascii=False)

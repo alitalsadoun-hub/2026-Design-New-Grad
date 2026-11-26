@@ -1,6 +1,6 @@
 // API tests against a running `wrangler pages dev` (default http://localhost:8788) with test password "test-password-123"
 const B=process.env.BASE||'http://localhost:8788',PW=process.env.PW||'test-password-123';let fail=0;const A=(n,c,x='')=>{if(!c)fail++;console.log(c?'ok  ':'FAIL',n,c?'':x)};
-const j=async(p,o={})=>{const r=await fetch(B+p,o);let d={};try{d=await r.json()}catch{}return {s:r.status,d,h:r.headers}};
+const j=async(p,o={})=>{if(p.startsWith('/api/admin')&&p!=='/api/admin/x'){o={...o,headers:{...(o.headers||{}),'x-admin':process.env.AT||'testtoken123456'}}}const r=await fetch(B+p,o);let d={};try{d=await r.json()}catch{}return {s:r.status,d,h:r.headers}};
 const post=(p,b,ck)=>j(p,{method:'POST',headers:{'content-type':'application/json',...(ck?{cookie:ck}:{})},body:JSON.stringify(b)});
 const put=(p,b,ck)=>j(p,{method:'PUT',headers:{'content-type':'application/json',cookie:ck},body:JSON.stringify(b)});
 const cust={name:'Test Customer',phone:'0791234567',gov:'Amman',address:'Abdoun, street 5',note:'call first'};
@@ -35,9 +35,15 @@ async function extra(ck){
  await put('/api/admin/settings',{paused:true},ck);A('paused: order refused',(await post('/api/order',{cart:{[sel.id]:1},customer:{name:'Paused Test',phone:'0798888889',gov:'Amman',address:'Test street 12'}})).d.error==='paused');
  A('paused flag visible to the store',(await j('/api/store')).d.paused===true);
  await put('/api/admin/settings',{paused:false,deliveryFee:3,wa:'962797906211',annEn:'',annAr:''},ck);
- A('delete product',(await fetch(B+'/api/admin/products/'+mk.d.id,{method:'DELETE',headers:{'content-type':'application/json',cookie:ck},body:'{}'}).then(r=>r.json())).ok&&!(await j('/api/store')).d.products[mk.d.id]);
+ A('delete product',(await fetch(B+'/api/admin/products/'+mk.d.id,{method:'DELETE',headers:{'content-type':'application/json',cookie:ck,'x-admin':process.env.AT||'testtoken123456'},body:'{}'}).then(r=>r.json())).ok&&!(await j('/api/store')).d.products[mk.d.id]);
 }
 (async()=>{
+ // the dashboard is invisible to the public
+ A('dashboard API does not exist without the secret token (login too)',(await fetch(B+'/api/admin/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({password:PW})})).status===404&&(await fetch(B+'/api/admin/orders')).status===404);
+ A('wrong token is refused (404)',(await fetch(B+'/api/admin/me',{headers:{'x-admin':'guess'}})).status===404);
+ A('dashboard page opens only at the secret address',(await fetch(B+'/manage-testtoken123456')).status===200&&(process.env.LOCAL_SPA_FALLBACK||true)&&(await fetch(B+'/admin-page.html')).status===404);
+ const home=await (await fetch(B+'/')).text();A('public page contains no dashboard code',!/Pause new orders|promosHtml|Download Excel|adApi|x-admin/.test(home));
+ const adm=await (await fetch(B+'/manage-testtoken123456')).text();A('dashboard page is noindex and carries the token only at that address',/noindex/.test(adm)&&adm.includes('testtoken123456')&&!home.includes('testtoken123456'));
  let s=(await j('/api/store')).d;A('store lists products',Object.keys(s.products).length>50);
  A('public rules carry no coupon codes',s.rules.every(r=>!r.code));
  const ids=Object.keys(s.products),sel=ids.filter(i=>s.products[i].collection==='selective'),pid=sel[0],p0=s.products[pid];

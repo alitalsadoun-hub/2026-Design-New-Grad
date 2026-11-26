@@ -228,8 +228,12 @@ export async function onRequest({ request, env, params, waitUntil }) {
     if (path === 'store' && m === 'GET') return await store(env);
     if (path === 'coupon' && m === 'GET') return await coupon(request, env, new URL(request.url));
     if (path === 'order' && m === 'POST') return await order(request, env, { waitUntil });
+    if (path.startsWith('admin/')) { // the dashboard API (login included) only answers to the dashboard page, which knows the secret address token; to anyone else it does not exist
+      const tok = request.headers.get('x-admin') || ''; if (!env.ADMIN_TOKEN || !tse(tok, env.ADMIN_TOKEN)) return bad('not found', 404);
+    }
     if (path === 'admin/login' && m === 'POST') return await login(request, env);
     if (path.startsWith('admin/')) {
+
       if (m !== 'GET' && !(request.headers.get('content-type') || '').includes('application/json')) return bad('bad content type', 415); // CSRF guard on top of SameSite
       return await admin(request, env, path.slice(6));
     }

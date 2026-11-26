@@ -4,7 +4,7 @@ import json, os, re, shutil, subprocess
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 subprocess.run(['python3', 'build.py'], cwd='../concept_v3', check=True)
 os.makedirs('public', exist_ok=True); os.makedirs('functions/_lib', exist_ok=True)
-shutil.copy('../concept_v3/index.html', 'public/index.html'); shutil.copy('../concept_v3/engine.js', 'functions/_lib/engine.js')
+shutil.copy('../concept_v3/index.html', 'public/index.html'); shutil.copy('../concept_v3/admin-page.html', 'public/admin-page.html'); shutil.copy('../concept_v3/engine.js', 'functions/_lib/engine.js')
 shutil.rmtree('public/img', ignore_errors=True); shutil.copytree('../concept_v3/img', 'public/img', ignore=shutil.ignore_patterns('*.png.bak'))
 open('public/_headers', 'w').write('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n/img/*\n  Cache-Control: public, max-age=31536000, immutable\n/index.html\n  Cache-Control: no-cache\n/\n  Cache-Control: no-cache\n')
 # starting offers = SEED_RULES from the template (sample offers except the confirmed "buy 2 Selective, get the 3rd free")

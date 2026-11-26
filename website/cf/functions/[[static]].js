@@ -7,9 +7,17 @@ export async function onRequest({ request, env, waitUntil }) {
   if (request.method !== 'GET' && request.method !== 'HEAD') return new Response('Method not allowed', { status: 405 });
   if (!env.ASSETS_KV) return env.ASSETS.fetch(request); // local `wrangler pages dev`: serve public/ directly
   const url = new URL(request.url);
+  // the owner's dashboard lives at a secret address (env ADMIN_TOKEN); everywhere else it simply does not exist
+  if (env.ADMIN_TOKEN && url.pathname === '/manage-' + env.ADMIN_TOKEN) {
+    let page = null;
+    if (env.LOCAL_DEV) page = await (await env.ASSETS.fetch(new Request(url.origin + '/admin-page.html'))).text();
+    else { const v = await env.ASSETS_KV.get('admin-page.html', 'text'); page = v; }
+    if (!page) return new Response('Not found', { status: 404 });
+    return new Response(page.replace("/*ADMIN_TOKEN*/''", () => JSON.stringify(env.ADMIN_TOKEN)), { headers: { ...HEADERS, 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow', 'referrer-policy': 'no-referrer' } });
+  }
   let key; try { key = decodeURIComponent(url.pathname).replace(/^\/+/, ''); } catch { return new Response('Bad request', { status: 400 }); }
   if (!key || key.endsWith('/')) key += 'index.html';
-  if (key.includes('..') || key.startsWith('_')) return new Response('Not found', { status: 404 });
+  if (key.includes('..') || key.startsWith('_') || key === 'admin-page.html') return new Response('Not found', { status: 404 });
   const cache = caches.default, ck = new Request(url.origin + '/' + key);
   const hit = await cache.match(ck); if (hit) return hit;
   const { value, metadata } = await env.ASSETS_KV.getWithMetadata(key, 'arrayBuffer');

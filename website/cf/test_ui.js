@@ -2,8 +2,8 @@
 const {chromium}=require('playwright');const BASE=process.env.BASE||'http://localhost:8788',PW=process.env.PW||'test-password-123';
 (async()=>{const b=await chromium.launch();let fail=0;const A=(n,c,x='')=>{if(!c)fail++;console.log(c?'ok  ':'FAIL',n,c?'':x)};
  // --- admin helper via API: make one product "low stock" (2) so the hint can be checked
- const lg=await fetch(BASE+'/api/admin/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({password:PW})});const ck=lg.headers.get('set-cookie').split(';')[0];
- const ad=(p,m,body)=>fetch(BASE+'/api/admin/'+p,{method:m,headers:{'content-type':'application/json',cookie:ck},body:body&&JSON.stringify(body)}).then(r=>r.json());
+ const lg=await fetch(BASE+'/api/admin/login',{method:'POST',headers:{'content-type':'application/json','x-admin':process.env.AT||'testtoken123456'},body:JSON.stringify({password:PW})});const ck=lg.headers.get('set-cookie').split(';')[0];
+ const AT=process.env.AT||'testtoken123456',AP='/manage-'+AT;const ad=(p,m,body)=>fetch(BASE+'/api/admin/'+p,{method:m,headers:{'content-type':'application/json',cookie:ck,'x-admin':AT},body:body&&JSON.stringify(body)}).then(r=>r.json());
  const st=(await (await fetch(BASE+'/api/store')).json()).products;const sel=Object.values(st).filter(p=>p.collection==='selective');const lowP=sel[0],normP=sel[1];
  await ad('products/'+lowP.id,'PUT',{price:lowP.price,was:lowP.was,stock:2,hidden:false});await ad('settings','PUT',{showLowStock:true});
  for(const [label,vp,mobile,hash] of [['desktop EN',{width:1440,height:900},false,'#en'],['mobile AR',{width:390,height:844},true,'#ar']]){
@@ -25,7 +25,7 @@ const {chromium}=require('playwright');const BASE=process.env.BASE||'http://loca
   A(label+': no JS errors',errs.length===0,errs.join('|'));await c.close()}
  // --- dashboard in the browser
  const c=await b.newContext({viewport:{width:1280,height:900}});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
- await p.goto(BASE+'/#admin-orders',{waitUntil:'networkidle'});await p.waitForTimeout(800);
+ await p.goto(BASE+AP,{waitUntil:'networkidle'});await p.waitForTimeout(800);
  A('dashboard asks for a password (nothing visible before login)',await p.evaluate(()=>!!document.querySelector('#lgp')&&!/UI Tester/.test(document.body.innerText)));
  await p.fill('#lgp','wrong');await p.click('#lg button');await p.waitForTimeout(600);A('wrong password shows an error',/Wrong password/.test(await p.innerText('#lgm')));
  await p.fill('#lgp',PW);await p.click('#lg button');await p.waitForTimeout(1200);
