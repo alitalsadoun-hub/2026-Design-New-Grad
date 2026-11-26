@@ -16,6 +16,7 @@ SHOT = 'stories/assets/launch/site_home_ar.png'
 
 
 def phone(screen_w=336, bezel=13, radius=54):
+    kk = screen_w / 336                                                          # everything scales with the screen width
     shot = Image.open(SHOT).convert('RGB')
     pad = Image.new('RGB', (shot.width, shot.height + 165), (14, 12, 10)); pad.paste(shot, (0, 165)); shot = pad   # status-bar band above the site so the phone's camera island never covers the site's top bar
     sh = int(screen_w * shot.height / shot.width); shot = shot.resize((screen_w, sh), Image.LANCZOS)
@@ -25,7 +26,7 @@ def phone(screen_w=336, bezel=13, radius=54):
     d.rounded_rectangle((2 * k, 2 * k, pw * k - 3 * k, ph * k - 3 * k), radius=(radius - 2) * k, fill=(16, 14, 12, 255))  # black glass body
     mask = Image.new('L', (pw * k, ph * k), 0); ImageDraw.Draw(mask).rounded_rectangle((bezel * k, bezel * k, (bezel + screen_w) * k, (bezel + sh) * k), radius=(radius - bezel) * k, fill=255)
     scr = Image.new('RGBA', (pw * k, ph * k), (0, 0, 0, 0)); scr.paste(shot.resize((screen_w * k, sh * k), Image.LANCZOS), (bezel * k, bezel * k)); body.paste(scr, (0, 0), mask)
-    d = ImageDraw.Draw(body); d.rounded_rectangle(((pw // 2 - 46) * k, (bezel + 12) * k, (pw // 2 + 46) * k, (bezel + 12 + 26) * k), radius=13 * k, fill=(16, 14, 12, 255))  # dynamic island
+    d = ImageDraw.Draw(body); iw, ih, iy = int(46 * kk), int(26 * kk), int(12 * kk); d.rounded_rectangle(((pw // 2 - iw) * k, (bezel + iy) * k, (pw // 2 + iw) * k, (bezel + iy + ih) * k), radius=ih // 2 * k, fill=(16, 14, 12, 255))  # dynamic island
     return body.resize((pw, ph), Image.LANCZOS)
 
 
