@@ -48,7 +48,7 @@ html,body{margin:0;background:transparent;width:1080px;height:1920px;overflow:hi
 <div class="rule2"></div><div class="dot"></div>
 <div class="t sub">OUR NEW WEBSITE IS LIVE</div>
 <div class="t url">scentrojo.com</div>
-<div class="t ofa">أي عطر نيش بـ ٣٠ دينار · حتى ٣٠ تشرين الثاني</div>
+<div class="t ofa">أي عطر نيش بـ ٣٠ دينار · حتى نهاية شهر ١١</div>
 <div class="t ofe">ANY NICHE PERFUME 30 JOD · UNTIL 30 NOV</div>
 </body></html>"""
 
