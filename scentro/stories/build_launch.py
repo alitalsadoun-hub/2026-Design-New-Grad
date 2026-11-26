@@ -41,8 +41,8 @@ html,body{margin:0;background:transparent;width:1080px;height:1920px;overflow:hi
 .rule2{position:absolute;left:500px;top:528px;width:80px;height:2px;background:#B08D57}.dot{position:absolute;left:536px;top:524px;width:8px;height:8px;border-radius:50%;background:#B08D57}
 .sub{top:548px;font:600 24px 'Inter',sans-serif;letter-spacing:12px;color:#8F6934;padding-left:12px}
 .url{top:1452px;font:600 64px 'Cormorant Garamond',serif;letter-spacing:3px;color:#4A3428}
-.ofa{top:1478px;font:500 38px 'IBM Plex Sans Arabic',sans-serif;color:#4A3428}
-.ofe{top:1540px;font:600 18px 'Inter',sans-serif;letter-spacing:6px;color:#8F6934;padding-left:6px}
+.ofa{top:1466px;font:700 46px/1.3 'Amiri',serif;color:#4A3428}
+.ofe{top:1540px;font:600 20px 'Inter',sans-serif;letter-spacing:5px;color:#4A3428;padding-left:5px}
 </style></head><body>
 <div class="t logo">SCENTRO</div><div class="rule"></div>
 <div class="t h">موقعنا بحلّته الجديدة</div>

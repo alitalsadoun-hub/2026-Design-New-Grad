@@ -20,8 +20,8 @@ html,body{margin:0;background:transparent;width:1080px;height:1350px;overflow:hi
 .h{top:150px;font:700 104px/1.25 'Amiri',serif;color:#701C2C}
 .rule2{position:absolute;left:500px;top:322px;width:80px;height:2px;background:#B08D57}.dot{position:absolute;left:536px;top:318px;width:8px;height:8px;border-radius:50%;background:#B08D57}
 .sub{top:344px;font:600 23px 'Inter',sans-serif;letter-spacing:12px;color:#8F6934;padding-left:12px}
-.ofa{top:1236px;font:500 36px 'IBM Plex Sans Arabic',sans-serif;color:#4A3428}
-.ofe{top:1296px;font:600 17px 'Inter',sans-serif;letter-spacing:6px;color:#8F6934;padding-left:6px}
+.ofa{top:1228px;font:700 42px/1.3 'Amiri',serif;color:#4A3428}
+.ofe{top:1297px;font:600 18px 'Inter',sans-serif;letter-spacing:5px;color:#4A3428;padding-left:5px}
 </style></head><body>
 <div class="t logo">SCENTRO</div><div class="rule"></div>
 <div class="t h">موقعنا بحلّته الجديدة</div>
