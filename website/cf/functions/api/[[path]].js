@@ -208,7 +208,7 @@ async function admin(req, env, path) {
 // ---------- product validation (add / edit from the dashboard) ----------
 const list = (v, n = 12) => (Array.isArray(v) ? v : String(v || '').split(/[,،\n]/)).map(x => clean(x, 40)).filter(Boolean).slice(0, n);
 function cleanProduct(b, old = {}) {
-  const name = clean(b.name, 60), coll = ['niche', 'selective', 'mist'].includes(b.collection) ? b.collection : null, who = ['her', 'him', 'unisex'].includes(b.for) ? b.for : null;
+  const name = clean(b.name, 60), coll = ['niche', 'selective', 'mist', 'room'].includes(b.collection) ? b.collection : null, who = ['her', 'him', 'unisex'].includes(b.for) ? b.for : null;
   const ml = Math.floor(+b.ml), price = +b.price, was = b.was === '' || b.was == null ? null : +b.was, stock = Math.max(0, Math.floor(+b.stock || 0));
   if (name.length < 1) return { error: 'Name is required' }; if (!coll) return { error: 'Choose a collection' }; if (!who) return { error: 'Choose who it is for' };
   if (!(ml > 0 && ml < 2000)) return { error: 'Size in ml is required' }; if (!(price > 0 && price < 10000)) return { error: 'Price is required' }; if (was != null && !(was > 0)) return { error: 'Price before discount is not valid' };

@@ -1,0 +1,31 @@
+{
+ "_source": "Images and notes: official MAD Parfumeur Singapore store (room spray pages). Price 10 JOD, 250 ml, unisex. Stock as counted by the owner on 2026-11-27.",
+ "price": 10,
+ "ml": 250,
+ "products": [
+  {
+   "file": "rain_forest",
+   "name": "Rain Forest Room Spray",
+   "stock": 8,
+   "top": "Orange, Aldehyde, Fruity Notes, Green Notes, Milky Accords",
+   "heart": "Botanical, Lily of the Valley, Jasmine",
+   "base": "Musk, Woody Notes"
+  },
+  {
+   "file": "mona_rosa",
+   "name": "Mona Rosa Room Spray",
+   "stock": 1,
+   "top": "Lemon, Green Notes, Melon",
+   "heart": "Apple, Peach, Rose, Floral Notes",
+   "base": "Musk, Patchouli"
+  },
+  {
+   "file": "hipnotizya",
+   "name": "Hipnotizya Room Spray",
+   "stock": 2,
+   "top": "Orange, Lemon, Lime",
+   "heart": "Lily of the Valley, Jasmine",
+   "base": "Musk, Patchouli, Vanilla"
+  }
+ ]
+}
