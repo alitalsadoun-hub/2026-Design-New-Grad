@@ -2,9 +2,10 @@
 // Public:  GET /api/store · POST /api/order        Admin (cookie session): /api/admin/*
 // The server re-prices every order with the SAME promotions engine as the storefront; browser totals are never trusted.
 import PromoEngine from '../_lib/engine.js';
+import OrderText from '../_lib/ordertext.js';
 import { getSetting, fee, loadRules, usesMap, publicRule, storePayload, loadProductsReal, popupCfg } from '../_lib/store.js';
 
-const GOVS = ['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Balqa', 'Madaba', 'Karak', 'Jerash', 'Ajloun', 'Mafraq', "Ma'an", 'Tafilah'];
+const GOVS = ['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Balqa', 'Balqa (Salt)', 'Madaba', 'Karak', 'Jerash', 'Ajloun', 'Mafraq', "Ma'an", 'Tafilah'];
 const STATUSES = ['new', 'confirmed', 'out for delivery', 'delivered', 'cancelled'];
 const json = (o, status = 200, h = {}) => new Response(JSON.stringify(o), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...h } });
 const bad = (msg, status = 400, extra = {}) => json({ ok: false, error: msg, ...extra }, status);
@@ -86,7 +87,7 @@ async function order(req, env, ctx) {
   for (const g of q.gifts) if (!products[g]) return bad('gift', 409, { problems: [{ pid: g, reason: 'gone' }] });
   const no = 'SC-' + (10000 + Math.floor(Math.random() * 89999));
   const at = new Date().toISOString();
-  const data = { customer: { name, phone: '962' + ph, gov, address, note }, lines: q.lines.map(l => ({ pid: l.pid, name: products[l.pid].name, qty: l.qty, unit: l.unit, net: l.net })), gifts: q.gifts.map(g => ({ pid: g, name: products[g].name })), applied: q.applied.map(a => ({ id: a.id, name: a.name, amount: a.amount })), subtotal: q.subtotal, discount: q.discount, delivery: q.delivery, total: q.total, code: q.couponOk ? code : '' };
+  const data = { customer: { name, phone: '962' + ph, gov, address, note }, lines: q.lines.map(l => ({ pid: l.pid, name: products[l.pid].name, kind: products[l.pid].collection, orig: (products[l.pid].insp && products[l.pid].insp.original) || '', qty: l.qty, unit: l.unit, net: l.net })), gifts: q.gifts.map(g => ({ pid: g, name: products[g].name, kind: products[g].collection })), applied: q.applied.map(a => ({ id: a.id, name: a.name, amount: a.amount, type: a.type, delivery: !!a.delivery })), subtotal: q.subtotal, discount: q.discount, delivery: q.delivery, total: q.total, code: q.couponOk ? code : '' };
   const stmts = [env.DB.prepare('INSERT INTO orders(no,at,status,phone,data) VALUES(?,?,?,?,?)').bind(no, at, 'new', ph, JSON.stringify(data))];
   // atomic stock decrement: refuses to go below zero
   const want = { ...cart }; q.gifts.forEach(g => { want[g] = (want[g] || 0) + 1; });
@@ -114,10 +115,7 @@ async function sendMail(env, subject, text) {
   return r.ok ? { ok: true } : { ok: false, error: d.message || ('Mail service said ' + r.status) };
 }
 async function notify(env, no, at, d) {
-  try {
-    const lines = d.lines.map(l => `• ${l.name} × ${l.qty}`).concat(d.gifts.map(g => `• ${g.name} (gift)`)).join('\n');
-    await sendMail(env, `New order ${no} — ${d.total} JOD`, `New SCENTRO order ${no}\n\n${lines}\n\nTotal: ${d.total} JOD (cash on delivery, delivery ${d.delivery} JOD)${d.discount ? `\nDiscount: ${d.discount} JOD` : ''}\n\n${d.customer.name}\n+${d.customer.phone}\n${d.customer.gov} — ${d.customer.address}${d.customer.note ? '\nNote: ' + d.customer.note : ''}`);
-  } catch (e) { /* never block an order because of mail */ }
+  try { await sendMail(env, `طلب جديد ${no} — ${d.total} دينار`, OrderText.build({ ...d, no })); } catch (e) { /* never block an order because of mail */ }
 }
 
 // ---------- admin ----------

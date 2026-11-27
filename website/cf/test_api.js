@@ -5,6 +5,13 @@ const post=(p,b,ck)=>j(p,{method:'POST',headers:{'content-type':'application/jso
 const put=(p,b,ck)=>j(p,{method:'PUT',headers:{'content-type':'application/json',cookie:ck},body:JSON.stringify(b)});
 const cust={name:'Test Customer',phone:'0791234567',gov:'Amman',address:'Abdoun, street 5',note:'call first'};
 async function extra(ck){
+ // every governorate the checkout offers must be accepted (the client sends 'Balqa (Salt)')
+ const govs=['Amman','Zarqa','Irbid','Aqaba','Balqa (Salt)','Madaba','Karak','Mafraq','Jerash','Ajloun','Tafilah',"Ma'an"];const stg=(await j('/api/store')).d,anyP=Object.keys(stg.products)[0],ap=(await j('/api/admin/products',{headers:{cookie:ck}})).d.products[anyP];await put('/api/admin/products/'+anyP,{price:ap.price,was:ap.was,stock:50,hidden:false},ck);let bad=[];
+ for(let i=0;i<govs.length;i++){const r=await post('/api/order',{cart:{[anyP]:1},customer:{...cust,gov:govs[i],phone:'07966660'+String(10+i)}});if(!r.d.ok)bad.push(govs[i]+':'+r.d.error)}
+ A('all 12 governorates (incl. Salt) can order',bad.length===0,bad.join(','));
+ const ords=(await j('/api/admin/orders',{headers:{cookie:ck}})).d.orders,last=ords[0],OT=require('../concept_v3/ordertext.js');
+ A('stored order lines carry what the product is (kind) for the delivery/owner message',last.lines.every(l=>l.kind&&typeof l.name==='string'));
+ const msg=OT.build(last);A('the message built from a real stored order has no gaps',!/undefined|NaN|null/.test(msg)&&/لشركة التوصيل/.test(msg)&&new RegExp('المبلغ شامل التوصيل: '+last.total+' دينار').test(msg),msg);
  const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
  const up=await post('/api/admin/upload',{data:png},ck);A('photo upload works',up.d.ok&&/^img\/u\/.+\.png$/.test(up.d.path),JSON.stringify(up.d));
  A('upload refuses non-images',(await post('/api/admin/upload',{data:'data:text/html;base64,PGI+'},ck)).d.ok===false);

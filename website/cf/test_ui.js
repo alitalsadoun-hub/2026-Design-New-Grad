@@ -20,11 +20,12 @@ const {chromium}=require('playwright');const BASE=process.env.BASE||'http://loca
   const done=await p.innerText('#dbody');A(label+': confirmation shown with order number',/SC-\d{5}/.test(done),done.slice(0,120));
   const no=(done.match(/SC-\d{5}/)||[])[0];
   await p.screenshot({path:`shots/order_done_${label.replace(' ','_')}.png`});
-  const wa=await p.getAttribute('.btn.wa2','href');A(label+': WhatsApp confirm link prefilled',wa.startsWith('https://wa.me/962797906211?text=')&&decodeURIComponent(wa).includes('UI Tester'));
+  const wa=await p.getAttribute('.btn.wa2','href');{const wt=decodeURIComponent(wa.split('text=')[1]||'');const phoneTail=label.includes('AR')?'0797777777':'0796666666';A(label+': WhatsApp text = order for the owner + a copy block for the delivery company',/طلب جديد SC-\d{5}/.test(wt)&&/لشركة التوصيل/.test(wt)&&wt.includes('الهاتف: '+phoneTail)&&/المبلغ شامل التوصيل: 53 دينار/.test(wt)&&/المنطقة: عمّان/.test(wt),wt)}
+  A(label+': WhatsApp confirm link prefilled',wa.startsWith('https://wa.me/962797906211?text=')&&decodeURIComponent(wa).includes('UI Tester'));
   const o=(await ad('orders','GET')).orders.find(x=>x.no===no);A(label+': order is saved on the server',!!o&&o.customer.name==='UI Tester'&&o.lines.length===2);
   A(label+': no JS errors',errs.length===0,errs.join('|'));await c.close()}
  // --- dashboard in the browser
- const c=await b.newContext({viewport:{width:1280,height:900}});await c.addInitScript(()=>{const d=new Date();localStorage.setItem('scentro_welcome',JSON.stringify(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')))});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+ const c=await b.newContext({viewport:{width:1280,height:900},permissions:['clipboard-read','clipboard-write']});await c.addInitScript(()=>{const d=new Date();localStorage.setItem('scentro_welcome',JSON.stringify(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')))});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
  await p.goto(BASE+AP,{waitUntil:'networkidle'});await p.waitForTimeout(800);
  A('dashboard asks for a password (nothing visible before login)',await p.evaluate(()=>!!document.querySelector('#lgp')&&!/UI Tester/.test(document.body.innerText)));
  await p.fill('#lgp','wrong');await p.click('#lg button');await p.waitForTimeout(600);A('wrong password shows an error',/Wrong password/.test(await p.innerText('#lgm')));
@@ -63,6 +64,9 @@ const {chromium}=require('playwright');const BASE=process.env.BASE||'http://loca
  await p.click('.ad-top .tabs button[data-tab=orders]');await p.waitForTimeout(600);
  A('orders stats strip shown',/last 7 days/i.test(await p.innerText("#adbody")));
  await p.fill('#oq','nomatchxyz');await p.waitForTimeout(300);A('order search filters (no match)',/No orders match/.test(await p.innerText('#adbody')));await p.fill('#oq','UI Tester');await p.waitForTimeout(300);A('order search finds the order',/UI Tester/.test(await p.innerText('#adbody')));
+ await p.locator('[data-cpd]').first().click();await p.waitForTimeout(300);const cb=await p.evaluate(()=>navigator.clipboard.readText());
+ A('dashboard "Copy for delivery" puts only the delivery block on the clipboard',/^الاسم: UI Tester\nالهاتف: 07\d{8}\nالمنطقة: عمّان — Test street 1/.test(cb)&&/المبلغ شامل التوصيل: 53 دينار$/.test(cb)&&!/P102|J108/.test(cb),cb);
+ await p.locator('[data-cpo]').first().click();await p.waitForTimeout(300);const cb2=await p.evaluate(()=>navigator.clipboard.readText());A('dashboard "Copy order" copies the full message (order + delivery block)',/الطلب:/.test(cb2)&&/لشركة التوصيل/.test(cb2)&&/× 1/.test(cb2),cb2);
  const [dl]=await Promise.all([p.waitForEvent('download'),p.click('#csv')]);const csv=require('fs').readFileSync(await dl.path(),'utf8');A('Excel export has header + the order',/"Order","Date","Status"/.test(csv)&&/UI Tester/.test(csv));
  const [pop]=await Promise.all([c.waitForEvent('page'),p.locator('[data-pr]').first().click()]);await pop.waitForLoadState();A('print slip opens with total to collect',/Total to collect/.test(await pop.innerText('body')));await pop.close();
  await p.click('.ad-top .tabs button[data-tab=promos]');await p.waitForTimeout(600);A('promotions tab shows offers',/3rd free|buy 2/i.test(await p.innerText('#adbody')));

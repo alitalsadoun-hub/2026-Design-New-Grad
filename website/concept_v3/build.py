@@ -62,7 +62,7 @@ def _notes(p):
 missing = sorted({n for p in prods.values() for n in _notes(p) if n.lower().strip() not in NF})
 assert not missing, 'notes without a scent family in data/note_families.json: %s' % missing
 h = open('template.html', encoding='utf-8').read()
-h = h.replace('{{ENGINE}}', open('engine.js').read())
+h = h.replace('{{ENGINE}}', open('engine.js').read()).replace('{{ORDERTEXT}}', open('ordertext.js').read())
 h = h.replace('{{FINDER}}', open('finder.js').read()).replace('{{NOTE_FAM_JSON}}', json.dumps(NF, ensure_ascii=False))
 # quantities are private: the static page carries no real stock (9 = per-item cart cap); the live catalogue comes from the server
 pub = {k: {**v, 'stock': 9} for k, v in prods.items()}

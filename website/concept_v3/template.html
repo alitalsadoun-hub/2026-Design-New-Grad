@@ -330,6 +330,7 @@ body.ispdp .toast{bottom:92px}.toast.on{pointer-events:auto}@media(min-width:981
 
 <script>
 {{ENGINE}}
+{{ORDERTEXT}}
 {{FINDER}}
 const NOTE_FAM={{NOTE_FAM_JSON}};
 const PRODUCTS={{PRODUCTS_JSON}};
@@ -529,16 +530,19 @@ function renderDrawer0(){const ids=Object.keys(cart);$('#dtitle').textContent=st
 /* ---- orders: saved in the system first (source of truth); WhatsApp is the optional fast lane ---- */
 let lastOrder=null;
 function normPhone(p){p=p.replace(/\D/g,'');if(p.startsWith('962'))return p;if(p.startsWith('0'))return '962'+p.slice(1);return '962'+p}
-function orderText(o){const L=o.lines.map(l=>`• ${pn(l.pid)} × ${l.qty}`).join('\n')+o.gifts.map(g=>`\n• ${pn(g)} (gift)`).join('');
- return `Hello SCENTRO 👋\nOrder ${o.no}\n${L}\nTotal: ${o.total} JOD (cash on delivery, delivery ${o.delivery} JOD)\n${o.customer.name} · ${o.customer.phone}\n${o.customer.gov} — ${o.customer.address}`}
+const SNAP={};const snap=id=>{const p=PRODUCTS[id];if(p)SNAP[id]={name:p.name,kind:p.collection,orig:(p.insp&&p.insp.original)||''}};
+function normOrder(o){const sn=id=>SNAP[id]||{name:pn(id),kind:(PRODUCTS[id]||{}).collection,orig:''};
+ return{no:o.no,customer:o.customer,lines:o.lines.map(l=>({...sn(l.pid),qty:l.qty,net:l.net})),gifts:(o.gifts||[]).map(g=>({name:sn(g).name})),applied:o.applied||[],discount:o.discount,delivery:o.delivery,total:o.total}}
+/* the text the customer sends on WhatsApp: same format as the e-mail (order for the owner + a block to copy for the delivery company) */
+function orderText(o){return OrderText.build(normOrder(o),{greeting:'مرحباً سنترو 👋'})}
 const waLink=(num,text)=>`https://wa.me/${num}?text=${encodeURIComponent(text)}`;
-function placeOrderLocal(customer){const q=quote(),no='SC-'+Math.floor(10000+Math.random()*89999);
+function placeOrderLocal(customer){const q=quote();Object.keys(cart).forEach(snap);q.gifts.forEach(snap);const no='SC-'+Math.floor(10000+Math.random()*89999);
  const o={no,at:new Date().toISOString(),status:'new',customer:{...customer,phone:normPhone(customer.phone)},lines:q.lines.map(l=>({pid:l.pid,qty:l.qty,net:l.net})),gifts:q.gifts,applied:q.applied.map(a=>({name:a.name,amount:a.amount})),subtotal:q.subtotal,discount:q.discount,delivery:q.delivery,total:q.total,code:q.couponOk?code:''};
  const orders=store.get('orders',[]);orders.unshift(o);store.set('orders',orders);
  const u=used();q.applied.forEach(a=>u[a.id]=(u[a.id]||0)+1);store.set('uses',u);
  lastOrder=o;step='done';renderDrawer()}
 function placeOrder(customer){return SERVER?placeOrderServer(customer):placeOrderLocal(customer)}
-async function placeOrderServer(customer){const btn=$('#pl');if(btn){btn.disabled=true;btn.textContent='…'}
+async function placeOrderServer(customer){Object.keys(cart).forEach(snap);quote().gifts.forEach(snap);const btn=$('#pl');if(btn){btn.disabled=true;btn.textContent='…'}
  try{const r=await fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({cart,code,customer,website:''})});let d={};try{d=await r.json()}catch{}
   if(d.ok){Object.keys(cart).forEach(id=>NAMEC[id]=pn(id));d.gifts.forEach(id=>NAMEC[id]=pn(id));lastOrder={no:d.no,at:d.at,status:d.status,customer:d.customer,lines:d.lines.map(l=>({pid:l.pid,qty:l.qty,net:l.net})),gifts:d.gifts,applied:d.applied,subtotal:d.subtotal,discount:d.discount,delivery:d.delivery,total:d.total,code:d.code};step='done';renderDrawer();return}
   if(d.error==='stock'){(d.problems||[]).forEach(x=>{if(x.reason==='stock'&&cart[x.pid]>1)cart[x.pid]=Math.max(1,Math.floor(cart[x.pid]/2));else delete cart[x.pid]});saveCart();updateCount();await refreshStore();step='cart';renderDrawer();toast(t('e_stock'));return}
